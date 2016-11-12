@@ -22,6 +22,9 @@ var roleHarvester = {
                 creep.moveTo(Game.spawns['Spawn1']);
             }
         }
+        else if (creep.carry.energy == creep.carryCapacity) {
+            creep.moveTo(Game.flags["idle-area"]);
+        }
     }
 };
 
