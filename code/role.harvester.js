@@ -17,13 +17,23 @@ var roleHarvester = {
                 creep.moveTo(sources[0]);
             }
         }
-        else if(Game.spawns['Spawn1'].energy < Game.spawns['Spawn1'].energyCapacity) {
-            if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(Game.spawns['Spawn1']);
+        else {
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                            structure.energy < structure.energyCapacity;
+                    }
+            });
+            var didAction = false;
+            if(targets.length > 0) {
+                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0]);
+                }
+                didAction = true;
             }
-        }
-        else if (creep.carry.energy == creep.carryCapacity) {
-            creep.moveTo(Game.flags["idle-area"]);
+            if (didAction == false) {
+                creep.moveTo(Game.flags["idle-area"]);
+            }
         }
     }
 };
