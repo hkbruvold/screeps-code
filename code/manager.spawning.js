@@ -6,10 +6,10 @@
 
 /* Define amount of creeps per role */
 var maxBuilderCount = 3;
-var maxHarvesterCount = 4;
+var maxHarvesterCount = 3;
 var maxUpgraderCount = 3;
 var maxRoadworkerCount = 1;
-var maxEnergyStealerCount = 3;
+var maxEnergyStealerCount = 4;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
@@ -35,7 +35,7 @@ var myCreeps = {
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.harvester, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker, myCreeps.energyStealer];
+var priorityList = [myCreeps.harvester, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
 
 /* Energy cost for body parts */
 var energyCost = {
