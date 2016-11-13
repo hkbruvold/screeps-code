@@ -16,7 +16,7 @@ var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
 var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
-var energyStealerParts = [MOVE,WORK,CARRY,MOVE,MOVE,CARRY,MOVE,CARRY];
+var energyStealerParts = [MOVE,WORK,CARRY,MOVE,MOVE,CARRY,MOVE,CARRY,CARRY];
 
 /* Define memory for creeps */
 var builderMemory = {role: 'builder', refueling: true, harvesting: true};
