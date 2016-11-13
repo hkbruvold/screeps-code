@@ -8,26 +8,30 @@
 var maxBuilderCount = 3;
 var maxHarvesterCount = 4;
 var maxUpgraderCount = 5;
+var maxRoadworkerCount = 1;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
 var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
+var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 
 /* Define memory for creeps */
-var builderMemory = {role: 'builder', building: false};
-var harvesterMemory = {role: 'harvester'};
-var upgraderMemory = {role: 'upgrader', upgrading: false};
+var builderMemory = {role: 'builder', building: false, refueling: true};
+var harvesterMemory = {role: 'harvester', refueling: true};
+var upgraderMemory = {role: 'upgrader', upgrading: false, refueling: true};
+var roadworkerMemory = {role: 'roadworker', refueling: true};
 
 /* Define lookup for creeps based on role */
 var myCreeps = {
     builder: {maxCount: maxBuilderCount, parts: builderParts, memory: builderMemory},
     harvester: {maxCount: maxHarvesterCount, parts: harvesterParts, memory: harvesterMemory},
-    upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory}
+    upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory},
+    roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory}
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.harvester, myCreeps.upgrader, myCreeps.builder];
+var priorityList = [myCreeps.harvester, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
 
 /* Energy cost for body parts */
 var energyCost = {
@@ -166,6 +170,17 @@ function getName(role) {
     return undefined;
 }
 
+function safeMode(spawner) {
+    /* Will spawn one harvester and one builder one one is missing */
+    if (_.filter(Game.creeps, (creep) => creep.memory.role == "harvester").length < 1) {
+        console.log("[SAFE MODE] Spawning safe mode harvester")
+        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", harvesterMemory);
+    } else if (_.filter(Game.creeps, (creep) => creep.memory.role == "upgrader").length < 1) {
+        console.log("[SAFE MODE] Spawning safe mode upgrader")
+        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_UPGRADER", upgraderMemory);
+    }
+}
+
 function spawnCreep(spawner) {
     /* 
      * Spawns first creep from priorityList that is needed if enough energy is available.
@@ -192,12 +207,7 @@ function spawnCreep(spawner) {
                 if (ret != creepName) {
                     // If it fails for some reason
                     console.log("[FATAL] Unable to create creep, error code: " + ret);
-                    console.log("[FATAL] Spawning safe mode creeps")
-                    if (_.filter(Game.creeps, (creep) => creep.memory.role == "harvester").length < 1) {
-                        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", {role: "harvester"});
-                    } else if (_.filter(Game.creeps, (creep) => creep.memory.role == "upgrader").length < 1) {
-                        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_UPGRADER", {role: "harvester", upgrading:false});
-                    }
+                    safeMode(spawner);
                 }
             }
             return;
@@ -207,6 +217,7 @@ function spawnCreep(spawner) {
 
 module.exports = {
     run(spawner) {
+        safeMode(spawner);
         spawnCreep(spawner);
     }
 };
