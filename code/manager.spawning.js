@@ -41,28 +41,80 @@ var energyCost = {
     tough: 10
 };
 
-function getEnergyCapacity(spawner) {
-    /* This function returns the energy capacity of the spawner */
+function getExtensionsList(spawner) {
+    /* Returns list of extensions limited by the controller level */
     var extensions = spawner.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION);
             }
     });
     
-    var eCap = spawner.energyCapacity;
-    for (var i in extensions) {
-        eCap += extensions[i].energyCapacity;
+    num = extensions.length;
+    var controllerLevel = spawner.room.controller.level;
+    
+    switch (controllerLevel) {
+        case 1:
+            num = 0;
+            break;
+        case 2:
+            num = Math.min(num, 5);
+            break;
+        case 3:
+            num = Math.min(num, 10);
+            break;
+        case 4:
+            num = Math.min(num, 20);
+            break;
+        case 5:
+            num = Math.min(num, 30);
+            break;
+        case 6:
+            num = Math.min(num, 40);
+            break;
+        case 7:
+            num = Math.min(num, 50);
+            break;
+        case 8:
+            num = Math.min(num, 60);
+            break;
+        default:
+            break;
     }
-    return eCap;
+    
+    return extensions.slice(0,num);
+}
+
+function getExtensionsCapacity(spawner) {
+    /* Returns energy capacity from extensions limited by controller level */
+    var extensions = getExtensionsList(spawner);
+    
+    var cap = 50;
+    var num = extensions.length;
+    
+    var controllerLevel = spawner.room.controller.level;
+    
+    switch (controllerLevel) {
+        case 7:
+            cap = 100;
+            break;
+        case 8:
+            cap = 200;
+            break;
+        default:
+            break;
+    }
+    
+    return num*cap;
+}
+
+function getEnergyCapacity(spawner) {
+    /* This function returns the energy capacity of the spawner */
+    return getExtensionsCapacity(spawner) + spawner.energyCapacity;
 }
 
 function getEnergy(spawner) {
     /* Returns current energy level of spawner plus extensions */
-    var extensions = spawner.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_EXTENSION);
-            }
-    });
+    var extensions = getExtensionsList(spawner);
     
     var curEnergy = spawner.energy;
     for (var i in extensions) {
@@ -108,6 +160,7 @@ function getName(role) {
         if (!Game.creeps[role+count]) {
             return role+count;
         }
+        count++;
     }
     
     return undefined;
@@ -120,18 +173,30 @@ function spawnCreep(spawner) {
      */
     
     for (var i in priorityList) {
-        var currentCount = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester').length;
+        var currentCount = _.filter(Game.creeps, (creep) => creep.memory.role == priorityList[i].memory.role).length;
         if (currentCount < priorityList[i].maxCount) {
             var spawnerCapacity = getEnergyCapacity(spawner);
             var bodyParts = getBodyParts(priorityList[i].parts, spawnerCapacity);
             
             if (getBodyPartCost(bodyParts) <= getEnergy(spawner)) {
-                spawner.createCreep(bodyParts, getName(priorityList[i].memory.role), priorityList[i].memory);
                 // Clear memory
                 for(var name in Memory.creeps) {
                     if(!Game.creeps[name]) {
                         delete Memory.creeps[name];
                         console.log('Clearing non-existing creep memory:', name);
+                    }
+                }
+                
+                var creepName = getName(priorityList[i].memory.role);
+                var ret = spawner.createCreep(bodyParts, creepName, priorityList[i].memory);
+                if (ret != creepName) {
+                    // If it fails for some reason
+                    console.log("[FATAL] Unable to create creep, error code: " + ret);
+                    console.log("[FATAL] Spawning safe mode creeps")
+                    if (_.filter(Game.creeps, (creep) => creep.memory.role == "harvester").length < 1) {
+                        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", {role: "harvester"});
+                    } else if (_.filter(Game.creeps, (creep) => creep.memory.role == "upgrader").length < 1) {
+                        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_UPGRADER", {role: "harvester", upgrading:false});
                     }
                 }
             }
