@@ -19,10 +19,10 @@ var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 var energyStealerParts = [MOVE,WORK,CARRY,MOVE,MOVE,CARRY,MOVE,CARRY,CARRY];
 
 /* Define memory for creeps */
-var builderMemory = {role: 'builder', refueling: true, harvesting: true};
-var harvesterMemory = {role: 'harvester', refueling: true, harvesting: true};
-var upgraderMemory = {role: 'upgrader', refueling: true, harvesting: true};
-var roadworkerMemory = {role: 'roadworker', refueling: true, harvesting: true};
+var builderMemory = {role: 'builder', harvesting: true};
+var harvesterMemory = {role: 'harvester', harvesting: true};
+var upgraderMemory = {role: 'upgrader', harvesting: true};
+var roadworkerMemory = {role: 'roadworker', harvesting: true};
 var energyStealerMemory = {role: 'energystealer', harvesting: true};
 
 /* Define lookup for creeps based on role */
