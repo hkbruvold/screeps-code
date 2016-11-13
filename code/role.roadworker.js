@@ -1,4 +1,4 @@
-var roleAssistant = require('role.builder');
+var roleAssistant = require('role.harvester');
 
 var roleRoadworker = {
 

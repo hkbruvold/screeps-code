@@ -1,11 +1,4 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('role.harvester');
- * mod.thing == 'a thing'; // true
- */
+var roleAssistant = require('role.upgrader');
 
 var roleHarvester = {
 
@@ -44,7 +37,8 @@ var roleHarvester = {
         }
         
         if (didAction == false) {
-            creep.moveTo(Game.flags["idle-area"]);
+            //creep.moveTo(Game.flags["idle-area"]);
+            roleAssistant.run(creep);
         }
     }
 };
