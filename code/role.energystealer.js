@@ -16,7 +16,12 @@ var roleEnergyStealer = {
         }
         
         if (creep.memory.harvesting == true) { // want to harvest
-            if (myPos == dest) { // harvest from energy source
+            let target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+            if(target) { // priority picking up dropped energy
+                if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target);
+                }
+            } else if (myPos == dest) { // harvest from energy source
                 let sources = creep.room.find(FIND_SOURCES);
                 if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(sources[0]);

@@ -26,7 +26,7 @@ var roleBuilder = {
             let targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_CONTAINER) &&
-                        _.sum(structure.store) < structure.storeCapacity;
+                        _.sum(structure.store) > 0;
                 }
             });
             
