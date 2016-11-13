@@ -4,7 +4,7 @@ var roleBuilder = require('role.builder');
 var managerSpawning = require('manager.spawning');
 
 module.exports.loop = function () {
-    //managerSpawning.run(Game.spawns["Spawn1"])
+    managerSpawning.run(Game.spawns["Spawn1"])
     
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
