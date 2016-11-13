@@ -3,6 +3,7 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRoadworker = require('role.roadworker');
 var roleClaimer = require('role.claimer');
+var roleEnergyStealer = require('role.energystealer');
 var managerSpawning = require('manager.spawning');
 
 module.exports.loop = function () {
@@ -20,6 +21,8 @@ module.exports.loop = function () {
             roleRoadworker.run(creep);
         } else if (creep.memory.role == 'claimer') {
             roleClaimer.run(creep);
+        } else if (creep.memory.role == 'energystealer') {
+            roleEnergyStealer.run(creep);
         }
     }
 }
