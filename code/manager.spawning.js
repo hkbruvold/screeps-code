@@ -35,7 +35,7 @@ var myCreeps = {
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.harvester, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
+var priorityList = [myCreeps.harvester, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker, myCreeps.energyStealer];
 
 /* Energy cost for body parts */
 var energyCost = {

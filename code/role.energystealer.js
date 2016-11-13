@@ -26,9 +26,17 @@ var roleEnergyStealer = {
             }
         } else { // want to go home to empty inventory
             if (myPos == home) { // transfer energy to container
-                let container = Game.structures["container"];
-                if(creep.harvest(container) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(container);
+                let targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_CONTAINER) &&
+                            _.sum(structure.store) < structure.storeCapacity;
+                    }
+                });
+                
+                if(targets.length > 0) {
+                    if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(targets[0]);
+                    }
                 }
             } else { // go to home room
                 creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(home)));
