@@ -9,25 +9,29 @@ var maxBuilderCount = 3;
 var maxHarvesterCount = 4;
 var maxUpgraderCount = 3;
 var maxRoadworkerCount = 1;
+var maxEnergyStealerCount = 3;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
 var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
+var energyStealerParts = [MOVE,WORK,CARRY,MOVE,MOVE,CARRY,MOVE,CARRY];
 
 /* Define memory for creeps */
 var builderMemory = {role: 'builder', refueling: true, harvesting: true};
 var harvesterMemory = {role: 'harvester', refueling: true, harvesting: true};
 var upgraderMemory = {role: 'upgrader', refueling: true, harvesting: true};
 var roadworkerMemory = {role: 'roadworker', refueling: true, harvesting: true};
+var energyStealerMemory = {role: 'energystealer', harvesting: true};
 
 /* Define lookup for creeps based on role */
 var myCreeps = {
     builder: {maxCount: maxBuilderCount, parts: builderParts, memory: builderMemory},
     harvester: {maxCount: maxHarvesterCount, parts: harvesterParts, memory: harvesterMemory},
     upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory},
-    roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory}
+    roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory},
+    energyStealer: {maxCount: maxEnergyStealerCount, parts: energyStealerParts, memory: energyStealerMemory}
 };
 
 /* Define priority list for spawning creeps */
