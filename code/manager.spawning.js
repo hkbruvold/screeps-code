@@ -4,9 +4,30 @@
  * with the current energy capacity.
  */
 
-/* Define body parts for creeps */
-var builder = [WORK,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
+/* Define amount of creeps per role */
+var maxBuilderCount = 3;
+var maxHarvesterCount = 4;
+var maxUpgraderCount = 5;
 
+/* Define body parts for creeps */
+var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
+var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
+var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
+
+/* Define memory for creeps */
+var builderMemory = {role: 'builder', building: false};
+var harvesterMemory = {role: 'harvester'};
+var upgraderMemory = {role: 'upgrader', upgrading: false};
+
+/* Define lookup for creeps based on role */
+var myCreeps = {
+    builder: {maxCount: maxBuilderCount, parts: builderParts, memory: builderMemory},
+    harvester: {maxCount: maxHarvesterCount, parts: harvesterParts, memory: harvesterMemory},
+    upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory}
+};
+
+/* Define priority list for spawning creeps */
+var priorityList = [myCreeps.harvester, myCreeps.upgrader, myCreeps.builder];
 
 /* Energy cost for body parts */
 var energyCost = {
@@ -22,16 +43,32 @@ var energyCost = {
 
 function getEnergyCapacity(spawner) {
     /* This function returns the energy capacity of the spawner */
-    var energyStructures = spawner.room.find(FIND_STRUCTURES, {
+    var extensions = spawner.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION);
             }
     });
     
-    var eCap = spawner.energyCapacity; // TODO: Add support for more spawns
-    eCap += energyStructures[0].energyCapacity * energyStructures.length; // TODO: Add support for higher capacity extensions
-    
+    var eCap = spawner.energyCapacity;
+    for (var i in extensions) {
+        eCap += extensions[i].energyCapacity;
+    }
     return eCap;
+}
+
+function getEnergy(spawner) {
+    /* Returns current energy level of spawner plus extensions */
+    var extensions = spawner.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_EXTENSION);
+            }
+    });
+    
+    var curEnergy = spawner.energy;
+    for (var i in extensions) {
+        curEnergy += extensions[i].energy;
+    }
+    return curEnergy;
 }
 
 function getBodyParts(bodyPartList, eCap) {
@@ -52,9 +89,59 @@ function getBodyParts(bodyPartList, eCap) {
     }
 }
 
+function getBodyPartCost(bodyPartList) {
+    /* Returns cost of creating creep with body parts specified in bodyPartList */
+    var totalCost = 0;
+    
+    for (var i in bodyPartList) {
+        totalCost += energyCost[bodyPartList[i]];
+    }
+    
+    return totalCost;
+}
+
+function getName(role) {
+    /* Returns free name starting with role and ending with a number */
+    
+    var count = 1;
+    while (count < 1000) {
+        if (!Game.creeps[role+count]) {
+            return role+count;
+        }
+    }
+    
+    return undefined;
+}
+
+function spawnCreep(spawner) {
+    /* 
+     * Spawns first creep from priorityList that is needed if enough energy is available.
+     * Will also clear memory of non-existing creeps if a creep was spawned.
+     */
+    
+    for (var i in priorityList) {
+        var currentCount = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester').length;
+        if (currentCount < priorityList[i].maxCount) {
+            var spawnerCapacity = getEnergyCapacity(spawner);
+            var bodyParts = getBodyParts(priorityList[i].parts, spawnerCapacity);
+            
+            if (getBodyPartCost(bodyParts) <= getEnergy(spawner)) {
+                spawner.createCreep(bodyParts, getName(priorityList[i].memory.role), priorityList[i].memory);
+                // Clear memory
+                for(var name in Memory.creeps) {
+                    if(!Game.creeps[name]) {
+                        delete Memory.creeps[name];
+                        console.log('Clearing non-existing creep memory:', name);
+                    }
+                }
+            }
+            return;
+        }
+    }
+}
+
 module.exports = {
     run(spawner) {
-        var eCap = getEnergyCapacity(spawner);
-        console.log(getBodyParts([WORK,MOVE], eCap));
+        spawnCreep(spawner);
     }
 };

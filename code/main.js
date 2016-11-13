@@ -6,13 +6,8 @@ var managerSpawning = require('manager.spawning');
 module.exports.loop = function () {
     managerSpawning.run(Game.spawns["Spawn1"])
     
-    for(var name in Memory.creeps) {
-        if(!Game.creeps[name]) {
-            delete Memory.creeps[name];
-            console.log('Clearing non-existing creep memory:', name);
-        }
-    }
-
+    
+    /*
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 
     if(harvesters.length < 4) {
@@ -33,7 +28,7 @@ module.exports.loop = function () {
         var newName = Game.spawns['Spawn1'].createCreep([WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE], undefined, {role: 'builder', building: false});
         console.log('Spawning new builder: ' + newName);
     }
-
+    */
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         if(creep.memory.role == 'harvester') {
