@@ -7,7 +7,7 @@
 /* Define amount of creeps per role */
 var maxBuilderCount = 3;
 var maxHarvesterCount = 4;
-var maxUpgraderCount = 5;
+var maxUpgraderCount = 3;
 var maxRoadworkerCount = 1;
 
 /* Define body parts for creeps */
@@ -17,10 +17,10 @@ var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 
 /* Define memory for creeps */
-var builderMemory = {role: 'builder', building: false, refueling: true};
-var harvesterMemory = {role: 'harvester', refueling: true};
-var upgraderMemory = {role: 'upgrader', upgrading: false, refueling: true};
-var roadworkerMemory = {role: 'roadworker', refueling: true};
+var builderMemory = {role: 'builder', refueling: true, harvesting: true};
+var harvesterMemory = {role: 'harvester', refueling: true, harvesting: true};
+var upgraderMemory = {role: 'upgrader', refueling: true, harvesting: true};
+var roadworkerMemory = {role: 'roadworker', refueling: true, harvesting: true};
 
 /* Define lookup for creeps based on role */
 var myCreeps = {
@@ -47,14 +47,14 @@ var energyCost = {
 
 function getExtensionsList(spawner) {
     /* Returns list of extensions limited by the controller level */
-    var extensions = spawner.room.find(FIND_STRUCTURES, {
+    let extensions = spawner.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION);
             }
     });
     
-    num = extensions.length;
-    var controllerLevel = spawner.room.controller.level;
+    let num = extensions.length;
+    let controllerLevel = spawner.room.controller.level;
     
     switch (controllerLevel) {
         case 1:
@@ -90,12 +90,12 @@ function getExtensionsList(spawner) {
 
 function getExtensionsCapacity(spawner) {
     /* Returns energy capacity from extensions limited by controller level */
-    var extensions = getExtensionsList(spawner);
+    let extensions = getExtensionsList(spawner);
     
-    var cap = 50;
-    var num = extensions.length;
+    let cap = 50;
+    let num = extensions.length;
     
-    var controllerLevel = spawner.room.controller.level;
+    let controllerLevel = spawner.room.controller.level;
     
     switch (controllerLevel) {
         case 7:
@@ -118,9 +118,9 @@ function getEnergyCapacity(spawner) {
 
 function getEnergy(spawner) {
     /* Returns current energy level of spawner plus extensions */
-    var extensions = getExtensionsList(spawner);
+    let extensions = getExtensionsList(spawner);
     
-    var curEnergy = spawner.energy;
+    let curEnergy = spawner.energy;
     for (var i in extensions) {
         curEnergy += extensions[i].energy;
     }
@@ -130,11 +130,11 @@ function getEnergy(spawner) {
 function getBodyParts(bodyPartList, eCap) {
     /* Returns the list of body parts possible to create with eCap energy */
     
-    var partsList = [];
-    var spareEnergy = eCap;
+    let partsList = [];
+    let spareEnergy = eCap;
     
     while (spareEnergy >= 0) {
-        var nextPart = bodyPartList[partsList.length % bodyPartList.length];
+        let nextPart = bodyPartList[partsList.length % bodyPartList.length];
         
         spareEnergy -= energyCost[nextPart];
         if (spareEnergy >= 0) {
@@ -147,9 +147,9 @@ function getBodyParts(bodyPartList, eCap) {
 
 function getBodyPartCost(bodyPartList) {
     /* Returns cost of creating creep with body parts specified in bodyPartList */
-    var totalCost = 0;
+    let totalCost = 0;
     
-    for (var i in bodyPartList) {
+    for (let i in bodyPartList) {
         totalCost += energyCost[bodyPartList[i]];
     }
     
@@ -159,7 +159,7 @@ function getBodyPartCost(bodyPartList) {
 function getName(role) {
     /* Returns free name starting with role and ending with a number */
     
-    var count = 1;
+    let count = 1;
     while (count < 1000) {
         if (!Game.creeps[role+count]) {
             return role+count;
@@ -187,23 +187,23 @@ function spawnCreep(spawner) {
      * Will also clear memory of non-existing creeps if a creep was spawned.
      */
     
-    for (var i in priorityList) {
-        var currentCount = _.filter(Game.creeps, (creep) => creep.memory.role == priorityList[i].memory.role).length;
+    for (let i in priorityList) {
+        let currentCount = _.filter(Game.creeps, (creep) => creep.memory.role == priorityList[i].memory.role).length;
         if (currentCount < priorityList[i].maxCount) {
-            var spawnerCapacity = getEnergyCapacity(spawner);
-            var bodyParts = getBodyParts(priorityList[i].parts, spawnerCapacity);
+            let spawnerCapacity = getEnergyCapacity(spawner);
+            let bodyParts = getBodyParts(priorityList[i].parts, spawnerCapacity);
             
             if (getBodyPartCost(bodyParts) <= getEnergy(spawner)) {
                 // Clear memory
-                for(var name in Memory.creeps) {
+                for(let name in Memory.creeps) {
                     if(!Game.creeps[name]) {
                         delete Memory.creeps[name];
                         console.log('Clearing non-existing creep memory:', name);
                     }
                 }
                 
-                var creepName = getName(priorityList[i].memory.role);
-                var ret = spawner.createCreep(bodyParts, creepName, priorityList[i].memory);
+                let creepName = getName(priorityList[i].memory.role);
+                let ret = spawner.createCreep(bodyParts, creepName, priorityList[i].memory);
                 if (ret != creepName) {
                     // If it fails for some reason
                     console.log("[FATAL] Unable to create creep, error code: " + ret);

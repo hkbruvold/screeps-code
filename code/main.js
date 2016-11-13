@@ -7,8 +7,8 @@ var managerSpawning = require('manager.spawning');
 module.exports.loop = function () {
     managerSpawning.run(Game.spawns["Spawn1"])
     
-    for(var name in Game.creeps) {
-        var creep = Game.creeps[name];
+    for(let name in Game.creeps) {
+        let creep = Game.creeps[name];
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
         } else if(creep.memory.role == 'upgrader') {
