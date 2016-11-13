@@ -5,8 +5,6 @@ var roleEnergyStealer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        let myPos = creep.room.name;
-        
         if (creep.memory.harvesting == true && creep.carry.energy == creep.carryCapacity) {
             creep.memory.harvesting = false;
         }
@@ -21,30 +19,24 @@ var roleEnergyStealer = {
                 if(creep.pickup(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
-            } else if (myPos == dest) { // harvest from energy source
-                let sources = creep.room.find(FIND_SOURCES);
+            } else { // harvest from energy source
+                let sources = Game.rooms[dest].find(FIND_SOURCES);
                 if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(sources[0]);
                 }
-            } else { // go to destination room
-                creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(dest)));
             }
         } else { // want to go home to empty inventory
-            if (myPos == home) { // transfer energy to container
-                let targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_CONTAINER) &&
-                            _.sum(structure.store) < structure.storeCapacity;
-                    }
-                });
-                
-                if(targets.length > 0) {
-                    if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(targets[0]);
-                    }
+            let targets = Game.rooms[home].find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_CONTAINER) &&
+                        _.sum(structure.store) < structure.storeCapacity;
                 }
-            } else { // go to home room
-                creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(home)));
+            });
+            
+            if(targets.length > 0) {
+                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0]);
+                }
             }
         }
     }
