@@ -6,19 +6,23 @@
 
 /* Define amount of creeps per role */
 var maxBuilderCount = 3;
-var maxHarvesterCount = 2;
+var maxHarvesterCount = 0;
 var maxUpgraderCount = 2;
 var maxRoadworkerCount = 1;
 var maxEnergyStealerCount = 3;
 var maxRoomerCount = 1;
+var maxDedicatedHarvesterCount = 1;
+var maxSpawnFillerCount = 2;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
-var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,CARRY];
+var upgraderParts = [MOVE,CARRY,WORK];
 var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var roomerParts = [MOVE];
+var dedicatedHarvesterParts = [MOVE,CARRY,WORK,WORK,WORK,WORK,WORK];
+var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 
 /* Define memory for creeps */
 var builderMemory = {role: 'builder', harvesting: true};
@@ -27,6 +31,8 @@ var upgraderMemory = {role: 'upgrader', harvesting: true};
 var roadworkerMemory = {role: 'roadworker', harvesting: true};
 var energyStealerMemory = {role: 'energystealer', harvesting: true};
 var roomerMemory = {role: 'roomer', room: "W46S68"};
+var dedicatedHarvesterMemory = {role: 'dedicatedharvester', harvesting: false, myPlace: {x: 32, y: 17}, src: "57ef9d2786f108ae6e60d577", cnt: "5829db93de2d8fc4201232e7"};
+var spawnFillerMemory = {role: 'spawnfiller', refill: true, harvesting: true};
 
 /* Define lookup for creeps based on role */
 var myCreeps = {
@@ -35,11 +41,13 @@ var myCreeps = {
     upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory, staticParts: false},
     roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory, staticParts: true},
     energyStealer: {maxCount: maxEnergyStealerCount, parts: energyStealerParts, memory: energyStealerMemory, staticParts: false},
-    roomer: {maxCount: maxRoomerCount, parts: roomerParts, memory: roomerMemory, staticParts: true}
+    roomer: {maxCount: maxRoomerCount, parts: roomerParts, memory: roomerMemory, staticParts: true},
+    dedicatedHarvester:  {maxCount: maxDedicatedHarvesterCount, parts: dedicatedHarvesterParts, memory: dedicatedHarvesterMemory, staticParts: true},
+    spawnFiller: {maxCount: maxSpawnFillerCount, parts: spawnFillerParts, memory: spawnFillerMemory, staticParts: true}
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.roomer, myCreeps.harvester, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
+var priorityList = [myCreeps.spawnFiller, myCreeps.dedicatedHarvester, myCreeps.roomer, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
 
 /* Energy cost for body parts */
 var energyCost = {
@@ -185,7 +193,7 @@ function getName(role) {
 
 function safeMode(spawner) {
     /* Will spawn one harvester and one builder one one is missing */
-    if (_.filter(Game.creeps, (creep) => creep.memory.role == "harvester").length < 1) {
+    if (_.filter(Game.creeps, (creep) => creep.memory.role == "dedicatedharvester").length < 1) {
         console.log("[SAFE MODE] Spawning safe mode harvester")
         spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", harvesterMemory);
     } else if (_.filter(Game.creeps, (creep) => creep.memory.role == "upgrader").length < 1) {
