@@ -4,7 +4,7 @@ var roleDedicatedHarvester = {
     run: function(creep) {
         
         if (creep.memory.harvesting) {
-            if (creep.carry.energy < creep.carryCapacity) {
+            if (creep.carry.energy < 96) {
                 creep.harvest(Game.getObjectById(creep.memory.src));
             } else {
                 creep.transfer(Game.getObjectById(creep.memory.cnt), RESOURCE_ENERGY);

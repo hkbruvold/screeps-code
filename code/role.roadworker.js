@@ -24,7 +24,7 @@ var roleRoadworker = {
         } else {
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.hits < structure.hitsMax*3/4);
+                        return (structure.hits < structure.hitsMax*2/4);
                     }
             });
             
