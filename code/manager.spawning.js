@@ -6,18 +6,18 @@
 
 /* Define amount of creeps per role */
 var maxBuilderCount = 3;
-var maxHarvesterCount = 3;
-var maxUpgraderCount = 3;
+var maxHarvesterCount = 2;
+var maxUpgraderCount = 2;
 var maxRoadworkerCount = 1;
-var maxEnergyStealerCount = 4;
+var maxEnergyStealerCount = 3;
 var maxRoomerCount = 1;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
 var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
-var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
-var energyStealerParts = [MOVE,WORK,CARRY,MOVE,MOVE,CARRY,MOVE,CARRY,CARRY];
+var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK];
+var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var roomerParts = [MOVE];
 
 /* Define memory for creeps */
@@ -33,7 +33,7 @@ var myCreeps = {
     builder: {maxCount: maxBuilderCount, parts: builderParts, memory: builderMemory, staticParts: false},
     harvester: {maxCount: maxHarvesterCount, parts: harvesterParts, memory: harvesterMemory, staticParts: false},
     upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory, staticParts: false},
-    roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory, staticParts: false},
+    roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory, staticParts: true},
     energyStealer: {maxCount: maxEnergyStealerCount, parts: energyStealerParts, memory: energyStealerMemory, staticParts: false},
     roomer: {maxCount: maxRoomerCount, parts: roomerParts, memory: roomerMemory, staticParts: true}
 };
@@ -143,7 +143,7 @@ function getBodyParts(bodyPartList, eCap, staticParts) {
     if (!staticParts) {
         spareEnergy = eCap;
     } else {
-        spareEnergy = getBodyPartCost(bodyPartList);
+        spareEnergy = Math.min(getBodyPartCost(bodyPartList), eCap);
     }
     
     while (spareEnergy >= 0) {
