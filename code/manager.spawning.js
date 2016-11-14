@@ -15,7 +15,7 @@ var maxRoomerCount = 1;
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
-var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
+var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,CARRY];
 var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var roomerParts = [MOVE];
