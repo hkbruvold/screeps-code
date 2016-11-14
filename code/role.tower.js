@@ -9,14 +9,26 @@ var roleTower = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.hits < structure.hitsMax*3/4);
-                }
-        });
+        let target = Game.getObjectById(creep.room.memory.repairTarget);
+        let needTarget = true;
         
-        if(targets.length > 0) {
-            creep.repair(targets[getRandomInt(0,targets.length)]);
+        if (target) {
+            creep.repair(target);
+            if (target.hits < target.hitsMax) {
+                needTarget = false;
+            }
+        }
+        
+        if (needTarget) {
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.hits < structure.hitsMax);
+                }
+            });
+            
+            if (targets.length > 0) {
+                creep.room.memory.repairTarget = targets[0].id;
+            }
         }
     }
 };
