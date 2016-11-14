@@ -5,7 +5,7 @@
  */
 
 /* Define amount of creeps per role */
-var maxBuilderCount = 3;
+var maxBuilderCount = 2;
 var maxHarvesterCount = 0;
 var maxUpgraderCount = 2;
 var maxRoadworkerCount = 1;
