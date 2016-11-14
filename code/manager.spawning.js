@@ -10,6 +10,7 @@ var maxHarvesterCount = 3;
 var maxUpgraderCount = 3;
 var maxRoadworkerCount = 1;
 var maxEnergyStealerCount = 4;
+var maxRoomerCount = 1;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,WORK,WORK,CARRY,MOVE];
@@ -17,6 +18,7 @@ var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
 var upgraderParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK,WORK,CARRY,MOVE];
 var energyStealerParts = [MOVE,WORK,CARRY,MOVE,MOVE,CARRY,MOVE,CARRY,CARRY];
+var roomerParts = [MOVE];
 
 /* Define memory for creeps */
 var builderMemory = {role: 'builder', harvesting: true};
@@ -24,18 +26,20 @@ var harvesterMemory = {role: 'harvester', harvesting: true};
 var upgraderMemory = {role: 'upgrader', harvesting: true};
 var roadworkerMemory = {role: 'roadworker', harvesting: true};
 var energyStealerMemory = {role: 'energystealer', harvesting: true};
+var roomerMemory = {role: 'roomer', room: "W46S68"};
 
 /* Define lookup for creeps based on role */
 var myCreeps = {
-    builder: {maxCount: maxBuilderCount, parts: builderParts, memory: builderMemory},
-    harvester: {maxCount: maxHarvesterCount, parts: harvesterParts, memory: harvesterMemory},
-    upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory},
-    roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory},
-    energyStealer: {maxCount: maxEnergyStealerCount, parts: energyStealerParts, memory: energyStealerMemory}
+    builder: {maxCount: maxBuilderCount, parts: builderParts, memory: builderMemory, staticParts: false},
+    harvester: {maxCount: maxHarvesterCount, parts: harvesterParts, memory: harvesterMemory, staticParts: false},
+    upgrader: {maxCount: maxUpgraderCount, parts: upgraderParts, memory: upgraderMemory, staticParts: false},
+    roadworker: {maxCount: maxRoadworkerCount, parts: roadworkerParts, memory: roadworkerMemory, staticParts: false},
+    energyStealer: {maxCount: maxEnergyStealerCount, parts: energyStealerParts, memory: energyStealerMemory, staticParts: false},
+    roomer: {maxCount: maxRoomerCount, parts: roomerParts, memory: roomerMemory, staticParts: true}
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.harvester, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
+var priorityList = [myCreeps.roomer, myCreeps.harvester, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
 
 /* Energy cost for body parts */
 var energyCost = {
@@ -131,11 +135,16 @@ function getEnergy(spawner) {
     return curEnergy;
 }
 
-function getBodyParts(bodyPartList, eCap) {
+function getBodyParts(bodyPartList, eCap, staticParts) {
     /* Returns the list of body parts possible to create with eCap energy */
     
     let partsList = [];
     let spareEnergy = eCap;
+    if (!staticParts) {
+        spareEnergy = eCap;
+    } else {
+        spareEnergy = getBodyPartCost(bodyPartList);
+    }
     
     while (spareEnergy >= 0) {
         let nextPart = bodyPartList[partsList.length % bodyPartList.length];
@@ -195,7 +204,7 @@ function spawnCreep(spawner) {
         let currentCount = _.filter(Game.creeps, (creep) => creep.memory.role == priorityList[i].memory.role).length;
         if (currentCount < priorityList[i].maxCount) {
             let spawnerCapacity = getEnergyCapacity(spawner);
-            let bodyParts = getBodyParts(priorityList[i].parts, spawnerCapacity);
+            let bodyParts = getBodyParts(priorityList[i].parts, spawnerCapacity, priorityList[i].staticParts);
             
             if (getBodyPartCost(bodyParts) <= getEnergy(spawner)) {
                 // Clear memory

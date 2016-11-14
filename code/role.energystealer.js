@@ -1,5 +1,5 @@
-let home = "W46S67";
-let dest = "W46S68";
+var home = "W46S67";
+var dest = "W46S68";
 
 var roleEnergyStealer = {
 
