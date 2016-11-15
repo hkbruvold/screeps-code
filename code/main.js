@@ -13,7 +13,7 @@ var managerSpawning = require('manager.spawning');
 module.exports.loop = function () {
     managerSpawning.run(Game.spawns["Spawn1"])
     
-    roleTower.run(Game.getObjectById("582a0533739724f97f69cb8c"));
+    //roleTower.run(Game.getObjectById("582a0533739724f97f69cb8c"));
     
     for(let name in Game.creeps) {
         let creep = Game.creeps[name];

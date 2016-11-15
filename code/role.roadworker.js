@@ -1,11 +1,24 @@
-var roleAssistant = require('role.harvester');
+var roleAssistant = require('role.upgrader');
 var utilEnergy = require('util.energy');
 
 var roleRoadworker = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        var didAction = false;
+        let didAction = false;
+        let target = Game.getObjectById(creep.memory.repairTarget);
+        
+        if (target == null) {
+            let targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.hits < structure.hitsMax*3/4);
+                }
+            });
+            
+            if (targets.length > 0) {
+                creep.memory.repairTarget = targets[0].id;
+            }
+        }
         
         if (creep.memory.harvesting == true && creep.carry.energy == creep.carryCapacity) {
             creep.memory.harvesting = false;
@@ -16,21 +29,15 @@ var roleRoadworker = {
         }
         
         if(creep.memory.harvesting == true) {
-            let src = utilEnergy.getSource(creep);
-            if(creep.withdraw(src, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(src);
-            }
-            didAction = true;
+            didAction = utilEnergy.pickupSource(creep);
         } else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.hits < structure.hitsMax*2/4);
-                    }
-            });
-            
-            if(targets.length > 0) {
-                if(creep.repair(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+            if (target) {
+                if(creep.repair(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target);
+                }
+                if (target.hits < target.hitsMax) {
+                } else {
+                    creep.memory.repairTarget = ""
                 }
                 didAction = true;
             }

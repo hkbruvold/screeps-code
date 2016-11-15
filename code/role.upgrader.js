@@ -15,11 +15,7 @@ var roleUpgrader = {
         }
         
         if(creep.memory.harvesting == true) {
-            let src = utilEnergy.getSource(creep);
-            if(creep.withdraw(src, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(src);
-            }
-            didAction = true;
+            didAction = utilEnergy.pickupSource(creep);
         } else {
             
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {

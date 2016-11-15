@@ -16,11 +16,7 @@ var roleSpawnFiller = {
         }
         
         if(creep.memory.refill == true) {
-            let src = utilEnergy.getSource(creep);
-            if(creep.withdraw(src, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(src);
-            }
-            didAction = true;
+            didAction = utilEnergy.pickupSource(creep);
         } else {
             let targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {

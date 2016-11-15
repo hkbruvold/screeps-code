@@ -16,19 +16,15 @@ var roleBuilder = {
         }
         
         if(creep.memory.harvesting == false) {
-            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            if(targets.length) {
-                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
+            let target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+            if (target) {
+                if(creep.build(target) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target);
                 }
                 didAction = true;
             }
         } else {
-            let src = utilEnergy.getSource(creep);
-            if(creep.withdraw(src, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(src);
-            }
-            didAction = true;
+            didAction = utilEnergy.pickupSource(creep);
         }
         
         if (didAction == false) {
