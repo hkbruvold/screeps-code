@@ -33,6 +33,8 @@ var energyStealerMemory = {role: 'energystealer', harvesting: true};
 var roomerMemory = {role: 'roomer'};
 var dedicatedHarvesterMemory = {role: 'dedicatedharvester', harvesting: false, myPlace: {x: 33, y: 5}, src: "57ef9efc86f108ae6e610383"};
 var spawnFillerMemory = {role: 'spawnfiller', refill: true, harvesting: true};
+var safeHarvesterMemory = {role: 'safeharvester', harvesting: true};
+var safeUpgraderMemory = {role: 'safeupgrader', harvesting: true};
 
 /* Define lookup for creeps based on role */
 var myCreeps = {
@@ -195,10 +197,10 @@ function safeMode(spawner) {
     /* Will spawn one harvester and one builder one one is missing */
     if (_.filter(Game.creeps, (creep) => creep.memory.role == "dedicatedharvester").length < 1) {
         console.log("[SAFE MODE] Spawning safe mode harvester")
-        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", harvesterMemory);
-    } else if (_.filter(Game.creeps, (creep) => creep.memory.role == "upgrader").length < 1) {
+        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", safeHarvesterMemory);
+    } else if (spawner.room.controller.ticksToDowngrade < 1500) {
         console.log("[SAFE MODE] Spawning safe mode upgrader")
-        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_UPGRADER", upgraderMemory);
+        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_UPGRADER", safeUpgraderMemory);
     }
 }
 
@@ -237,8 +239,8 @@ function spawnCreep(spawner) {
 }
 
 module.exports = {
+    safe(spawner) {safeMode(spawner)},
     run(spawner) {
-        safeMode(spawner);
         spawnCreep(spawner);
     }
 };
