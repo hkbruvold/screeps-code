@@ -7,10 +7,10 @@
 /* Define amount of creeps per role */
 var maxBuilderCount = 2;
 var maxHarvesterCount = 0;
-var maxUpgraderCount = 2;
-var maxRoadworkerCount = 1;
+var maxUpgraderCount = 1;
+var maxRoadworkerCount = 0;
 var maxEnergyStealerCount = 3;
-var maxRoomerCount = 1;
+var maxRoomerCount = 4;
 var maxDedicatedHarvesterCount = 1;
 var maxSpawnFillerCount = 2;
 
@@ -20,7 +20,7 @@ var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
 var upgraderParts = [MOVE,CARRY,WORK];
 var roadworkerParts = [MOVE,WORK,CARRY,CARRY,MOVE,WORK];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
-var roomerParts = [MOVE];
+var roomerParts = [MOVE,ATTACK];
 var dedicatedHarvesterParts = [MOVE,CARRY,CARRY,WORK,WORK,WORK,WORK,WORK,WORK];
 var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 
@@ -30,7 +30,7 @@ var harvesterMemory = {role: 'harvester', harvesting: true};
 var upgraderMemory = {role: 'upgrader', harvesting: true};
 var roadworkerMemory = {role: 'roadworker', harvesting: true};
 var energyStealerMemory = {role: 'energystealer', harvesting: true};
-var roomerMemory = {role: 'roomer', room: "W46S68"};
+var roomerMemory = {role: 'roomer'};
 var dedicatedHarvesterMemory = {role: 'dedicatedharvester', harvesting: false, myPlace: {x: 32, y: 17}, src: "57ef9d2786f108ae6e60d577", cnt: "5829db93de2d8fc4201232e7"};
 var spawnFillerMemory = {role: 'spawnfiller', refill: true, harvesting: true};
 
