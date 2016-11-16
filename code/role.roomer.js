@@ -3,7 +3,7 @@ var roleRoomer = {
     /** @param {Creep} creep **/
     run: function(creep) {
         if (creep.name == "roomer1") {
-            creep.memory["apath"] = ["W46S67","W46S68"];
+            creep.memory["apath"] = ["E46S62"];
         } else if (creep.name == "roomer2") {
             creep.memory["apath"] = ["W46S67","W47S67","W48S67"];
         } else if (creep.name == "roomer3") {

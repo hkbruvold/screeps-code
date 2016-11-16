@@ -1,7 +1,7 @@
 var roleAssistant = require('role.upgrader');
 var utilEnergy = require('util.energy');
 
-var wallsize = 20000;
+var wallsize = 2000;
 
 var roleRoadworker = {
 

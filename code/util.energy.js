@@ -1,61 +1,64 @@
-function getSource(creep, priorityMain){
-    
-        let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
-            filter: (resource) => {
-                return (resource.amount > 50); //creep.carryCapacity);
-            }
-        });
-        if (dropped) {
-            return dropped;
+function getPickup(creep) {
+    let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
+        filter: (resource) => {
+            return (resource.amount > 50); //creep.carryCapacity);
         }
-    
-    if (priorityMain) {
-        let mainsrc = creep.room.memory.mainsrc;
-        // try to give one main container
-        if (mainsrc) {
-            let maxsum = 0;
-            let imin = 0;
-            for (let i in mainsrc) {
-                let cursum = _.sum(Game.getObjectById(mainsrc[i]).store);
-                if (cursum > maxsum) {
-                    maxsum = cursum;
-                    imin = i;
-                }
-            }
-            return Game.getObjectById(mainsrc[imin]);
-        }
-    } else {
-        let src = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER) &&
-                        _.sum(structure.store) > 0;
-            }
-        });
-        
-        if (src){
-            return src;
-        } else {
-            let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
-                filter: (resource) => {
-                    return (resource.amount > 50); //creep.carryCapacity);
-                }
-            });
-            if (dropped) {
-                return dropped;
-            }
-        }
+    });
+    if (dropped) {
+        return dropped;
     }
+    return false;
+}
+
+
+function getClosestEnergyContainer(creep) {
+    let src = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_CONTAINER) &&
+                    _.sum(structure.store) > 0;
+        }
+    });
+    
+    if (src){
+        return src;
+    }
+    return false;
+}
+
+function getHarvesterStorage(creep) {
+   let mainsrc = creep.room.memory.mainsrc;
+    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (_.sum(structure.store) > 0) &&
+                    (structure.structureType == STRUCTURE_CONTAINER) &&
+                    (mainsrc.indexOf(structure.id) != -1);
+        }
+    });
+    return target; 
 }
 
 function getRegularStorage(creep) {
     let mainsrc = creep.room.memory.mainsrc;
-    
-    return creep.pos.findClosestByRange(STRUCTURE_CONTAINER,{
+    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (mainsrc.indexOf(structure.id) == -1) &&
-                    (_.sum(structure.store) < structure.storeCapacity);
+            return (_.sum(structure.store) < structure.storeCapacity) &&
+                    (structure.structureType == STRUCTURE_CONTAINER) &&
+                    (mainsrc.indexOf(structure.id) == -1);
         }
     });
+    return target;
+}
+
+function getSource(creep, priorityMain){
+    if (priorityMain) {
+        if (src = getPickup(creep)) {return src}
+        if (src = getHarvesterStorage(creep)) {return src}
+        if (src = getClosestEnergyContainer(creep)) {return src}
+    } else {
+        if (src = getClosestEnergyContainer(creep)) {return src}
+        console.log("creep didn't find container")
+        if (src = getPickup(creep)) {return src}
+    }
 }
 
 function pickupSource(creep){
@@ -82,7 +85,8 @@ function pickupSource(creep){
 }
 
 module.exports = {
-    pickupSource(creep) {pickupSource(creep)},
-    getSource(creep) {getSource(creep)},
-    getRegularStorage(creep) {getRegularStorage(creep)}
+    pickupSource(creep) {return pickupSource(creep)},
+    getSource(creep) {return getSource(creep)},
+    getRegularStorage(creep) {return getRegularStorage(creep)},
+    getHarvesterStorage(creep) {return getHarvesterStorage(creep)}
 };

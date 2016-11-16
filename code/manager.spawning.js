@@ -5,24 +5,27 @@
  */
 
 /* Define amount of creeps per role */
-var maxBuilderCount = 3;
+var maxBuilderCount = 4;
 var maxHarvesterCount = 0;
-var maxUpgraderCount = 1;
-var maxRoadworkerCount = 0;
+var maxUpgraderCount = 3;
+var maxRoadworkerCount = 1;
 var maxEnergyStealerCount = 0;
-var maxRoomerCount = 0;
+var maxRoomerCount = 1;
 var maxDedicatedHarvesterCount = 2;
-var maxSpawnFillerCount = 1;
+var maxSpawnFillerCount = 2;
+var maxClaimer = 0;
 
 /* Define body parts for creeps */
-var builderParts = [MOVE,WORK,CARRY,MOVE,CARRY,WORK];
+var builderParts = [MOVE,CARRY,WORK];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
-var upgraderParts = [MOVE,CARRY,WORK,WORK,CARRY];
-var roadworkerParts = [MOVE,WORK,CARRY,WORK,CARRY,MOVE,WORK,WORK];
+var upgraderParts = [MOVE,CARRY,WORK];
+var roadworkerParts = [MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
-var roomerParts = [MOVE,ATTACK];
+var roomerParts = [MOVE,ATTACK,MOVE,ATTACK];
 var dedicatedHarvesterParts = [MOVE,WORK,WORK,WORK,WORK,WORK];
-var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
+//var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
+var spawnFillerParts = [MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY]; // for walking on roads
+var claimerParts = [MOVE,CLAIM];
 
 /* Define memory for creeps */
 var builderMemory = {role: 'builder', harvesting: true};
@@ -35,6 +38,7 @@ var dedicatedHarvesterMemory = {role: 'dedicatedharvester', harvesting: false, m
 var spawnFillerMemory = {role: 'spawnfiller', refill: true, harvesting: true};
 var safeHarvesterMemory = {role: 'safeharvester', harvesting: true};
 var safeUpgraderMemory = {role: 'safeupgrader', harvesting: true};
+var claimerMemory = {role: 'claimer'};
 
 /* Define lookup for creeps based on role */
 var myCreeps = {
@@ -45,11 +49,12 @@ var myCreeps = {
     energyStealer: {maxCount: maxEnergyStealerCount, parts: energyStealerParts, memory: energyStealerMemory, staticParts: false},
     roomer: {maxCount: maxRoomerCount, parts: roomerParts, memory: roomerMemory, staticParts: true},
     dedicatedHarvester:  {maxCount: maxDedicatedHarvesterCount, parts: dedicatedHarvesterParts, memory: dedicatedHarvesterMemory, staticParts: true},
-    spawnFiller: {maxCount: maxSpawnFillerCount, parts: spawnFillerParts, memory: spawnFillerMemory, staticParts: true}
+    spawnFiller: {maxCount: maxSpawnFillerCount, parts: spawnFillerParts, memory: spawnFillerMemory, staticParts: true},
+    claimer: {maxCount: maxClaimer, parts: claimerParts, memory: claimerMemory, staticParts: true}
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.spawnFiller, myCreeps.dedicatedHarvester, myCreeps.roomer, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
+var priorityList = [myCreeps.spawnFiller, myCreeps.dedicatedHarvester, myCreeps.claimer, myCreeps.roomer, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
 
 /* Energy cost for body parts */
 var energyCost = {
@@ -198,11 +203,11 @@ function safeMode(spawner) {
     if ((_.filter(Game.creeps, (creep) => creep.memory.role == "dedicatedharvester").length < 1) && 
        (_.filter(Game.creeps, (creep) => creep.memory.role == "safeharvester").length < 1)) {
         console.log("[SAFE MODE] Spawning safe mode harvester")
-        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", safeHarvesterMemory);
+        spawner.createCreep([WORK,MOVE,CARRY,MOVE], "SAFEMODE_HARVESTER", safeHarvesterMemory);
         return true;
     } else if (spawner.room.controller.ticksToDowngrade < 1500) {
         console.log("[SAFE MODE] Spawning safe mode upgrader")
-        spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_UPGRADER", safeUpgraderMemory);
+        spawner.createCreep([WORK,MOVE,CARRY,MOVE], "SAFEMODE_UPGRADER", safeUpgraderMemory);
         return true;
     } else {
         return false;

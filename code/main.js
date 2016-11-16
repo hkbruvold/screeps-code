@@ -13,6 +13,15 @@ var roleTower = require('role.tower');
 var managerSpawning = require('manager.spawning');
 
 module.exports.loop = function () {
+    /* set to true to set some memory */
+    if (false) {
+        /* mainsrc is array of containers under dedicated harvesters */
+        Game.spawns.Spawn1.room.memory["mainsrc"] = ["582cdb7b051b7a2e782e93a3","582cdddb4e3fd7496e2fb6c5"];
+        
+    }
+    
+    
+    
     if (Game.creeps["SAFEMODE_HARVESTER"]) {roleSafeHarvester.run(Game.creeps["SAFEMODE_HARVESTER"]);}
     if (Game.creeps["SAFEMODE_UPGRADER"]) {roleSafeUpgrader.run(Game.creeps["SAFEMODE_UPGRADER"]);}
     if (managerSpawning.safe(Game.spawns["Spawn1"]) == false) {
