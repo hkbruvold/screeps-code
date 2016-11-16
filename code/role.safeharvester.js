@@ -15,11 +15,23 @@ var roleSafeHarvester = {
         }
         
         if(creep.memory.harvesting == true) {
-            let source = creep.pos.findClosestByRange(FIND_SOURCES);
-            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
+            let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
+                filter: (resource) => {
+                    return (resource.amount > 50); //creep.carryCapacity);
+                }
+            });
+            if (dropped) {
+                if(creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(dropped);
+                }
+                didAction = true;
+            } else {
+                let source = creep.pos.findClosestByRange(FIND_SOURCES);
+                if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source);
+                }
+                didAction = true;
             }
-            didAction = true;
         } else {
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {

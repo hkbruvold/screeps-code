@@ -5,14 +5,14 @@
  */
 
 /* Define amount of creeps per role */
-var maxBuilderCount = 4;
-var maxHarvesterCount = 1;
-var maxUpgraderCount = 2;
-var maxRoadworkerCount = 1;
+var maxBuilderCount = 3;
+var maxHarvesterCount = 0;
+var maxUpgraderCount = 1;
+var maxRoadworkerCount = 0;
 var maxEnergyStealerCount = 0;
 var maxRoomerCount = 0;
 var maxDedicatedHarvesterCount = 2;
-var maxSpawnFillerCount = 2;
+var maxSpawnFillerCount = 1;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,MOVE,CARRY,WORK];
@@ -22,7 +22,7 @@ var roadworkerParts = [MOVE,WORK,CARRY,WORK,CARRY,MOVE,WORK,WORK];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var roomerParts = [MOVE,ATTACK];
 var dedicatedHarvesterParts = [MOVE,WORK,WORK,WORK,WORK,WORK];
-var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
+var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 
 /* Define memory for creeps */
 var builderMemory = {role: 'builder', harvesting: true};
@@ -195,12 +195,17 @@ function getName(role) {
 
 function safeMode(spawner) {
     /* Will spawn one harvester and one builder one one is missing */
-    if (_.filter(Game.creeps, (creep) => creep.memory.role == "dedicatedharvester").length < 1) {
+    if ((_.filter(Game.creeps, (creep) => creep.memory.role == "dedicatedharvester").length < 1) && 
+       (_.filter(Game.creeps, (creep) => creep.memory.role == "safeharvester").length < 1)) {
         console.log("[SAFE MODE] Spawning safe mode harvester")
         spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_HARVESTER", safeHarvesterMemory);
+        return true;
     } else if (spawner.room.controller.ticksToDowngrade < 1500) {
         console.log("[SAFE MODE] Spawning safe mode upgrader")
         spawner.createCreep([WORK,MOVE,CARRY], "SAFEMODE_UPGRADER", safeUpgraderMemory);
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -239,7 +244,7 @@ function spawnCreep(spawner) {
 }
 
 module.exports = {
-    safe(spawner) {safeMode(spawner)},
+    safe(spawner) {return safeMode(spawner)},
     run(spawner) {
         spawnCreep(spawner);
     }

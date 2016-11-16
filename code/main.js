@@ -13,11 +13,12 @@ var roleTower = require('role.tower');
 var managerSpawning = require('manager.spawning');
 
 module.exports.loop = function () {
-    managerSpawning.safe(Game.spawns["Spawn1"]);
     if (Game.creeps["SAFEMODE_HARVESTER"]) {roleSafeHarvester.run(Game.creeps["SAFEMODE_HARVESTER"]);}
     if (Game.creeps["SAFEMODE_UPGRADER"]) {roleSafeUpgrader.run(Game.creeps["SAFEMODE_UPGRADER"]);}
+    if (managerSpawning.safe(Game.spawns["Spawn1"]) == false) {
+        managerSpawning.run(Game.spawns["Spawn1"]);
+    }
     
-    managerSpawning.run(Game.spawns["Spawn1"]);
     
     //roleTower.run(Game.getObjectById("582a0533739724f97f69cb8c"));
     

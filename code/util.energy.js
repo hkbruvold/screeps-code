@@ -1,5 +1,5 @@
 function getSource(creep, priorityMain){
-    if (priorityMain) {
+    
         let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
             filter: (resource) => {
                 return (resource.amount > 50); //creep.carryCapacity);
@@ -9,7 +9,7 @@ function getSource(creep, priorityMain){
             return dropped;
         }
     
-    
+    if (priorityMain) {
         let mainsrc = creep.room.memory.mainsrc;
         // try to give one main container
         if (mainsrc) {
