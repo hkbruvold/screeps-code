@@ -41,6 +41,19 @@ var roleSpawnFiller = {
                         creep.moveTo(targets[0]);
                     }
                     didAction = true;
+                } else {
+                    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity;
+                        }
+                    });
+                    
+                    if (target) {
+                        if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(target);
+                        }
+                        didAction = true;
+                    }
                 }
             }
         }

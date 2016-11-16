@@ -1,7 +1,7 @@
 var roleAssistant = require('role.upgrader');
 var utilEnergy = require('util.energy');
 
-var wallsize = 10000;
+var wallsize = 20000;
 
 var roleRoadworker = {
 
@@ -44,11 +44,13 @@ var roleRoadworker = {
                 }
                 if (target.hits < target.hitsMax) {
                     if (target.structureType == STRUCTURE_WALL) {
-                        if (target.hits < wallsize + 5000) {
+                        if (target.hits > wallsize + 5000) {
+                            creep.say("Done!");
                             creep.memory.repairTarget = "";
                         }
                     }
                 } else {
+                    creep.say("Done")
                     creep.memory.repairTarget = "";
                 }
                 didAction = true;

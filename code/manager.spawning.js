@@ -7,22 +7,22 @@
 /* Define amount of creeps per role */
 var maxBuilderCount = 4;
 var maxHarvesterCount = 1;
-var maxUpgraderCount = 1;
+var maxUpgraderCount = 2;
 var maxRoadworkerCount = 1;
 var maxEnergyStealerCount = 0;
 var maxRoomerCount = 0;
 var maxDedicatedHarvesterCount = 2;
-var maxSpawnFillerCount = 1;
+var maxSpawnFillerCount = 2;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,WORK,CARRY,MOVE,CARRY,WORK];
 var harvesterParts = [MOVE,WORK,CARRY,WORK,CARRY,WORK,MOVE];
-var upgraderParts = [MOVE,CARRY,WORK];
-var roadworkerParts = [MOVE,WORK,CARRY,WORK,CARRY,MOVE];
+var upgraderParts = [MOVE,CARRY,WORK,WORK,CARRY];
+var roadworkerParts = [MOVE,WORK,CARRY,WORK,CARRY,MOVE,WORK,WORK];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var roomerParts = [MOVE,ATTACK];
 var dedicatedHarvesterParts = [MOVE,WORK,WORK,WORK,WORK,WORK];
-var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
+var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 
 /* Define memory for creeps */
 var builderMemory = {role: 'builder', harvesting: true};
