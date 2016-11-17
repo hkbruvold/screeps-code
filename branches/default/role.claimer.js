@@ -4,7 +4,7 @@ var roleClaimer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if (creep.name == "claimer1") {
+        if (creep.name == "claimer1" || creep.name == "claimer2") {
             creep.memory["apath"] = ["E46S62","E46S63"];
         } 
         let myPos = creep.room.name;

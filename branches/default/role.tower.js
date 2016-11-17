@@ -24,7 +24,7 @@ var roleTower = {
                 }
             }
         }
-        
+        return;
         let ramparts = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_RAMPART && structure.hits < 5000);

@@ -15,7 +15,7 @@ function getClosestEnergyContainer(creep) {
     let src = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_CONTAINER) &&
-                    _.sum(structure.store) > 0;
+                    _.sum(structure.store) > 50;
         }
     });
     
@@ -29,7 +29,7 @@ function getHarvesterStorage(creep) {
    let mainsrc = creep.room.memory.mainsrc;
     let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (_.sum(structure.store) > 0) &&
+            return (_.sum(structure.store) > 50) &&
                     (structure.structureType == STRUCTURE_CONTAINER) &&
                     (mainsrc.indexOf(structure.id) != -1);
         }

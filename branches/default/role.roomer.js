@@ -5,7 +5,7 @@ var roleRoomer = {
         if (creep.name == "roomer1") {
             creep.memory["apath"] = ["E46S62"];
         } else if (creep.name == "roomer2") {
-            creep.memory["apath"] = ["W46S67","W47S67","W48S67"];
+            creep.memory["apath"] = ["E46S62","E46S63"];
         } else if (creep.name == "roomer3") {
             creep.memory["apath"] = ["W46S67","W46S68","W46S69"];
         } else if (creep.name == "roomer4") {
@@ -22,7 +22,11 @@ var roleRoomer = {
                     creep.moveTo(targets[0]);
                 }
             } else {
-                creep.moveTo(25,25);
+                if (Game.flags[creep.name]) {
+                    creep.moveTo(Game.flags[creep.name]);
+                } else {
+                    creep.moveTo(25,25);
+                }
             }
         } else {
             creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.apath[idest])));

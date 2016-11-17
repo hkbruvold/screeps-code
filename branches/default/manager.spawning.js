@@ -10,10 +10,10 @@ var maxHarvesterCount = 0;
 var maxUpgraderCount = 3;
 var maxRoadworkerCount = 1;
 var maxEnergyStealerCount = 0;
-var maxRoomerCount = 1;
+var maxRoomerCount = 2;
 var maxDedicatedHarvesterCount = 2;
 var maxSpawnFillerCount = 2;
-var maxClaimer = 0;
+var maxClaimer = 2;
 
 /* Define body parts for creeps */
 var builderParts = [MOVE,CARRY,WORK];
@@ -22,7 +22,7 @@ var upgraderParts = [MOVE,CARRY,WORK];
 var roadworkerParts = [MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var roomerParts = [MOVE,ATTACK,MOVE,ATTACK];
-var dedicatedHarvesterParts = [MOVE,WORK,WORK,WORK,WORK,WORK];
+var dedicatedHarvesterParts = [MOVE,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE];
 //var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var spawnFillerParts = [MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY]; // for walking on roads
 var claimerParts = [MOVE,CLAIM];
@@ -54,7 +54,7 @@ var myCreeps = {
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.spawnFiller, myCreeps.dedicatedHarvester, myCreeps.claimer, myCreeps.roomer, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
+var priorityList = [myCreeps.spawnFiller, myCreeps.dedicatedHarvester, myCreeps.roomer, myCreeps.claimer, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
 
 /* Energy cost for body parts */
 var energyCost = {
@@ -239,7 +239,8 @@ function spawnCreep(spawner) {
                 let ret = spawner.createCreep(bodyParts, creepName, priorityList[i].memory);
                 if (ret != creepName) {
                     // If it fails for some reason
-                    console.log("[FATAL] Unable to create creep, error code: " + ret);
+                    console.log("[FATAL] Unable to create creep, error code: " + ret + "I had " + getEnergy(spawner) + " energy");
+                    console.log("[FATAL] Creep name:"+creepName+" role:"+priorityList[i].memory.role+" body parts:"+bodyParts)
                     safeMode(spawner);
                 }
             }
