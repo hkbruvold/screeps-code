@@ -1,5 +1,6 @@
 let confRooms = require("conf.rooms");
 let mgrCreeps = require("mgr.creeps");
+let mgrSpawner = require("mgr.spawner");
 
 module.exports.loop = function () {
     let rooms = [];
@@ -9,8 +10,8 @@ module.exports.loop = function () {
     safeMode(rooms[0]);
     mgrCreeps.runCreeps();
 
-    if (Game.time % 100 == 0) {
-        mgrCreeps.reset(rooms[0]);
+    if (Game.time % 1500 == 0) {
+        mgrSpawner.fillSpawnQueue(confRooms[rooms[0].name].spawners[0]);
     }
 };
 
