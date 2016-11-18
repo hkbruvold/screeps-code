@@ -49,7 +49,7 @@ function runCreeps(room) {
             removeCreep(room, Game.creeps[cname]);
         }
         try {
-            let creepModule = require("type." + Game.creeps[cname].memory.type);
+            var creepModule = require("type." + Game.creeps[cname].memory.type);
         } catch(error) {
             console.log(error);
             console.log("Probably missing module type." + Game.creeps[cname].memory.type);
