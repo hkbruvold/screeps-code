@@ -7,11 +7,13 @@ function reset(room) {
     /* Refresh the creep dictionary. This dictionary is mainly used to choose what needs to be spawned */
     let dict = {};
     for (let cname in Game.creeps) {
-        let creepType = Game.creeps[cname].memory.type;
-        if (dict[creepType]) {
-            dict[creepType].push(Game.creeps[cname].id);
-        } else {
-            dict[creepType] = [Game.creeps[cname].id];
+        if (Game.creeps[cname].memory.home == room.name) {
+            let creepType = Game.creeps[cname].memory.type;
+            if (dict[creepType]) {
+                dict[creepType].push(Game.creeps[cname].id);
+            } else {
+                dict[creepType] = [Game.creeps[cname].id];
+            }
         }
     }
     room.memory["creepdict"] = dict;
