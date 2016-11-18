@@ -5,9 +5,9 @@
  */
 
 /* Define amount of creeps per role */
-var maxBuilderCount = 4;
+var maxBuilderCount = 2;
 var maxHarvesterCount = 0;
-var maxUpgraderCount = 3;
+var maxUpgraderCount = 1;
 var maxRoadworkerCount = 1;
 var maxEnergyStealerCount = 0;
 var maxRoomerCount = 2;
@@ -22,9 +22,9 @@ var upgraderParts = [MOVE,CARRY,WORK];
 var roadworkerParts = [MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY];
 var energyStealerParts = [MOVE,CARRY,WORK,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
 var roomerParts = [MOVE,ATTACK,MOVE,ATTACK];
-var dedicatedHarvesterParts = [MOVE,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE];
+var dedicatedHarvesterParts = [MOVE,WORK,WORK,WORK,WORK,WORK];
 //var spawnFillerParts = [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY];
-var spawnFillerParts = [MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY]; // for walking on roads
+var spawnFillerParts = [MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY]; // for walking on roads
 var claimerParts = [MOVE,CLAIM];
 
 /* Define memory for creeps */
@@ -50,11 +50,11 @@ var myCreeps = {
     roomer: {maxCount: maxRoomerCount, parts: roomerParts, memory: roomerMemory, staticParts: true},
     dedicatedHarvester:  {maxCount: maxDedicatedHarvesterCount, parts: dedicatedHarvesterParts, memory: dedicatedHarvesterMemory, staticParts: true},
     spawnFiller: {maxCount: maxSpawnFillerCount, parts: spawnFillerParts, memory: spawnFillerMemory, staticParts: true},
-    claimer: {maxCount: maxClaimer, parts: claimerParts, memory: claimerMemory, staticParts: true}
+    claimer: {maxCount: maxClaimer, parts: claimerParts, memory: claimerMemory, staticParts: true},
 };
 
 /* Define priority list for spawning creeps */
-var priorityList = [myCreeps.spawnFiller, myCreeps.dedicatedHarvester, myCreeps.roomer, myCreeps.claimer, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
+var priorityList = [myCreeps.dedicatedHarvester, myCreeps.spawnFiller, myCreeps.roomer, myCreeps.claimer, myCreeps.energyStealer, myCreeps.upgrader, myCreeps.builder, myCreeps.roadworker];
 
 /* Energy cost for body parts */
 var energyCost = {
