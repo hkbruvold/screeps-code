@@ -17,8 +17,9 @@ function initSources(structure) {
                 imin = i;
             }
         }
-        sourceList.push(sources[imin]);
+        sourceList.push(sources[imin].id);
     }
+    structure.room.memory.sources = sourceList;
 }
 
 function initDroppedMemory(room) {

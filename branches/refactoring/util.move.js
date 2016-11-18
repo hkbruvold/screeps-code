@@ -3,11 +3,11 @@ module.exports = {
     createPath, move
 };
 
-function createPath(creep, target) {
+function createPath(creep, x, y) {
     /* Creates a path from creep to target that the creep can follow by using move() */
-    creep.memory.path = creep.pos.findPathTo(target);
+    creep.memory.path = creep.pos.findPathTo(x, y);
     creep.memory.pathprog = 0;
-    creep.memory.target = target.id;
+    creep.memory.target = {x: x, y: y};
 }
 
 function move(creep) {
@@ -32,8 +32,8 @@ function move(creep) {
         }
         // Something went wrong, most likely something in the way
         // Solution: Generate new path
-        let target = Game.getObjectById(creep.memory.target);
-        creep.memory.path = creep.pos.findPathTo(target);
+        let target = creep.memory.target;
+        creep.memory.path = creep.pos.findPathTo(target.x, target.y);
         creep.memory.pathprog = 0;
         return 2;
     } else if (res == ERR_TIRED) {

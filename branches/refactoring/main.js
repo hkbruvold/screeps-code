@@ -30,6 +30,7 @@ module.exports.loop = function () {
     if (Game.time % 1500 == 0) {
         mgrSpawner.fillSpawnQueue(confRooms[rooms[0].name].spawners[0]);
         mgrMemory.clearCreepMemory();
+        mgrInitmem.initDroppedMemory(rooms[0]);
     }
 };
 

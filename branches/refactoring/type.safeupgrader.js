@@ -1,5 +1,5 @@
 /* The safeupgrader is a dumb basic creep that will harvest or pick up energy and upgrade the controller */
-module.exports = {run(creep) {run(creep)}};
+module.exports = {run};
 
 function run(creep) {
     if (!creep.memory.harvesting) {

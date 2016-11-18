@@ -1,5 +1,5 @@
 /* The safeharvester is a dumb basic creep that will harvest or pick up energy and fill up the spawn */
-module.exports = {run(creep) {run(creep)}};
+module.exports = {run};
 
 function run(creep) {
     let didAction = false;
