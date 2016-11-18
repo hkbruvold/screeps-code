@@ -15,8 +15,9 @@ var roleRoadworker = {
         if (targetID == "") {
             let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return ((structure.structureType != STRUCTURE_WALL) && (structure.hits < structure.hitsMax*3/4)) ||
-                           ((structure.structureType == STRUCTURE_WALL) && (structure.hits < wallsize));
+                    return ((structure.structureType != STRUCTURE_WALL && structure.structureType != STRUCTURE_RAMPART) && (structure.hits < structure.hitsMax*3/4)) ||
+                           ((structure.structureType == STRUCTURE_WALL) && (structure.hits < wallsize)) ||
+                           ((structure.structureType == STRUCTURE_RAMPART) && (structure.hits < wallsize));
                 }
             });
             
@@ -43,7 +44,7 @@ var roleRoadworker = {
                     creep.moveTo(target);
                 }
                 if (target.hits < target.hitsMax) {
-                    if (target.structureType == STRUCTURE_WALL) {
+                    if (target.structureType == STRUCTURE_WALL || target.structureType == STRUCTURE_RAMPART) {
                         if (target.hits > wallsize + 5000) {
                             creep.say("Done!");
                             creep.memory.repairTarget = "";

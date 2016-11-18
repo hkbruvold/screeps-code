@@ -14,7 +14,7 @@ function getPickup(creep) {
 function getClosestEnergyContainer(creep) {
     let src = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_CONTAINER) &&
+            return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
                     _.sum(structure.store) > 50;
         }
     });
@@ -42,7 +42,7 @@ function getRegularStorage(creep) {
     let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (_.sum(structure.store) < structure.storeCapacity) &&
-                    (structure.structureType == STRUCTURE_CONTAINER) &&
+                    (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
                     (mainsrc.indexOf(structure.id) == -1);
         }
     });
@@ -56,11 +56,12 @@ function getSource(creep, priorityMain){
         if (src = getClosestEnergyContainer(creep)) {return src}
     } else {
         if (src = getClosestEnergyContainer(creep)) {return src}
-        console.log("creep didn't find container")
         if (src = getPickup(creep)) {return src}
     }
 }
 
+// try:
+// var pickupSource = function pickupSource(creep){return something;};
 function pickupSource(creep){
     if (creep.memory.role == "spawnfiller") {
         var src = getSource(creep, true);
@@ -85,7 +86,7 @@ function pickupSource(creep){
 }
 
 module.exports = {
-    pickupSource(creep) {return pickupSource(creep)},
+    pickupSource,
     getSource(creep) {return getSource(creep)},
     getRegularStorage(creep) {return getRegularStorage(creep)},
     getHarvesterStorage(creep) {return getHarvesterStorage(creep)}
