@@ -24,7 +24,7 @@ function move(creep) {
     if (!creep.memory.path) return 4;
     if (path.length == pathprog) return 1;
 
-    let res = creep.move(path[pathprog]);
+    let res = creep.move(path[pathprog].direction);
     if (res == OK) {
         if (creep.pos.x == path[pathprog].x && creep.pos.y == path[pathprog].y) {
             creep.memory.pathprog = pathprog + 1;
@@ -35,8 +35,9 @@ function move(creep) {
         let target = Game.getObjectById(creep.memory.target);
         creep.memory.path = creep.pos.findPathTo(target);
         creep.memory.pathprog = 0;
+        return 2;
     } else if (res == ERR_TIRED) {
-        creep.memory.tiredCound += 1;
+        creep.memory.tiredCount += 1;
         return 3;
     }
 }
