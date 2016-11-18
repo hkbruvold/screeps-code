@@ -1,6 +1,6 @@
 /* This module contains functions to generate memory that only needs to be set once */
 module.exports = {
-    initSources, initRepairQueue, initSpawnMemory
+    initSources, initRepairQueue, initSpawnMemory, initDroppedMemory, initHarvesterContainers
 };
 
 function initSources(structure) {
@@ -18,6 +18,23 @@ function initSources(structure) {
             }
         }
         sourceList.push(sources[imin]);
+    }
+}
+
+function initDroppedMemory(room) {
+    /* Creates an empty dictionary to store status of dropped resources */
+    room.memory.dropped = {};
+}
+
+function initHarvesterContainers(room) {
+    /* Creates an array of containers underneath harvesters */
+    room.memory.harvesterContainers = [];
+
+    for (let name in Game.creeps) {
+        if (Game.creeps[name].memory.type == "harvester") {
+            let container = _.filter(Game.creeps[name].pos.lookFor(LOOK_STRUCTURES), (structure) => (structure.structureType == STRUCTURE_CONTAINER));
+            room.memory.harvesterContainers.push(container[0]);
+        }
     }
 }
 

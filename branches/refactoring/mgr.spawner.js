@@ -41,6 +41,7 @@ function spawnNext(spawner) {
 
             if (result == name) {
                 Game.creeps[name].memory.born = Game.time;
+                Game.creeps[name].memory.home = spawner.room.name;
             } else if (result == ERR_NOT_ENOUGH_ENERGY) {
                 return;
             } else if (result == ERR_BUSY) {

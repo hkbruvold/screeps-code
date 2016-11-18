@@ -58,7 +58,7 @@ function runCreeps(room) {
             continue;
         }
         try {
-            creepModule.run(Game.creeps[cname], room);
+            creepModule.run(Game.creeps[cname]);
         } catch(error) {
             console.log("Error executing code for creep: " + Game.creeps[cname].name + " of type: " + Game.creeps[cname].memory.type);
             console.log(error);
