@@ -5,6 +5,7 @@ module.exports = {
 
 function getEnergy(creep) {
     /* Returns an object to get energy from. Closest container prioritized */
+    let src = null;
     if (src = getClosestEnergyContainer(creep)) {return src}
     if (src = getDroppedResource(creep)) {return src}
 }
