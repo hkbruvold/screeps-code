@@ -21,10 +21,6 @@ function spawnNext(spawner) {
     *  Will also recalculate spawn energy capacity once in a while */
     let confCreeps = require("conf.creeps");
     let mgrDelegator = require("mgr.delegator");
-    if (Game.time % 100 == 1) {
-        fillSpawnQueue(spawner);
-        recalculateCapacity(spawner);
-    }
 
     if (spawner.spawning) {
         return;

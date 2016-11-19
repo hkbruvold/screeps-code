@@ -10,14 +10,12 @@ function giveTask(creep, room) {
 }
 
 function giveHarvesterTask(creep, room) {
-    /* Give the harvester a the task of the oldest harvester under 200 ticks*/
-
+    /* Give the harvester a the task of the oldest harvester under 200 ticks */
     if (!room.memory.harvesterTasks) {
         room.memory.harvesterTasks = {};
     }
 
     // Check for sources missing a harvester
-    //let missingWorker = _.filter(room.memory.harvesterTasks, (sourceID) => (Game.getObjectById(sourceID.creepID) === null));
     let missingWorker = null;
     for (let sourceID in room.memory.harvesterTasks) {
         if ((!Game.creeps[room.memory.harvesterTasks[sourceID].creepName]) ||
@@ -27,11 +25,11 @@ function giveHarvesterTask(creep, room) {
         }
     }
 
-    if (missingWorker) {
+    if (missingWorker) { // Give harvester the task to harvest the source with a missing harvester
         creep.memory.task = {id: missingWorker};
         room.memory.harvesterTasks[missingWorker].creepName = creep.name;
         creep.memory.state = 2;
-    } else {
+    } else { // Give the harvester the task of replacing the oldest creep
         let harvesters = _.filter(Game.creeps, (creep) => (creep.memory.type == "harvester") &&
             (creep.memory.home == room.name) &&
             (creep.ticksToLive < 200) &&
