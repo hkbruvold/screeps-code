@@ -122,7 +122,13 @@ function transporterGetSource(creep, room) {
     /* Function to give energy source for the transporter */
     // Check for harvester storage
     let utilEnergy = require("util.energy");
-    target = utilEnergy.getHarvesterStorage(creep);
+    let target = utilEnergy.getHarvesterStorage(creep);
+
+    if (target) {
+        return target;
+    }
+
+    target = utilEnergy.getDroppedResource(creep);
 
     if (target) {
         return target;
@@ -133,7 +139,7 @@ function transporterGetTarget(creep, room) {
     /* Function to give the transporter a target */
     // Check if some regular storage containers need filling
     let utilEnergy = require("util.energy");
-    target = utilEnergy.getRegularStorage(creep);
+    let target = utilEnergy.getRegularStorage(creep);
 
     if (target) {
         creep.memory.role = "transporter";

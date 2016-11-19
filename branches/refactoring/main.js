@@ -13,16 +13,17 @@ module.exports.loop = function () {
         //mgrInitmem.initHarvesterContainers(Game.spawns.Spawn1.room);
     }
 
+    let rooms = [];
+    for (let roomname in confRooms) {
+        rooms.push(Game.rooms[roomname]);
+    }
+
     /* Do some operations every 15 ticks */
     if (Game.time % 15 == 0) {
         mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
         mgrMemory.clearCreepMemory();
     }
 
-    let rooms = [];
-    for (let roomname in confRooms) {
-        rooms.push(Game.rooms[roomname]);
-    }
     /* Spawn safemode harvester/upgrader if needed, otherwise regular creeps */
     if (!safeMode(Game.spawns[confRooms[rooms[0].name].spawners[0]])) {
         mgrSpawner.spawnNext(Game.spawns[confRooms[rooms[0].name].spawners[0]]);

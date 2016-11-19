@@ -30,7 +30,9 @@ function initHarvesterContainers(room) {
     for (let name in Game.creeps) {
         if (Game.creeps[name].memory.type == "harvester") {
             let container = _.filter(Game.creeps[name].pos.lookFor(LOOK_STRUCTURES), (structure) => (structure.structureType == STRUCTURE_CONTAINER));
-            room.memory.harvesterContainers.push(container[0]);
+            if (container[0]) {
+                room.memory.harvesterContainers.push(container[0].id);
+            }
         }
     }
 }
