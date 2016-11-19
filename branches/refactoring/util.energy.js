@@ -17,10 +17,30 @@ function getEnergyDroppedPriority(creep) {
 
 function takeEnergy(creep, object) {
     /* Make creep execute the correct take command on object */
-    if (object.resourceType == RESOURCE_ENERGY) {
+    if (object.resourceType == RESOURCE_ENERGY) { // If it's dropped energy
         return creep.pickup(object);
     } else {
         return creep.withdraw(object, RESOURCE_ENERGY);
+    }
+}
+
+function reserve(object, amount) {
+    /* Reserve collection of energy for the amount */
+    if (!object.memory.reservation) object.memory.reservation = {};
+
+    if (object.id in object.room.memory.reservation) {
+        object.room.memory.reservation[object.id] += amount;
+    } else {
+        object.room.memory.reservation[object.id] = amount;
+    }
+}
+
+function unReserve(object, amount) {
+    /* Remove reservation on the object of given amount */
+    if (!object.memory.reservation) object.memory.reservation = {};
+
+    if (object.id in object.room.memory.reservation) {
+        object.room.memory.reservation[object.id] -= amount;
     }
 }
 
@@ -69,11 +89,7 @@ function getDroppedResource(creep) {
         }
     });
     if (dropped) {
-        if (droppedmem.indexOf(dropped.id) == -1) {
-            creep.room.memory.dropped[dropped.id] = remainingCapacity;
-        } else {
-            creep.room.memory.dropped[dropped.id] += remainingCapacity;
-        }
+        reserve(dropped, remainingCapacity);
     }
     return dropped;
 }

@@ -3,16 +3,14 @@
 *  0 - just spawned
 *  1 - looking for task
 *  2 - moving to task
-*  3 - harvesting*/
+*  3 - harvesting */
 module.exports = {run};
 
 function run(creep) {
     let utilMove = require("util.move");
     let mgrSpawner = require("mgr.spawner");
 
-    if (creep.spawning) {
-        return;
-    }
+    if (creep.spawning) return;
 
     if (creep.ticksToLive <= creep.memory.deployTime) {
         mgrSpawner.addToQueue(creep.room, creep.memory.type);
