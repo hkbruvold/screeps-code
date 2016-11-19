@@ -13,7 +13,7 @@ function initSources(structure) {
         let imin = 0;
         for (let i in sources) {
             let range = structure.pos.getRangeTo(sources[i]);
-            if (range < min && sourceList.indexOf(sources[i]) == -1) {
+            if (range < min && sourceList.indexOf(sources[i].id) == -1) {
                 min = range;
                 imin = i;
             }

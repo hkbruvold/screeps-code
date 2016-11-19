@@ -13,29 +13,22 @@ function run(creep) {
         return;
     }
 
-    if (!creep.room.memory.harvesterTasks) {
-        creep.room.memory.harvesterTasks = {};
+    if (creep.memory.state == 3) { // Ready to harvest
+        creep.harvest(Game.getObjectById(creep.memory.task.id));
+        return;
     }
 
     if (!creep.memory.task) {
         creep.memory.task = {};
+    }
+
+    if (!("id" in creep.memory.task)) {
         creep.memory.state = 1;
-    } else {
-        if (creep.memory.task.id) {
-            creep.memory.state = 2;
-        } else {
-            console.log("This creep wasn't given a task: "+creep.name);
-            creep.say("task?");
-            return;
-        }
+        creep.say("Exploring");
     }
 
-    if (creep.memory.state == 3) {
-        creep.harvest(Game.getObjectById(creep.memory.task.id));
-    }
-
-    else if (creep.memory.state == 1) { // Looking for task
-        if (!("id" in creep.memory.task)) {
+    if (creep.memory.state == 1) { // Looking for task
+        if (!("id" in creep.memory.task)) { // Identify task
             let source = creep.pos.findClosestByRange(FIND_SOURCES, {
                 filter: (source) => {
                     return !(source.id in creep.room.memory.harvesterTasks);
@@ -43,7 +36,9 @@ function run(creep) {
             });
             creep.room.memory.harvesterTasks[source.id] = {creepID: creep.id};
             creep.memory.task["id"] = source.id;
+            creep.say("Found it");
         }
+
         let source = Game.getObjectById(creep.memory.task.id);
         let result = creep.harvest(source);
         if (result == ERR_NOT_IN_RANGE) {
@@ -53,6 +48,7 @@ function run(creep) {
             let myY = creep.pos.y;
             creep.room.memory.harvesterTasks[source.id].pos = {x: myX, y: myY};
             creep.memory.state = 3;
+            creep.say("Here");
         } else if (result == ERR_BUSY) {
             // possibly when still being spawned
         } else {
@@ -68,12 +64,14 @@ function run(creep) {
             utilMove.createPath(creep, taskpos.x, taskpos.y);
         } else if (result == 1) {
             creep.memory.state = 3;
+            creep.say("I'm here");
             return;
         }
         if ("old" in creep.memory.task) {
             let oldCreep = Game.getObjectById(creep.memory.task.old);
             if (oldCreep) {
                 if (creep.pos.isNearTo(oldCreep)) { // Can calculate time it took to get here
+                    creep.say("Waiting");
                     if (creep.memory.deployTime == 0) {
                         creep.memory.deployTime = Game.time - creep.memory.born;
                     }
