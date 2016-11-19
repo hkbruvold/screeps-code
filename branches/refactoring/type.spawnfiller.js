@@ -41,9 +41,10 @@ function run(creep) {
             }
         }
 
-        if (creep.isNearTo(energyTarget)) {
+        if (creep.pos.isNearTo(energyTarget)) {
             utilEnergy.takeEnergy(creep, energyTarget);
             creep.memory.state = 2;
+            creep.memory.energyTarget = "";
             return;
         }
         let moveResult = utilMove.move(creep);
@@ -71,9 +72,10 @@ function run(creep) {
             }
         }
 
-        if (creep.isNearTo(dumpTarget)) {
+        if (creep.pos.isNearTo(dumpTarget)) {
             creep.transfer(dumpTarget, RESOURCE_ENERGY);
-            creep.memory.state = 1;
+            if (creep.carry.energy === 0) creep.memory.state = 1;
+            creep.memory.dumpTarget = "";
             return;
         }
         let moveResult = utilMove.move(creep);

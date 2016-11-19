@@ -30,7 +30,7 @@ function takeEnergy(creep, object) {
 
 function reserve(object, amount) {
     /* Reserve collection of energy for the amount */
-    if (!object.memory.reservation) object.memory.reservation = {};
+    if (!object.room.memory.reservation) object.room.memory.reservation = {};
 
     if (object.id in object.room.memory.reservation) {
         object.room.memory.reservation[object.id] += amount;
@@ -41,7 +41,7 @@ function reserve(object, amount) {
 
 function unReserve(object, amount) {
     /* Remove reservation on the object of given amount */
-    if (!object.memory.reservation) object.memory.reservation = {};
+    if (!object.room.memory.reservation) object.room.memory.reservation = {};
 
     if (object.id in object.room.memory.reservation) {
         object.room.memory.reservation[object.id] -= amount;
@@ -86,7 +86,7 @@ function getDroppedResource(creep) {
     /* Returns dropped resource if not all reserved, will also reserve */
     let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
     let droppedmem = creep.room.memory.reservation;
-    if !(droppedmem) droppedmem = {};
+    if (!droppedmem) droppedmem = {};
     let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: (resource) => {
             return (resource.resourceType == RESOURCE_ENERGY) && ((!(resource.id in droppedmem) && resource.amount > 50) ||
