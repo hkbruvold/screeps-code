@@ -16,6 +16,13 @@ module.exports = {
         memory: {type: "harvester", home: "", tiredCount: 0, deployTime: 2, state: 0},
         priority: 1, // priority is a number from 0 to 9 where 0 is highest priority
     },
+    spawnfiller: {
+        /* transporter transports energy from harvester container to central storage */
+        parts: [MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "spawnfiller", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
+        priority: 1, // priority is a number from 0 to 9 where 0 is highest priority
+    },
     transporter: {
         /* transporter transports energy from harvester container to central storage */
         parts: [MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY],

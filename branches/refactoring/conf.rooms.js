@@ -7,6 +7,7 @@ module.exports = {
         spawners: ["Spawn1"],
         creeps: {
             harvester: 1,
+            spawnfiller: 1,
             transporter: 0,
             transporternoroad: 0,
             upgrader: 0,

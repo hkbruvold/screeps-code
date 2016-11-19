@@ -21,11 +21,11 @@ function run(creep) {
         mgrSpawner.addToQueue(creep.room, creep.memory.type);
     }
 
-    if (creep.carry === creep.carryCapacity) {
+    if (_.sum(creep.carry) === creep.carryCapacity) {
         creep.memory.state = 2;
     }
 
-    if (creep.carry === 0) {
+    if (creep.carry.energy === 0) {
         creep.memory.state = 1;
     }
 

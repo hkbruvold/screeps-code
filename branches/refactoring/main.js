@@ -9,8 +9,14 @@ module.exports.loop = function () {
         mgrInitmem.initSources(Game.spawns.Spawn1);
         mgrInitmem.initSpawnMemory(Game.spawns.Spawn1);
         mgrInitmem.initRepairQueue(Game.spawns.Spawn1.room);
-        mgrInitmem.initDroppedMemory(Game.spawns.Spawn1.room);
+        mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
         //mgrInitmem.initHarvesterContainers(Game.spawns.Spawn1.room);
+    }
+
+    /* Do some operations every 1500 ticks */
+    if (Game.time % 150 == 0) {
+        mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
+        mgrMemory.clearCreepMemory();
     }
 
     let rooms = [];
@@ -24,13 +30,6 @@ module.exports.loop = function () {
 
     /* Run creeps modules */
     mgrCreeps.runCreeps();
-
-    /* Do some operations every 1500 ticks */
-    if (Game.time % 150 == 0) {
-        mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
-        mgrMemory.clearCreepMemory();
-        mgrInitmem.initDroppedMemory(rooms[0]);
-    }
 };
 
 

@@ -23,11 +23,6 @@ function initSources(structure) {
     structure.room.memory.sources = sourceList;
 }
 
-function initDroppedMemory(room) {
-    /* Creates an empty dictionary to store status of dropped resources */
-    room.memory.dropped = {};
-}
-
 function initHarvesterContainers(room) {
     /* Creates an array of containers underneath harvesters */
     room.memory.harvesterContainers = [];

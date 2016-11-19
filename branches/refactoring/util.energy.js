@@ -18,7 +18,7 @@ function getEnergyDroppedPriority(creep) {
 
 function takeEnergy(creep, object) {
     /* Make creep execute the correct take command on object */
-    let remainingCapacity = creep.carryCapacity - creep.carry;
+    let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
     if (object.resourceType == RESOURCE_ENERGY) { // If it's dropped energy
         let result = creep.pickup(object);
         if (result === OK) unReserve(object, remainingCapacity);
@@ -84,7 +84,7 @@ function getRegularStorage(creep) {
 
 function getDroppedResource(creep) {
     /* Returns dropped resource if not all reserved, will also reserve */
-    let remainingCapacity = creep.carryCapacity - creep.carry;
+    let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
     let droppedmem = creep.room.memory.dropped;
     let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: (resource) => {
