@@ -34,9 +34,16 @@ function run(creep) {
                     return !(source.id in creep.room.memory.harvesterTasks);
                 }
             });
-            creep.room.memory.harvesterTasks[source.id] = {creepID: creep.id};
-            creep.memory.task["id"] = source.id;
-            creep.say("Found it");
+            if (source) {
+                creep.room.memory.harvesterTasks[source.id] = {creepID: creep.id};
+                creep.memory.task["id"] = source.id;
+                creep.say("Found it");
+            } else {
+                creep.memory.task["id"] = "";
+                creep.say("NOPE");
+                console.log("[FATAL] creep "+creep.name+" can't find any unclaimed sources.");
+                return;
+            }
         }
 
         let source = Game.getObjectById(creep.memory.task.id);

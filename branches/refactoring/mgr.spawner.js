@@ -22,7 +22,7 @@ module.exports = {
 function spawnNext(spawner) {
     /* Will spawn next creep in spawn queue if there are enough resources.
     *  Will also recalculate spawn energy capacity once in a while */
-    if ((Game.time+1) % 1000) {
+    if (Game.time % 1000 == 1) {
         fillSpawnQueue(spawner);
         recalculateCapacity(spawner);
     }
@@ -41,7 +41,7 @@ function spawnNext(spawner) {
             let result = spawner.createCreep(body, getName(creep), confCreeps[creep].memory);
 
             if (result == name) {
-                spawner.memory.spawnQueue.shift();
+                spawner.memory.spawnQueue[i].shift();
                 Game.creeps[name].memory.born = Game.time;
                 Game.creeps[name].memory.home = spawner.room.name;
                 mgrDelegator.giveTask(Game.creeps[name], spawner.room);
@@ -74,7 +74,7 @@ function fillSpawnQueue(spawner) {
             let queued = 0;
             let priority = confCreeps[creepType].priority;
             for (let i in spawnQueue[priority]) {
-                if (spawnQueue[priority] == creepType) {
+                if (spawnQueue[priority][i] == creepType) {
                     queued++;
                 }
             }

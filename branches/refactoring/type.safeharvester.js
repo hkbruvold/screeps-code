@@ -2,7 +2,7 @@
 module.exports = {run};
 
 function run(creep) {
-    if (!creep.memory.harvesting) {
+    if (!("harvesting" in creep.memory)) {
         creep.memory.harvesting = true;
     }
 
