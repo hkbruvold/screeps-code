@@ -1,6 +1,6 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
-    giveTask, spawnfillerGetAssistantTask
+    giveTask, spawnfillerGetTask, workerGetTask
 };
 
 function giveTask(creep, room) {
@@ -51,10 +51,23 @@ function giveHarvesterTask(creep, room) {
     }
 }
 
-function spawnfillerGetAssistantTask(creep, room) {
+function spawnfillerGetTask(creep, room) {
     /* Function to give spawnfiller an assistant task */
-    // Check for towers
+    // Check if spawn or extensions need energy
     let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                structure.energy < structure.energyCapacity;
+        }
+    });
+
+    if (target) {
+        creep.memory.role = "spawnfiller";
+        return target;
+    }
+
+    // Check for towers
+    target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_TOWER) &&
                 structure.energy < structure.energyCapacity;
@@ -74,4 +87,33 @@ function spawnfillerGetAssistantTask(creep, room) {
         creep.memory.role = "transporter";
         return target;
     }
+}
+
+function workerGetTask(creep, room) {
+    /* Function to give a worker a task */
+    // Check if something needs repair
+    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType != STRUCTURE_WALL &&
+            structure.structureType != STRUCTURE_RAMPART &&
+            structure.hits <= structure.hitsMax*3/4);
+        }
+    });
+
+    if (target) {
+        creep.memory.role = "repairer";
+        return target;
+    }
+
+    // Check for construction sites
+    target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+
+    if (target) {
+        creep.memory.role = "builder";
+        return target;
+    }
+
+    // Give the worker the task of upgrading the controller
+    creep.memory.role = "upgrader";
+    return creep.room.controller;
 }
