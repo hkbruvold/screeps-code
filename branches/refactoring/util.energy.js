@@ -1,6 +1,6 @@
 /* This module contains functions to be used by creeps to find energy sources */
 module.exports = {
-    getClosestEnergyContainer, getHarvesterContainer, getRegularStorage, getDroppedResource, getEnergy, getEnergyDroppedPriority, takeEnergy
+    getClosestEnergyContainer, getHarvesterContainer, getRegularStorage, getDroppedResource, getEnergy, getEnergyDroppedPriority, takeEnergy, reserve, unReserve
 };
 
 function getEnergy(creep) {
@@ -17,8 +17,11 @@ function getEnergyDroppedPriority(creep) {
 
 function takeEnergy(creep, object) {
     /* Make creep execute the correct take command on object */
+    let remainingCapacity = creep.carryCapacity - creep.carry;
     if (object.resourceType == RESOURCE_ENERGY) { // If it's dropped energy
-        return creep.pickup(object);
+        let result = creep.pickup(object);
+        if (result === OK) unReserve(object, remainingCapacity);
+        return result;
     } else {
         return creep.withdraw(object, RESOURCE_ENERGY);
     }
@@ -79,7 +82,7 @@ function getRegularStorage(creep) {
 }
 
 function getDroppedResource(creep) {
-    /* Returns dropped resource if not reserved */
+    /* Returns dropped resource if not all reserved, will also reserve */
     let remainingCapacity = creep.carryCapacity - creep.carry;
     let droppedmem = creep.room.memory.dropped;
     let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
