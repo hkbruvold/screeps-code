@@ -61,11 +61,17 @@ function spawnfillerGetAssistantTask(creep, room) {
         }
     });
 
-    if (target) return target;
+    if (target) {
+        creep.memory.role = "towerfiller";
+        return target;
+    }
 
     // Check if some regular storage containers need filling
     let utilEnergy = require("util.energy");
     target = utilEnergy.getRegularStorage(creep);
 
-    if (target) return target;
+    if (target) {
+        creep.memory.role = "transporter";
+        return target;
+    }
 }

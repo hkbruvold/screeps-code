@@ -1,19 +1,27 @@
 /* This module contains functions to be used by creeps to find energy sources */
 module.exports = {
-    getClosestEnergyContainer, getHarvesterContainer, getRegularStorage, getDroppedResource, getEnergy, getEnergyDroppedPriority, takeEnergy, reserve, unReserve
+    getClosestEnergyContainer, getHarvesterStorage, getRegularStorage, getDroppedResource, getEnergy, getEnergyDroppedPriority, takeEnergy, reserve, unReserve
 };
 
 function getEnergy(creep) {
     /* Returns an object to get energy from. Closest container prioritized */
     let src = null;
-    if (src = getClosestEnergyContainer(creep)) {return src}
-    if (src = getDroppedResource(creep)) {return src}
+    if (src = getClosestEnergyContainer(creep)) return src;
+    if (src = getDroppedResource(creep)) return src;
 }
 
 function getEnergyDroppedPriority(creep) {
     /* Returns an object to get energy from. Dropped resource prioritized */
-    if (src = getDroppedResource(creep)) {return src}
-    if (src = getClosestEnergyContainer(creep)) {return src}
+    let src = null;
+    if (src = getDroppedResource(creep)) return src;
+    if (src = getClosestEnergyContainer(creep)) return src;
+}
+
+function getEnergyFromHarvester(creep) {
+    /* Returns an object to get energy from. Dropped resource prioritized. Regular containers stored ignored. */
+    let src = null;
+    if (src = getDroppedResource(creep)) return src;
+    if (src = getHarvesterStorage(creep)) return src;
 }
 
 function takeEnergy(creep, object) {
@@ -58,9 +66,10 @@ function getClosestEnergyContainer(creep) {
     });
 }
 
-function getHarvesterContainer(creep) {
+function getHarvesterStorage(creep) {
     /* Returns harvester container closest to creep with more than 50 energy */
     let containers = creep.room.memory.harvesterContainers;
+    if (!containers) creep.room.memory.harvesterContainers = [];
     return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (_.sum(structure.store) > 50) &&
@@ -73,6 +82,7 @@ function getHarvesterContainer(creep) {
 function getRegularStorage(creep) {
     /* Returns other containers than harvester containers */
     let containers = creep.room.memory.harvesterContainers;
+    if (!containers) creep.room.memory.harvesterContainers = [];
     return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (_.sum(structure.store) < structure.storeCapacity) &&

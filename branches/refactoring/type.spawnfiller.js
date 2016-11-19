@@ -34,6 +34,9 @@ function run(creep) {
         let energyTarget = Game.getObjectById(creep.memory.energyTarget);
         if (!energyTarget) { // Need target
             let src = utilEnergy.getEnergy(creep);
+            if (creep.memory.role === "transporter") {
+                src = utilEnergy.
+            }
             if (src) {
                 creep.memory.energyTarget = src.id;
                 energyTarget = src;
