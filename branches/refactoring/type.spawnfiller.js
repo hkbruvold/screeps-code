@@ -45,12 +45,19 @@ function run(creep) {
             utilEnergy.takeEnergy(creep, energyTarget);
             creep.memory.state = 2;
             creep.memory.energyTarget = "";
+            creep.memory.path = null;
             return;
         }
         let moveResult = utilMove.move(creep);
         if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
             utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y);
             utilMove.move(creep);
+        } else if (moveResult === 2) {
+            if (creep.memory.pathtarget.x != energyTarget.pos.x || creep.memory.pathtarget.y != energyTarget.pos.y) {
+                // Need new path, shouldn't happen often
+                utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y);
+                utilMove.move(creep);
+            }
         }
     }
 
@@ -76,12 +83,20 @@ function run(creep) {
             creep.transfer(dumpTarget, RESOURCE_ENERGY);
             if (creep.carry.energy === 0) creep.memory.state = 1;
             creep.memory.dumpTarget = "";
+            creep.memory.path = null;
             return;
         }
+
         let moveResult = utilMove.move(creep);
         if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
             utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y);
             utilMove.move(creep);
+        } else if (moveResult === 2) {
+            if (creep.memory.pathtarget.x != dumpTarget.pos.x || creep.memory.pathtarget.y != dumpTarget.pos.y) {
+                // Need new path, shouldn't happen often
+                utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y);
+                utilMove.move(creep);
+            }
         }
     }
 }

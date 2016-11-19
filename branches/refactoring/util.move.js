@@ -7,7 +7,7 @@ function createPath(creep, x, y) {
     /* Creates a path from creep to target that the creep can follow by using move() */
     creep.memory.path = creep.pos.findPathTo(x, y);
     creep.memory.pathprog = 0;
-    creep.memory.target = {x: x, y: y};
+    creep.memory.pathtarget = {x: x, y: y};
 }
 
 function move(creep) {
@@ -28,7 +28,7 @@ function move(creep) {
         if (!(creep.pos.x == path[pathprog-1].x && creep.pos.y == path[pathprog-1].y)) {
             // Last move didn't go fine
             // Solution: Generate new path
-            let target = creep.memory.target;
+            let target = creep.memory.pathtarget;
             creep.memory.path = creep.pos.findPathTo(target.x, target.y);
             creep.memory.pathprog = 1;
             creep.move(path[0].direction);
