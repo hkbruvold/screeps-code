@@ -1,6 +1,6 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
-    giveTask, spawnfillerGetTask, workerGetTask
+    giveTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget
 };
 
 function giveTask(creep, room) {
@@ -52,7 +52,7 @@ function giveHarvesterTask(creep, room) {
 }
 
 function spawnfillerGetTask(creep, room) {
-    /* Function to give spawnfiller an assistant task */
+    /* Function to give spawnfiller a task */
     // Check if spawn or extensions need energy
     let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
@@ -116,4 +116,53 @@ function workerGetTask(creep, room) {
     // Give the worker the task of upgrading the controller
     creep.memory.role = "upgrader";
     return creep.room.controller;
+}
+
+function transporterGetSource(creep, room) {
+    /* Function to give energy source for the transporter */
+    // Check for harvester storage
+    let utilEnergy = require("util.energy");
+    target = utilEnergy.getHarvesterStorage(creep);
+
+    if (target) {
+        return target;
+    }
+}
+
+function transporterGetTarget(creep, room) {
+    /* Function to give the transporter a target */
+    // Check if some regular storage containers need filling
+    let utilEnergy = require("util.energy");
+    target = utilEnergy.getRegularStorage(creep);
+
+    if (target) {
+        creep.memory.role = "transporter";
+        return target;
+    }
+
+    // Check if spawn or extensions need energy
+    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                structure.energy < structure.energyCapacity;
+        }
+    });
+
+    if (target) {
+        creep.memory.role = "spawnfiller";
+        return target;
+    }
+
+    // Check for towers
+    target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_TOWER) &&
+                structure.energy < structure.energyCapacity;
+        }
+    });
+
+    if (target) {
+        creep.memory.role = "towerfiller";
+        return target;
+    }
 }

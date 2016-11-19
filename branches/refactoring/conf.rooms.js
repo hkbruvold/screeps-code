@@ -8,6 +8,7 @@ module.exports = {
         creeps: {
             harvester: 1,
             spawnfiller: 1,
+            worker: 0,
             transporter: 0,
             transporternoroad: 0,
             upgrader: 0,

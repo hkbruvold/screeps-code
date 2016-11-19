@@ -9,7 +9,7 @@ module.exports.loop = function () {
         mgrInitmem.initSources(Game.spawns.Spawn1);
         mgrInitmem.initSpawnMemory(Game.spawns.Spawn1);
         mgrInitmem.initRepairQueue(Game.spawns.Spawn1.room);
-        mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
+        mgrSpawner.fillSpawnQueue(Game.spawns.Spawn1);
         //mgrInitmem.initHarvesterContainers(Game.spawns.Spawn1.room);
     }
 
