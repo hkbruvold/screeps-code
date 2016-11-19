@@ -11,40 +11,36 @@ function getEnergy() {
 
 function getClosestEnergyContainer(creep) {
     /* Returns the closest energy container or storage */
-    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
                 _.sum(structure.store) > 50;
         }
     });
-
-    return target;
 }
 
 function getHarvesterContainer(creep) {
     /* Returns harvester container closest to creep with more than 50 energy */
     let containers = creep.room.memory.harvesterContainers;
-    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (_.sum(structure.store) > 50) &&
                 (structure.structureType == STRUCTURE_CONTAINER) &&
                 (containers.indexOf(structure.id) != -1);
         }
     });
-    return target;
 }
 
 function getRegularStorage(creep) {
     /* Returns other containers than harvester containers */
     let containers = creep.room.memory.harvesterContainers;
-    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (_.sum(structure.store) < structure.storeCapacity) &&
                 (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
                 (containers.indexOf(structure.id) == -1);
         }
     });
-    return target;
 }
 
 function getDroppedResource(creep) {
