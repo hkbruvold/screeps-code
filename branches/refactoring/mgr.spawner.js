@@ -1,7 +1,4 @@
 /* This module handles spawning creeps */
-let confCreeps = require("conf.creeps");
-let confRooms = require("conf.rooms");
-let mgrDelegator = require("mgr.delegator");
 
 /* Energy cost for body parts */
 let energyCost = {
@@ -22,7 +19,9 @@ module.exports = {
 function spawnNext(spawner) {
     /* Will spawn next creep in spawn queue if there are enough resources.
     *  Will also recalculate spawn energy capacity once in a while */
-    if (Game.time % 1000 == 1) {
+    let confCreeps = require("conf.creeps");
+    let mgrDelegator = require("mgr.delegator");
+    if (Game.time % 100 == 1) {
         fillSpawnQueue(spawner);
         recalculateCapacity(spawner);
     }

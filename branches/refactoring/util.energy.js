@@ -1,6 +1,6 @@
 /* This module contains functions to be used by creeps to find energy sources */
 module.exports = {
-    getClosestEnergyContainer, getHarvesterStorage, getRegularStorage, getDroppedResource, getEnergy, getEnergyDroppedPriority, takeEnergy, reserve, unReserve
+    getClosestEnergyContainer, getHarvesterStorage, getRegularStorage, getDroppedResource, getEnergy, getEnergyDroppedPriority, takeEnergy, reserve, unReserve, getEnergyFromHarvester
 };
 
 function getEnergy(creep) {

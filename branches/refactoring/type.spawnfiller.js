@@ -35,7 +35,7 @@ function run(creep) {
         if (!energyTarget) { // Need target
             let src = utilEnergy.getEnergy(creep);
             if (creep.memory.role === "transporter") {
-                src = utilEnergy.
+                src = utilEnergy.getEnergyFromHarvester(creep);
             }
             if (src) {
                 creep.memory.energyTarget = src.id;
