@@ -17,17 +17,16 @@ module.exports.loop = function () {
     for (let roomname in confRooms) {
         rooms.push(Game.rooms[roomname]);
     }
-    /* Safe spawner */
-    safeMode(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
+    /* Spawn safemode harvester/upgrader if needed, otherwise regular creeps */
+    if (!safeMode(Game.spawns[confRooms[rooms[0].name].spawners[0]])) {
+        mgrSpawner.spawnNext(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
+    }
 
     /* Run creeps modules */
     mgrCreeps.runCreeps();
 
-    /* Spawn if needed */
-    mgrSpawner.spawnNext(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
-
     /* Do some operations every 1500 ticks */
-    if (Game.time % 1500 == 0) {
+    if (Game.time % 150 == 0) {
         mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
         mgrMemory.clearCreepMemory();
         mgrInitmem.initDroppedMemory(rooms[0]);
