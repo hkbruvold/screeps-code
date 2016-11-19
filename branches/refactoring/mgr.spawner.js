@@ -1,6 +1,7 @@
 /* This module handles spawning creeps */
 let confCreeps = require("conf.creeps");
 let confRooms = require("conf.rooms");
+let mgrDelegator = require("mgr.delegator");
 
 /* Energy cost for body parts */
 let energyCost = {
@@ -22,7 +23,7 @@ function spawnNext(spawner) {
     /* Will spawn next creep in spawn queue if there are enough resources.
     *  Will also recalculate spawn energy capacity once in a while */
     if ((Game.time+1) % 1000) {
-        SpawnQueue(spawner);
+        fillSpawnQueue(spawner);
         recalculateCapacity(spawner);
     }
 
@@ -32,16 +33,18 @@ function spawnNext(spawner) {
 
     let spawnQueue = spawner.memory.spawnQueue;
     for (let i in spawnQueue) {
-        for (let j in spawnQueue[i]) {
-            let creep = spawnQueue[i][j];
+        if (spawnQueue[i].length > 0) {
+            let creep = spawnQueue[i][0];
             let capacity = spawner.memory.capacity;
             let body = getBodyParts(confCreeps[creep].parts, capacity, confCreeps[creep].extend);
             let name = getName(creep);
             let result = spawner.createCreep(body, getName(creep), confCreeps[creep].memory);
 
             if (result == name) {
+                spawner.memory.spawnQueue.shift();
                 Game.creeps[name].memory.born = Game.time;
                 Game.creeps[name].memory.home = spawner.room.name;
+                mgrDelegator.giveTask(Game.creeps[name], spawner.room);
             } else if (result == ERR_NOT_ENOUGH_ENERGY) {
                 return;
             } else if (result == ERR_BUSY) {
@@ -49,6 +52,7 @@ function spawnNext(spawner) {
             } else if (result == ERR_NAME_EXISTS) {
                 console.log("[FATAL] mgr.spawner.getName() returned name which is already in use")
             }
+            return; // Return if creep was found
         }
     }
 }

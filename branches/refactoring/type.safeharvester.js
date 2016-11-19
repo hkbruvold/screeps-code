@@ -1,9 +1,7 @@
-/* The safeharvester is a dumb basic creep that will harvest or pick up energy and fill up the spawn */
+/* The safeharvester is a dumb basic creep that will harvest or pick up energy and fill up the spawn or controller */
 module.exports = {run};
 
 function run(creep) {
-    let didAction = false;
-
     if (!creep.memory.harvesting) {
         creep.memory.harvesting = true;
     }
@@ -26,13 +24,24 @@ function run(creep) {
             if(creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(dropped);
             }
-            didAction = true;
         } else {
-            let source = creep.pos.findClosestByRange(FIND_SOURCES);
-            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
+            let container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
+                        _.sum(structure.store) > 50;
+                }
+            });
+
+            if (container) {
+                if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(container);
+                }
+            } else {
+                let source = creep.pos.findClosestByRange(FIND_SOURCES);
+                if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source);
+                }
             }
-            didAction = true;
         }
     } else {
         let targets = creep.room.find(FIND_STRUCTURES, {
@@ -46,13 +55,10 @@ function run(creep) {
             if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(targets[0]);
             }
-            didAction = true;
-        }
-    }
-
-    if (didAction == false) {
-        if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(creep.room.controller);
+        } else {
+            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.controller);
+            }
         }
     }
 }

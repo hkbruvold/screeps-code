@@ -18,17 +18,17 @@ module.exports.loop = function () {
         rooms.push(Game.rooms[roomname]);
     }
     /* Safe spawner */
-    safeMode(confRooms[rooms[0].name].spawners[0]);
+    safeMode(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
 
     /* Run creeps modules */
     mgrCreeps.runCreeps();
 
     /* Spawn if needed */
-    mgrSpawner.spawnNext(confRooms[rooms[0].name].spawners[0]);
+    mgrSpawner.spawnNext(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
 
     /* Do some operations every 1500 ticks */
     if (Game.time % 1500 == 0) {
-        mgrSpawner.fillSpawnQueue(confRooms[rooms[0].name].spawners[0]);
+        mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
         mgrMemory.clearCreepMemory();
         mgrInitmem.initDroppedMemory(rooms[0]);
     }

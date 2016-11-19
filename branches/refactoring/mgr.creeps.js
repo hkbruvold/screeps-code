@@ -48,7 +48,7 @@ function runCreeps(room) {
     /* Executes function to all creeps. Automatically imports module. */
     for (let cname in Game.creeps) {
         if (Game.creeps[cname].ticksToLive < 50) {
-            removeCreep(room, Game.creeps[cname]);
+            //removeCreep(room, Game.creeps[cname]);
         }
         try {
             var creepModule = require("type." + Game.creeps[cname].memory.type);
