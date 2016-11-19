@@ -85,11 +85,12 @@ function getRegularStorage(creep) {
 function getDroppedResource(creep) {
     /* Returns dropped resource if not all reserved, will also reserve */
     let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
-    let droppedmem = creep.room.memory.dropped;
+    let droppedmem = creep.room.memory.reservation;
+    if !(droppedmem) droppedmem = {};
     let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: (resource) => {
-            return (resource.resourceType == RESOURCE_ENERGY) && ((droppedmed.indexOf(resource.id) == -1 && resource.amount > 50) ||
-                (droppedmem.indexOf(resource.id) >= -1 && resource.amount > droppedmem[droppedmem.indexOf(resource.id)]));
+            return (resource.resourceType == RESOURCE_ENERGY) && ((!(resource.id in droppedmem) && resource.amount > 50) ||
+                (resource.id in droppedmem && resource.amount > droppedmem[resource.id]));
         }
     });
     if (dropped) {

@@ -1,6 +1,6 @@
 /* This module contains functions to generate memory that only needs to be set once */
 module.exports = {
-    initSources, initRepairQueue, initSpawnMemory, initDroppedMemory, initHarvesterContainers
+    initSources, initRepairQueue, initSpawnMemory, initHarvesterContainers
 };
 
 function initSources(structure) {
