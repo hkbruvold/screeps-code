@@ -9,6 +9,7 @@ module.exports = {run};
 function run(creep) {
     let utilMove = require("util.move");
     let utilEnergy = require("util.energy");
+    let mgrDelegator = require("mgr.delegator");
     let mgrSpawner = require("mgr.spawner");
 
     if (creep.spawning) {
@@ -74,8 +75,13 @@ function run(creep) {
             if (target) {
                 creep.memory.dumpTarget = target.id;
                 dumpTarget = target;
-            } else { // No targets found
-                return;
+            } else { // Ask delegator for target
+                target = mgrDelegator.spawnfillerGetAssistantTask(creep, creep.romm);
+                if (target) {
+                    dumpTarget = target;
+                } else { // Delegator didn't have any tasks
+                    return;
+                }
             }
         }
 

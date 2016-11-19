@@ -13,8 +13,8 @@ module.exports.loop = function () {
         //mgrInitmem.initHarvesterContainers(Game.spawns.Spawn1.room);
     }
 
-    /* Do some operations every 1500 ticks */
-    if (Game.time % 150 == 0) {
+    /* Do some operations every 15 ticks */
+    if (Game.time % 15 == 0) {
         mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[0].name].spawners[0]]);
         mgrMemory.clearCreepMemory();
     }

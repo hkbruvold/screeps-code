@@ -1,6 +1,6 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
-    giveTask
+    giveTask, spawnfillerGetAssistantTask
 };
 
 function giveTask(creep, room) {
@@ -49,4 +49,23 @@ function giveHarvesterTask(creep, room) {
             creep.memory.state = 2;
         }
     }
+}
+
+function spawnfillerGetAssistantTask(creep, room) {
+    /* Function to give spawnfiller an assistant task */
+    // Check for towers
+    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_TOWER) &&
+                structure.energy < structure.energyCapacity;
+        }
+    });
+
+    if (target) return target;
+
+    // Check if some regular storage containers need filling
+    let utilEnergy = require("util.energy");
+    target = utilEnergy.getRegularStorage(creep);
+
+    if (target) return target;
 }
