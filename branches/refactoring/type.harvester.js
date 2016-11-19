@@ -8,9 +8,14 @@ module.exports = {run};
 
 function run(creep) {
     let utilMove = require("util.move");
+    let mgrSpawner = require("mgr.spawner");
 
     if (creep.spawning) {
         return;
+    }
+
+    if (creep.ticksToLive <= creep.memory.deployTime) {
+        mgrSpawner.addToQueue(creep.room, creep.memory.type);
     }
 
     if (creep.memory.state == 3) { // Ready to harvest
@@ -72,6 +77,9 @@ function run(creep) {
         } else if (result == 1) {
             creep.memory.state = 3;
             creep.say("I'm here");
+            if (creep.memory.deployTime == 2) {
+                creep.memory.deployTime = Game.time - creep.memory.born;
+            }
             return;
         }
         if ("old" in creep.memory.task) {
@@ -79,7 +87,7 @@ function run(creep) {
             if (oldCreep) {
                 if (creep.pos.isNearTo(oldCreep)) { // Can calculate time it took to get here
                     creep.say("Waiting");
-                    if (creep.memory.deployTime == 0) {
+                    if (creep.memory.deployTime == 2) {
                         creep.memory.deployTime = Game.time - creep.memory.born;
                     }
                 }

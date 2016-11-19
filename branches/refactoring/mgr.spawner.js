@@ -16,7 +16,7 @@ let energyCost = {
 };
 
 module.exports = {
-    spawnNext, recalculateCapacity, fillSpawnQueue
+    spawnNext, recalculateCapacity, fillSpawnQueue, addToQueue
 };
 
 function spawnNext(spawner) {
@@ -57,9 +57,20 @@ function spawnNext(spawner) {
     }
 }
 
+function addToQueue(room, creepType) {
+    /* Adds a creep of creepType to spawn queue */
+    let confRooms = require("conf.rooms");
+    let confCreeps = require("conf.creeps");
+
+    let priority = confCreeps[creepType].priority;
+    let spawner = confRooms[room.name].spawners[0];
+
+    spawner.memory.spawnQueue[priority].push(creepType);
+}
+
 function fillSpawnQueue(spawner) {
     /* Fill spawn queue with creeps that are missing and somehow has not a place in queue.
-    *  Does currently not support more than one spawn per room (need to move spawn queue to room memory for that) */
+    *  Does currently not support more than one spawn per room (need to move spawn queue to room memory for that, possibly) */
     let confRooms = require("conf.rooms");
     let confCreeps = require("conf.creeps");
 
