@@ -1,93 +1,110 @@
-function getPickup(creep) {
-    let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
-        filter: (resource) => {
-            return (resource.amount > 50); //creep.carryCapacity);
-        }
-    });
-    if (dropped) {
-        return dropped;
-    }
-    return false;
+/* This module contains functions to be used by creeps to find energy sources */
+module.exports = {
+    getClosestEnergyContainer, getHarvesterStorage, getRegularStorage, getDroppedResource, getEnergy, getEnergyDroppedPriority, takeEnergy, reserve, unReserve, getEnergyFromHarvester
+};
+
+function getEnergy(creep) {
+    /* Returns an object to get energy from. Closest container prioritized */
+    let src = null;
+    if (src = getClosestEnergyContainer(creep)) return src;
+    if (src = getDroppedResource(creep)) return src;
 }
 
+function getEnergyDroppedPriority(creep) {
+    /* Returns an object to get energy from. Dropped resource prioritized */
+    let src = null;
+    if (src = getDroppedResource(creep)) return src;
+    if (src = getClosestEnergyContainer(creep)) return src;
+}
+
+function getEnergyFromHarvester(creep) {
+    /* Returns an object to get energy from. Dropped resource prioritized. Regular containers stored ignored. */
+    let src = null;
+    if (src = getDroppedResource(creep)) return src;
+    if (src = getHarvesterStorage(creep)) return src;
+}
+
+function takeEnergy(creep, object) {
+    /* Make creep execute the correct take command on object */
+    let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
+    if (object.resourceType == RESOURCE_ENERGY) { // If it's dropped energy
+        let result = creep.pickup(object);
+        if (result === OK) unReserve(object, remainingCapacity);
+        return result;
+    } else {
+        return creep.withdraw(object, RESOURCE_ENERGY);
+    }
+}
+
+function reserve(object, amount) {
+    /* Reserve collection of energy for the amount */
+    if (!object.room.memory.reservation) object.room.memory.reservation = {};
+
+    if (object.id in object.room.memory.reservation) {
+        object.room.memory.reservation[object.id] += amount;
+    } else {
+        object.room.memory.reservation[object.id] = amount;
+    }
+}
+
+function unReserve(object, amount) {
+    /* Remove reservation on the object of given amount */
+    if (!object.room.memory.reservation) object.room.memory.reservation = {};
+
+    if (object.id in object.room.memory.reservation) {
+        object.room.memory.reservation[object.id] -= amount;
+    }
+}
 
 function getClosestEnergyContainer(creep) {
-    let src = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    /* Returns the closest energy container or storage */
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
-                    _.sum(structure.store) > 50;
+                _.sum(structure.store) > 50;
         }
     });
-    
-    if (src){
-        return src;
-    }
-    return false;
 }
 
 function getHarvesterStorage(creep) {
-   let mainsrc = creep.room.memory.mainsrc;
-    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    /* Returns harvester container closest to creep with more than 50 energy */
+    let containers = creep.room.memory.harvesterContainers;
+    if (!containers) creep.room.memory.harvesterContainers = [];
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (_.sum(structure.store) > 50) &&
-                    (structure.structureType == STRUCTURE_CONTAINER) &&
-                    (mainsrc.indexOf(structure.id) != -1);
+                (structure.structureType == STRUCTURE_CONTAINER) &&
+                (containers.indexOf(structure.id) != -1);
         }
     });
-    return target; 
 }
 
 function getRegularStorage(creep) {
-    let mainsrc = creep.room.memory.mainsrc;
-    let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    /* Returns other containers than harvester containers */
+    let containers = creep.room.memory.harvesterContainers;
+    if (!containers) creep.room.memory.harvesterContainers = [];
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
             return (_.sum(structure.store) < structure.storeCapacity) &&
-                    (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
-                    (mainsrc.indexOf(structure.id) == -1);
+                (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
+                (containers.indexOf(structure.id) == -1);
         }
     });
-    return target;
 }
 
-function getSource(creep, priorityMain){
-    if (priorityMain) {
-        if (src = getPickup(creep)) {return src}
-        if (src = getHarvesterStorage(creep)) {return src}
-        if (src = getClosestEnergyContainer(creep)) {return src}
-    } else {
-        if (src = getClosestEnergyContainer(creep)) {return src}
-        if (src = getPickup(creep)) {return src}
-    }
-}
-
-// try:
-// var pickupSource = function pickupSource(creep){return something;};
-function pickupSource(creep){
-    if (creep.memory.role == "spawnfiller") {
-        var src = getSource(creep, true);
-    } else {
-        var src = getSource(creep, false);
-    }
-    
-    if (src == null) {
-        return false;
-    }
-    
-    if (src.resourceType == RESOURCE_ENERGY) {
-        if(creep.pickup(src) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(src);
+function getDroppedResource(creep) {
+    /* Returns dropped resource if not all reserved, will also reserve */
+    let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
+    let droppedmem = creep.room.memory.reservation;
+    if (!droppedmem) droppedmem = {};
+    let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
+        filter: (resource) => {
+            return (resource.resourceType == RESOURCE_ENERGY) && ((!(resource.id in droppedmem) && resource.amount > 50) ||
+                (resource.id in droppedmem && resource.amount > droppedmem[resource.id]));
         }
-    } else {
-        if(creep.withdraw(src, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(src);
-        }
+    });
+    if (dropped) {
+        reserve(dropped, remainingCapacity);
     }
-    return true;
+    return dropped;
 }
-
-module.exports = {
-    pickupSource,
-    getSource(creep) {return getSource(creep)},
-    getRegularStorage(creep) {return getRegularStorage(creep)},
-    getHarvesterStorage(creep) {return getHarvesterStorage(creep)}
-};
