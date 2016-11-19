@@ -30,7 +30,8 @@ function move(creep) {
             // Solution: Generate new path
             let target = creep.memory.target;
             creep.memory.path = creep.pos.findPathTo(target.x, target.y);
-            creep.memory.pathprog = 0;
+            creep.memory.pathprog = 1;
+            creep.move(path[0].direction);
 
             return 2;
         }
