@@ -40,7 +40,7 @@ function run(creep) {
                 }
             });
             if (source) {
-                creep.room.memory.harvesterTasks[source.id] = {creepID: creep.id};
+                creep.room.memory.harvesterTasks[source.id] = {creepName: creep.name};
                 creep.memory.task["id"] = source.id;
                 creep.say("Found it");
             } else {

@@ -20,7 +20,7 @@ function giveHarvesterTask(creep, room) {
     //let missingWorker = _.filter(room.memory.harvesterTasks, (sourceID) => (Game.getObjectById(sourceID.creepID) === null));
     let missingWorker = null;
     for (let sourceID in room.memory.harvesterTasks) {
-        if (Game.getObjectById(room.memory.harvesterTasks[sourceID].creepID) === null) {
+        if (Game.creeps[room.memory.harvesterTasks[sourceID].creepName] === undefined) {
             missingWorker = sourceID;
             break;
         }
@@ -28,7 +28,7 @@ function giveHarvesterTask(creep, room) {
 
     if (missingWorker) {
         creep.memory.task = {id: missingWorker};
-        room.memory.harvesterTasks[missingWorker].creepID = creep.id;
+        //room.memory.harvesterTasks[missingWorker].creepID = creep.id; Creep ID not defined yet
         creep.memory.state = 2;
     } else {
         let harvesters = _.filter(Game.creeps, (creep) => (creep.memory.type == "harvester") &&
@@ -44,7 +44,7 @@ function giveHarvesterTask(creep, room) {
         if (sorted.length > 0) {
             sorted[0].memory.replacing = true;
             creep.memory.task = {id: sorted[0].memory.task.id, old: sorted[0].id};
-            room.memory.harvesterTasks[sorted[0].memory.task.id].creepID = creep.id;
+            room.memory.harvesterTasks[sorted[0].memory.task.id].creepName = creep.name;
             creep.memory.state = 2;
         }
     }
