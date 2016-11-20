@@ -67,10 +67,12 @@ function harvesterGetTask(creep, room) {
         let minTicks = 1500;
         for (let sourceID in room.memory.harvesterTasks) {
             let curHarvester = Game.getObjectById(room.memory.harvesterTasks[sourceID].creepID);
-            if (curHarvester.memory.state === 3 && !(curHarvester.memory.repairTarget === true)) {
-                if (curHarvester.ticksToLive < minTicks) {
-                    minTicks = curHarvester.ticksToLive;
-                    harvester = curHarvester.id;
+            if (curHarvester) {
+                if (curHarvester.memory.state === 3 && !(curHarvester.memory.repairTarget === true)) {
+                    if (curHarvester.ticksToLive < minTicks) {
+                        minTicks = curHarvester.ticksToLive;
+                        harvester = curHarvester.id;
+                    }
                 }
             }
         }
