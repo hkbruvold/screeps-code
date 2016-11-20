@@ -6,10 +6,10 @@ module.exports = {
     E46S62: {
         spawners: ["Spawn1"],
         creeps: {
-            harvester: 1,
+            harvester: 2,
             spawnfiller: 1,
-            worker: 0,
-            transporter: 0,
+            worker: 1,
+            transporter: 1,
             transporternoroad: 0,
             upgrader: 0,
             builder: 0,
