@@ -9,7 +9,7 @@ module.exports = {
         creeps: {
             harvester: 2,
             spawnfiller: 2,
-            worker: 1,
+            worker: 2,
             wallfixer: 1,
             transporter: 1,
             transporternoroad: 0,
@@ -20,14 +20,14 @@ module.exports = {
             abroadworker: 2,
             roomdefender: 1,
         },
-        wallbuffer: 1000,
+        wallbuffer: 2000,
     },
     E46S63: {
         spawners: ["Spawn2"],
         creeps: {
             harvester: 2,
             spawnfiller: 0,
-            worker: 0,
+            worker: 1,
             wallfixer: 0,
             transporter: 0,
             transporternoroad: 0,

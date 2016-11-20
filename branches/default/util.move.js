@@ -22,6 +22,7 @@ function move(creep) {
     let pathprog = creep.memory.pathprog;
 
     if (!creep.memory.path) return 4;
+    if (creep.memory.path.length == 0) return 4;
 
     // Check if last move went fine
     if (pathprog) {
