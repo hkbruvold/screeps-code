@@ -14,6 +14,7 @@ module.exports = {
             upgrader: 0,
             builder: 0,
             repairer: 0,
+            claimer: 0,
         },
     },
 };
