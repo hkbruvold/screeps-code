@@ -5,6 +5,11 @@ function run(creep) {
     if (!("harvesting" in creep.memory)) {
         creep.memory.harvesting = true;
     }
+    
+    // If the creep ends up in another room (it did happen)
+    if (creep.room.name != creep.memory.home) {
+        creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.home)));
+    }
 
     if (creep.memory.harvesting == true && creep.carry.energy == creep.carryCapacity) {
         creep.memory.harvesting = false;
