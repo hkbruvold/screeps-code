@@ -10,7 +10,7 @@ module.exports = {
             harvester: 2,
             spawnfiller: 2,
             worker: 1,
-            wallfixer: 0,
+            wallfixer: 1,
             transporter: 1,
             transporternoroad: 0,
             upgrader: 0,
