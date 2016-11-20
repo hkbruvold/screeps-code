@@ -1,4 +1,4 @@
-/* The abroudworker does repair, building, and upgrading in another room
+/* The abroadworker does repair, building, and upgrading in another room
  *  States:
  *  0 - just spawned
  *  1 - getting energy
@@ -69,7 +69,7 @@ function run(creep) {
     else if (creep.memory.state === 2) {
         let workTarget = Game.getObjectById(creep.memory.workTarget);
         if (!workTarget) { // Need target
-            let target = mgrDelegator.abroudworkerGetTask(creep, Game.rooms[creep.memory.workRoom]);
+            let target = mgrDelegator.abroadworkerGetTask(creep, Game.rooms[creep.memory.workRoom]);
 
             if (target) {
                 creep.memory.workTarget = target.id;
