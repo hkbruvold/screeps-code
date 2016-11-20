@@ -71,7 +71,7 @@ function run(creep) {
         if (result == 4) {
             let sourceID = creep.memory.task.id;
             let taskpos = creep.room.memory.harvesterTasks[sourceID].pos;
-            utilMove.createPath(creep, taskpos.x, taskpos.y);
+            utilMove.createPath(creep, taskpos.x, taskpos.y, creep.memory.home);
         } else if (result == 1) {
             creep.memory.state = 3;
             creep.say("I'm here");

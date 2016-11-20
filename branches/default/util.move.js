@@ -3,11 +3,17 @@ module.exports = {
     createPath, move
 };
 
-function createPath(creep, x, y) {
-    /* Creates a path from creep to target that the creep can follow by using move() */
+function createPath(creep, x, y, roomname) {
+    /* Creates a path from creep to target that the creep can follow by using move()
+     * If room is specified, it will go to the room first */
     creep.memory.path = creep.pos.findPathTo(x, y);
     creep.memory.pathprog = 0;
     creep.memory.pathtarget = {x: x, y: y};
+    if (roomname) {
+        creep.memory.pathtarget["room"] = roomname;
+    } else {
+        creep.memory.pathtarget["room"] = creep.room.name;
+    }
 }
 
 function move(creep) {
@@ -20,15 +26,26 @@ function move(creep) {
     *  4 - creep memory does not contain path.*/
     let path = creep.memory.path;
     let pathprog = creep.memory.pathprog;
+    let pathtarget = creep.memory.pathtarget;
 
-    if (!creep.memory.path) return 4;
-    if (creep.memory.path.length == 0) return 4;
+    // Return 4 if no path exist
+    if (!path || !pathtarget) return 4;
 
-    // Check if last move went fine
+    // return 4 if missing room object, until all creeps has new pathtarget definition
+    if (!pathtarget.room) return 4;
+
+    // If in wrong room, or about to leave target room
+    if (creep.room.name != pathtarget.room || (creep.room.name == pathtarget.room &&
+        (creep.pos.y === 0 || creep.pos.y === 49 || creep.pos.x === 0 || creep.pos.x === 49))) {
+        creep.moveTo(Game.rooms[pathtarget.room].controller);
+
+        return;
+    }
+
+    // Check if last move went fine or if it's wise to regenerate path
     if (pathprog) {
-        if (!(creep.pos.x == path[pathprog-1].x && creep.pos.y == path[pathprog-1].y)) {
-            // Last move didn't go fine
-            // Solution: Generate new path
+        if (!(creep.pos.x == path[pathprog-1].x && creep.pos.y == path[pathprog-1].y) || (pathprog > 5)) {
+            // Generate new path to target
             let target = creep.memory.pathtarget;
             creep.memory.path = creep.pos.findPathTo(target.x, target.y);
             creep.memory.pathprog = 1;
@@ -38,6 +55,7 @@ function move(creep) {
         }
     }
 
+    // Return 1 if path is done
     if (path.length == pathprog) return 1;
 
 
