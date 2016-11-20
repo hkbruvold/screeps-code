@@ -75,8 +75,8 @@ module.exports.loop = function () {
     /* Spawn safemode harvester/upgrader if needed, otherwise spawn regular creeps */
     try {
         for (let i in rooms) {
-            if (!safeMode(Game.spawns[confRooms[rooms[i].name].spawners[0]])) {
-                tools.mgrSpawner.spawnNext(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
+            if (!safeMode(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]])) {
+                tools.mgrSpawner.spawnNext(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
             }
         }
     } catch(error) {
