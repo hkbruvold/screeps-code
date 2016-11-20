@@ -79,4 +79,11 @@ module.exports = {
         memory: {type: "abroadworker", home: "", tiredCount: 0, deployTime: 2, state: 0},
         priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
     },
+    roomdefender: {
+        /* roomdefender attacks enemies in the room */
+        parts: [TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "roomdefender", home: "", tiredCount: 0, deployTime: 2, state: 0},
+        priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
+    },
 };
