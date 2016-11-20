@@ -63,19 +63,22 @@ function harvesterGetTask(creep, room) {
         room.memory.harvesterTasks[source].creepID = creep.id;
         creep.memory.state = 2;
     } else { // Give the harvester the task of replacing the oldest creep
-        let harvesters = _.filter(Game.creeps, (creep) => (creep.memory.type == "harvester") &&
-            (creep.memory.home == room.name) &&
-            (!(creep.memory.replacing == true))
-        );
+        let harvester = null;
+        let minTicks = 1500;
+        for (let sourceID in room.memory.harvesterTasks) {
+            let curHarvester = Game.getObjectById(room.memory.harvesterTasks[sourceID].creepID);
+            if (curHarvester.memory.state === 3 && !(curHarvester.memory.repairTarget === true)) {
+                if (curHarvester.ticksToLive < minTicks) {
+                    minTicks = curHarvester.ticksToLive;
+                    harvester = curHarvester.id;
+                }
+            }
+        }
 
-        let sorted = _.sortBy(harvesters, function (item) {
-            return item.ticksToLive;
-        });
-
-        if (sorted.length > 1) { // greater than 1 because it finds itself
-            sorted[0].memory.replacing = true;
-            creep.memory.task = {id: sorted[0].memory.task.id, old: sorted[0].id};
-            room.memory.harvesterTasks[sorted[0].memory.task.id].creepID = creep.id;
+        if (harvester) { // greater than 1 because it finds itself
+            harvester.memory.replacing = true;
+            creep.memory.task = {id: harvester.memory.task.id, old: harvester.id};
+            room.memory.harvesterTasks[harvester.memory.task.id].creepID = creep.id;
             creep.memory.state = 2;
         }
     }
