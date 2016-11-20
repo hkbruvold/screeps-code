@@ -5,16 +5,11 @@
  *  2 - doing work */
 module.exports = {run};
 
-function run(creep) {
-    let utilMove = require("util.move");
-    let utilEnergy = require("util.energy");
-    let mgrDelegator = require("mgr.delegator");
-    let mgrSpawner = require("mgr.spawner");
-
+function run(creep, tools) {
     if (creep.spawning) return;
 
     if (creep.ticksToLive == creep.memory.deployTime) {
-        mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
+        tools.tools.mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
     }
 
     if (_.sum(creep.carry) === creep.carryCapacity) {
@@ -28,7 +23,7 @@ function run(creep) {
     if (creep.memory.state === 1) { // Is most likely moving to energy
         let energyTarget = Game.getObjectById(creep.memory.energyTarget);
         if (!energyTarget) { // Need target
-            let src = utilEnergy.getEnergy(creep);
+            let src = tools.utilEnergy.getEnergy(creep);
             if (src) {
                 creep.memory.energyTarget = src.id;
                 energyTarget = src;
@@ -38,21 +33,21 @@ function run(creep) {
         }
 
         if (creep.pos.isNearTo(energyTarget)) {
-            utilEnergy.takeEnergy(creep, energyTarget);
+            tools.utilEnergy.takeEnergy(creep, energyTarget);
             creep.memory.state = 2;
             creep.memory.energyTarget = "";
             creep.memory.path = null;
             return;
         }
-        let moveResult = utilMove.move(creep);
+        let moveResult = tools.utilMove.move(creep);
         if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
-            utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.home);
-            utilMove.move(creep);
+            tools.utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.home);
+            tools.utilMove.move(creep);
         } else if (moveResult === 2) {
             if (creep.memory.pathtarget.x != energyTarget.pos.x || creep.memory.pathtarget.y != energyTarget.pos.y) {
                 // Need new path, shouldn't happen often
-                utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.home);
-                utilMove.move(creep);
+                tools.utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.home);
+                tools.utilMove.move(creep);
             }
         }
     }
@@ -60,7 +55,7 @@ function run(creep) {
     else if (creep.memory.state === 2) {
         let workTarget = Game.getObjectById(creep.memory.workTarget);
         if (!workTarget) { // Need target
-            let target = mgrDelegator.workerGetTask(creep, creep.room);
+            let target = tools.mgrDelegator.workerGetTask(creep, creep.room);
             
             if (target) {
                 creep.memory.workTarget = target.id;
@@ -99,15 +94,15 @@ function run(creep) {
             }
         }
 
-        let moveResult = utilMove.move(creep);
+        let moveResult = tools.utilMove.move(creep);
         if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
-            utilMove.createPath(creep, workTarget.pos.x, workTarget.pos.y, creep.memory.home);
-            utilMove.move(creep);
+            tools.utilMove.createPath(creep, workTarget.pos.x, workTarget.pos.y, creep.memory.home);
+            tools.utilMove.move(creep);
         } else if (moveResult === 2) {
             if (creep.memory.pathtarget.x != workTarget.pos.x || creep.memory.pathtarget.y != workTarget.pos.y) {
                 // Need new path, shouldn't happen often
-                utilMove.createPath(creep, workTarget.pos.x, workTarget.pos.y, creep.memory.home);
-                utilMove.move(creep);
+                tools.utilMove.createPath(creep, workTarget.pos.x, workTarget.pos.y, creep.memory.home);
+                tools.utilMove.move(creep);
             }
         }
     }

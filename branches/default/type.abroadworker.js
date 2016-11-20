@@ -5,17 +5,11 @@
  *  2 - doing work */
 module.exports = {run};
 
-function run(creep) {
-    let utilMove = require("util.move");
-    let utilEnergy = require("util.energy");
-    let mgrDelegator = require("mgr.delegator");
-    let mgrSpawner = require("mgr.spawner");
-    let confRooms = require("conf.rooms");
-
+function run(creep, tools) {
     if (creep.spawning) return;
 
     if (creep.ticksToLive == creep.memory.deployTime) {
-        mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
+        tools.mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
     }
 
     if (_.sum(creep.carry) === creep.carryCapacity) {
@@ -29,9 +23,9 @@ function run(creep) {
     if (creep.memory.state === 1) { // Is most likely moving to energy
         let energyTarget = Game.getObjectById(creep.memory.energyTarget);
         if (!energyTarget) { // Need target
-            let src = utilEnergy.getDroppedResource(creep); // Take dropped energy if possible
+            let src = tools.utilEnergy.getDroppedResource(creep); // Take dropped energy if possible
             if (!src) {
-                src = utilEnergy.getEnergy(Game.rooms[creep.memory.home].controller);
+                src = tools.utilEnergy.getEnergy(Game.rooms[creep.memory.home].controller);
             }
             if (src) {
                 creep.memory.energyTarget = src.id;
@@ -42,7 +36,7 @@ function run(creep) {
         }
 
         if (creep.pos.isNearTo(energyTarget)) {
-            utilEnergy.takeEnergy(creep, energyTarget);
+            tools.utilEnergy.takeEnergy(creep, energyTarget);
             creep.memory.state = 2;
             creep.memory.energyTarget = "";
             creep.memory.path = null;
@@ -54,7 +48,7 @@ function run(creep) {
     else if (creep.memory.state === 2) {
         let workTarget = Game.getObjectById(creep.memory.workTarget);
         if (!workTarget) { // Need target
-            let target = mgrDelegator.abroadworkerGetTask(creep, Game.rooms[creep.memory.workRoom]);
+            let target = tools.mgrDelegator.abroadworkerGetTask(creep, Game.rooms[creep.memory.workRoom]);
 
             if (target) {
                 creep.memory.workTarget = target.id;

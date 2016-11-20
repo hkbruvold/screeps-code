@@ -44,7 +44,7 @@ function getTypeCount(room, type) {
     }
 }
 
-function runCreeps(room) {
+function runCreeps(tools) {
     /* Executes function to all creeps. Automatically imports module. */
     for (let cname in Game.creeps) {
         if (Game.creeps[cname].ticksToLive < 50) {
@@ -58,10 +58,10 @@ function runCreeps(room) {
             continue;
         }
         try {
-            creepModule.run(Game.creeps[cname]);
+            creepModule.run(Game.creeps[cname], tools);
         } catch(error) {
             console.log("Error executing code for creep: " + Game.creeps[cname].name + " of type: " + Game.creeps[cname].memory.type);
-            console.log(error.stack)
+            console.log(error.stack);
         }
     }
 }

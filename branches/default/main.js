@@ -1,14 +1,21 @@
-let confRooms = require("conf.rooms");
-let mgrCreeps = require("mgr.creeps");
-let mgrSpawner = require("mgr.spawner");
-let mgrMemory = require("mgr.memory");
+var tools = { // Modules that should be passed to different modules
+    confCreeps: require("conf.creeps"),
+    confGame: require("conf.game"),
+    confRooms: require("conf.rooms"),
+    mgrCreeps: require("mgr.creeps"),
+    mgrDelegator: require("mgr.delegator"),
+    mgrSpawner: require("mgr.spawner"),
+    mgrMemory: require("mgr.memory"),
+    utilEnergy: require("util.energy"),
+    utilMove: require("util.move"),
+};
 let typeTower = require("type.tower");
 
 module.exports.loop = function () {
     /* Get rooms defined in conf.rooms */
     let rooms = [];
     try {
-        for (let roomname in confRooms) {
+        for (let roomname in tools.confRooms) {
             if (Game.rooms[roomname]) {
                 rooms.push(Game.rooms[roomname]);
             } else {
@@ -25,10 +32,10 @@ module.exports.loop = function () {
     try {
         for (let i in rooms) {
             if (rooms[i].memory.initialized != true) {
-                mgrMemory.initSpawnMemory(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
-                mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
-                mgrSpawner.recalculateCapacity(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
-                mgrMemory.initHarvesterContainers(rooms[i]);
+                tools.mgrMemory.initSpawnMemory(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
+                tools.mgrSpawner.fillSpawnQueue(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
+                tools.mgrSpawner.recalculateCapacity(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
+                tools.mgrMemory.initHarvesterContainers(rooms[i]);
                 rooms[i].memory.initialized = true;
             }
         }
@@ -40,8 +47,8 @@ module.exports.loop = function () {
     /* Do some operations every tick */
     try {
         for (let i in rooms) {
-            for (let j in confRooms[rooms[i].name].towers) {
-                typeTower.run(Game.getObjectById(confRooms[rooms[i].name].towers[j]));
+            for (let j in tools.confRooms[rooms[i].name].towers) {
+                typeTower.run(Game.getObjectById(tools.confRooms[rooms[i].name].towers[j]));
             }
         }
     } catch(error) {
@@ -53,15 +60,15 @@ module.exports.loop = function () {
     try {
         if (Game.time % 15 == 0) {
             for (let i in rooms) {
-                mgrSpawner.fillSpawnQueue(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
-                mgrSpawner.recalculateCapacity(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
-                mgrMemory.clearReservationMemory(rooms[i]);
-                //mgrMemory.initHarvesterContainers(rooms[i]); // Check for new harvester containers (can be commented out if not needed)
+                tools.mgrSpawner.fillSpawnQueue(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
+                tools.mgrSpawner.recalculateCapacity(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
+                tools.mgrMemory.clearReservationMemory(rooms[i]);
+                //tools.mgrMemory.initHarvesterContainers(rooms[i]); // Check for new harvester containers (can be commented out if not needed)
             }
-            mgrMemory.clearCreepMemory();
+            tools.mgrMemory.clearCreepMemory();
         }
     } catch(error) {
-        console.log("[ERROR] Error executing 15 ticks functions")
+        console.log("[ERROR] Error executing 15 ticks functions");
         console.log(error.stack);
     }
 
@@ -69,16 +76,16 @@ module.exports.loop = function () {
     try {
         for (let i in rooms) {
             if (!safeMode(Game.spawns[confRooms[rooms[i].name].spawners[0]])) {
-                mgrSpawner.spawnNext(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
+                tools.mgrSpawner.spawnNext(Game.spawns[confRooms[rooms[i].name].spawners[0]]);
             }
         }
     } catch(error) {
-        console.log("[ERROR] Error executing spawn functions")
+        console.log("[ERROR] Error executing spawn functions");
         console.log(error.stack);
     }
 
     /* Run creeps modules */
-    mgrCreeps.runCreeps();
+    tools.mgrCreeps.runCreeps(tools);
 };
 
 

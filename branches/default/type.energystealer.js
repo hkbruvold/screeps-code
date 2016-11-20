@@ -5,20 +5,15 @@
  *  2 - returning */
 module.exports = {run};
 
-function run(creep) {
-    let utilMove = require("util.move");
-    let utilEnergy = require("util.energy");
-    let mgrDelegator = require("mgr.delegator");
-    let mgrSpawner = require("mgr.spawner");
-
+function run(creep, tools) {
     if (creep.spawning) return;
 
     if (creep.ticksToLive == creep.memory.deployTime) {
-        mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
+        tools.mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
     }
 
     if (creep.memory.task.length == 0) {
-        creep.memory.task = mgrDelegator.energystealerGetTask(creep, Game.rooms[creep.memory.home]);
+        creep.memory.task = tools.mgrDelegator.energystealerGetTask(creep, Game.rooms[creep.memory.home]);
     }
 
     if (_.sum(creep.carry) === creep.carryCapacity) {
@@ -34,7 +29,7 @@ function run(creep) {
         if (creep.room.name == creep.memory.task[creep.memory.task.length -1]) {
             let energyTarget = Game.getObjectById(creep.memory.energyTarget);
             if (!energyTarget) { // Need target
-                let src = utilEnergy.getEnergyDroppedPriority(creep);
+                let src = tools.utilEnergy.getEnergyDroppedPriority(creep);
                 if (src) {
                     creep.memory.energyTarget = src.id;
                     energyTarget = src;
@@ -44,21 +39,21 @@ function run(creep) {
             }
 
             if (creep.pos.isNearTo(energyTarget)) {
-                utilEnergy.takeEnergy(creep, energyTarget);
+                tools.utilEnergy.takeEnergy(creep, energyTarget);
                 creep.memory.state = 2;
                 creep.memory.energyTarget = "";
                 creep.memory.path = null;
                 return;
             }
-            let moveResult = utilMove.move(creep);
+            let moveResult = tools.utilMove.move(creep);
             if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
-                utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.task[creep.memory.task.length -1]);
-                utilMove.move(creep);
+                tools.utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.task[creep.memory.task.length -1]);
+                tools.utilMove.move(creep);
             } else if (moveResult === 2) {
                 if (creep.memory.pathtarget.x != energyTarget.pos.x || creep.memory.pathtarget.y != energyTarget.pos.y) {
                     // Need new path, shouldn't happen often
-                    utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.task[creep.memory.task.length -1]);
-                    utilMove.move(creep);
+                    tools.utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y, creep.memory.task[creep.memory.task.length -1]);
+                    tools.utilMove.move(creep);
                 }
             }
         } else { // Move to room
@@ -73,7 +68,7 @@ function run(creep) {
         if (creep.room.name == creep.memory.task[0]) {
             let dumpTarget = Game.getObjectById(creep.memory.dumpTarget);
             if (!dumpTarget) { // Ask delegator for target
-                let target = mgrDelegator.transporterGetTarget(creep, Game.rooms[creep.memory.home]);
+                let target = tools.mgrDelegator.transporterGetTarget(creep, Game.rooms[creep.memory.home]);
 
                 if (target) {
                     creep.memory.dumpTarget = target.id;
@@ -93,13 +88,13 @@ function run(creep) {
 
             let moveResult = utilMove.move(creep);
             if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
-                utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
-                utilMove.move(creep);
+                tools.utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
+                tools.utilMove.move(creep);
             } else if (moveResult === 2) {
                 if (creep.memory.pathtarget.x != dumpTarget.pos.x || creep.memory.pathtarget.y != dumpTarget.pos.y) {
                     // Need new path, shouldn't happen often
-                    utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
-                    utilMove.move(creep);
+                    tools.utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
+                    tools.utilMove.move(creep);
                 }
             }
         } else { // Move to correct room

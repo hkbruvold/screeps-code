@@ -6,20 +6,16 @@
 *  3 - harvesting */
 module.exports = {run};
 
-function run(creep) {
-    let utilMove = require("util.move");
-    let mgrSpawner = require("mgr.spawner");
-    let mgrDelegator = require("mgr.delegator");
-
+function run(creep, tools) {
     if (creep.spawning) {
         if (!("id" in creep.memory.task)) { // Get task from delegator if possible
-            mgrDelegator.harvesterGetTask(creep, creep.room);
+            tools.mgrDelegator.harvesterGetTask(creep, creep.room);
         }
         return;
     }
 
     if (creep.ticksToLive == creep.memory.deployTime) {
-        mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
+        tools.mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
     }
 
     if (creep.memory.state == 3) { // Ready to harvest
@@ -48,7 +44,7 @@ function run(creep) {
                 creep.memory.task["id"] = source.id;
                 creep.say("Found it");
             } else {
-                mgrDelegator.harvesterGetTask(creep, creep,room);
+                tools.mgrDelegator.harvesterGetTask(creep, creep,room);
                 if (!"id" in creep.memory.task) {
                     console.log("[FATAL] creep " + creep.name + " can't find any unclaimed sources.");
                     console.log("You probably have too many harvesters");
@@ -77,11 +73,11 @@ function run(creep) {
     }
 
     else if (creep.memory.state = 2) { // Moving to work place
-        let result = utilMove.move(creep);
+        let result = tools.utilMove.move(creep);
         if (result == 4) {
             let sourceID = creep.memory.task.id;
             let taskpos = creep.room.memory.harvesterTasks[sourceID].pos;
-            utilMove.createPath(creep, taskpos.x, taskpos.y, creep.memory.home);
+            tools.utilMove.createPath(creep, taskpos.x, taskpos.y, creep.memory.home);
         } else if (result == 1) {
             creep.memory.state = 3;
             creep.say("I'm here");
