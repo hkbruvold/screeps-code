@@ -129,6 +129,7 @@ function abroadworkerGetTask(creep, room) {
         filter: (structure) => {
             return (structure.structureType != STRUCTURE_WALL &&
             structure.structureType != STRUCTURE_RAMPART &&
+            structure.structureType != STRUCTURE_CONTROLLER &&
             structure.hits <= structure.hitsMax*3/4);
         }
     });
