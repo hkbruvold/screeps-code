@@ -35,7 +35,7 @@ function run(creep) {
         if (!energyTarget) { // Need target
             let src = utilEnergy.getDroppedResource(creep); // Take dropped energy if possible
             if (!src) {
-                src = utilEnergy.getEnergy(Game.rooms[creep.memory.home]);
+                src = utilEnergy.getEnergy(Game.rooms[creep.memory.home].controller);
             }
             if (src) {
                 creep.memory.energyTarget = src.id;
