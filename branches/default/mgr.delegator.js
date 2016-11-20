@@ -227,7 +227,6 @@ function wallfixerGetTask(creep, room) {
         }
     
         minHits += confRooms[room.name].wallbuffer; // The allowed hits in order to find next wall
-        console.log(minHits);
     
         let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => {
