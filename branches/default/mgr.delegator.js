@@ -7,6 +7,12 @@ function giveTask(creep, room) {
     /* Assign task to creep, meant to be used for new creeps */
     let type = creep.memory.type;
     if (type == "harvester") giveHarvesterTask(creep, room);
+    if (type == "abroudworker") giveAbroudworkerTask(creep, room);
+}
+
+function giveAbroudworkerTask(creep, room) {
+    /* Give the abroudworker a workRoom */
+    creep.memory.workRoom = "E46S63";
 }
 
 function giveHarvesterTask(creep, room) {
@@ -114,6 +120,35 @@ function workerGetTask(creep, room) {
     // Give the worker the task of upgrading the controller
     creep.memory.role = "upgrader";
     return creep.room.controller;
+}
+
+function abroudworkerGetTask(creep, room) {
+    /* Function to give an abroudworker a task */
+    // Check if something needs repair
+    let target = room.controller.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType != STRUCTURE_WALL &&
+            structure.structureType != STRUCTURE_RAMPART &&
+            structure.hits <= structure.hitsMax*3/4);
+        }
+    });
+
+    if (target) {
+        creep.memory.role = "repairer";
+        return target;
+    }
+
+    // Check for construction sites
+    target = room.controller.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+
+    if (target) {
+        creep.memory.role = "builder";
+        return target;
+    }
+
+    // Give the worker the task of upgrading the controller
+    creep.memory.role = "upgrader";
+    return room.controller;
 }
 
 function transporterGetSource(creep, room) {

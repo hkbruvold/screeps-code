@@ -24,7 +24,7 @@ module.exports = {
         priority: 1, // priority is a number from 0 to 9 where 0 is highest priority
     },
     worker: {
-        /* upgrader upgrades controller */
+        /* worker upgrades controllers, builds, and repairs */
         parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "worker", home: "", tiredCount: 0, deployTime: 2, state: 0},
@@ -71,5 +71,12 @@ module.exports = {
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "claimer", home: "", tiredCount: 0, deployTime: -1, state: 0},
         priority: 5, // priority is a number from 0 to 9 where 0 is highest priority
+    },
+    abroudworker: {
+        /* abroudworker works in another room, but collect sources from home room */
+        parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "abroudworker", home: "", tiredCount: 0, deployTime: 2, state: 0},
+        priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
     },
 };
