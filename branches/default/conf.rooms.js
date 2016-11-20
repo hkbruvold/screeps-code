@@ -1,11 +1,13 @@
-/* This module servers two purposes:
+/* This module contains room-specific configurations :
 *  - Defines the rooms
 *  - Defines name of spawners per room
+*  - Defines the ids of towers per room
 *  - Contains definitions of the desired amount of creeps
 *  - Defines the amount of hits above minimum wall hits before the wall should be considered to be repaired (walluffer)*/
 module.exports = {
     E46S62: {
         spawners: ["Spawn1"],
+        towers: [], // tower IDs
         creeps: {
             harvester: 2,
             spawnfiller: 2,
@@ -24,6 +26,7 @@ module.exports = {
     },
     E46S63: {
         spawners: ["Spawn2"],
+        towers: [], // tower IDs
         creeps: {
             harvester: 2,
             spawnfiller: 0,

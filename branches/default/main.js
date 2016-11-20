@@ -2,13 +2,18 @@ let confRooms = require("conf.rooms");
 let mgrCreeps = require("mgr.creeps");
 let mgrSpawner = require("mgr.spawner");
 let mgrMemory = require("mgr.memory");
+let typeTower = require("type.tower");
 
 module.exports.loop = function () {
     /* Get rooms defined in conf.rooms */
     let rooms = [];
     try {
         for (let roomname in confRooms) {
-            rooms.push(Game.rooms[roomname]);
+            if (Game.rooms[roomname]) {
+                rooms.push(Game.rooms[roomname]);
+            } else {
+                console.log("[ERROR] Unable to find room "+roomname+" which is specified in conf.rooms")
+            }
         }
     } catch(error) {
         console.log("[FATAL] Error collecting rooms from conf.rooms");
@@ -29,6 +34,18 @@ module.exports.loop = function () {
         }
     } catch(error) {
         console.log("[ERROR] Error running room initialization");
+        console.log(error.stack);
+    }
+
+    /* Do some operations every tick */
+    try {
+        for (let i in rooms) {
+            for (let j in confRooms[rooms[i].name].towers) {
+                typeTower.run(Game.getObjectById(confRooms[rooms[i].name].towers[j]));
+            }
+        }
+    } catch(error) {
+        console.log("[ERROR] Error running tower script");
         console.log(error.stack);
     }
 
