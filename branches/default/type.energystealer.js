@@ -103,7 +103,9 @@ function run(creep) {
                 }
             }
         } else { // Move to correct room
-            creep.moveTo(Game.rooms[creep.memory.home].controller);
+            let myPos = creep.room.name;
+            let idest = creep.memory.task.indexOf(myPos) - 1;
+            creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.task[idest])));
         }
     }
 
