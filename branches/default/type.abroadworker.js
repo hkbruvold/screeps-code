@@ -97,6 +97,6 @@ function run(creep) {
             }
         }
 
-        let moveResult = creep.moveTo(energyTarget);
+        let moveResult = creep.moveTo(workTarget);
     }
 }
