@@ -7,7 +7,7 @@ function giveTask(creep, room) {
     /* Assign task to creep, meant to be used for new creeps */
     let type = creep.memory.type;
     if (type == "harvester") giveHarvesterTask(creep, room);
-    if (type == "abroudworker") giveAbroudworkerTask(creep, room);
+    if (type == "abroadworker") giveAbroudworkerTask(creep, room);
 }
 
 function giveAbroudworkerTask(creep, room) {

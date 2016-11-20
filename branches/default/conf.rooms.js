@@ -7,7 +7,7 @@ module.exports = {
         spawners: ["Spawn1"],
         creeps: {
             harvester: 2,
-            spawnfiller: 1,
+            spawnfiller: 2,
             worker: 1,
             transporter: 1,
             transporternoroad: 0,
@@ -15,8 +15,8 @@ module.exports = {
             builder: 0,
             repairer: 0,
             claimer: 0,
-            abroudworker: 4,
-            roomdefender: 0,
+            abroadworker: 4,
+            roomdefender: 1,
         },
     },
 };
