@@ -7,7 +7,7 @@
 module.exports = {
     E46S62: {
         spawners: ["Spawn1"],
-        towers: ["582d7e71412cc5f63b55d3b2"], // tower IDs
+        towers: ["582d7e71412cc5f63b55d3b2", "5831d51e3b3158d14cff4157"], // tower IDs
         creeps: {
             harvester: 2,
             spawnfiller: 2,

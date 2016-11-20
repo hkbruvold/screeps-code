@@ -240,7 +240,7 @@ function wallfixerGetTask(creep, room) {
     
         if (target) {
             creep.memory.role = "wallfixer";
-            creep.memory.repairTarget = target.hits + minHits*1.5;
+            creep.memory.repairTarget = minHits + confRooms[room.name].wallbuffer*1.5;
             return target;
         }
     }
