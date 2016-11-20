@@ -18,7 +18,7 @@ function run(creep) {
     }
 
     if (creep.ticksToLive <= creep.memory.deployTime) {
-        mgrSpawner.addToQueue(creep.room, creep.memory.type);
+        mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
     }
 
     if (_.sum(creep.carry) === creep.carryCapacity) {
