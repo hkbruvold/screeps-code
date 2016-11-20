@@ -8,8 +8,10 @@ module.exports = {run};
 
 function run(creep, tools) {
     if (creep.spawning) {
-        if (!("id" in creep.memory.task)) { // Get task from delegator if possible
-            tools.mgrDelegator.harvesterGetTask(creep, creep.room);
+        if (!(creep.id===undefined)) {
+            if (!("id" in creep.memory.task)) { // Get task from delegator if possible
+                tools.mgrDelegator.harvesterGetTask(creep, creep.room);
+            }
         }
         return;
     }

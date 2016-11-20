@@ -28,12 +28,12 @@ module.exports = {
     },
     E46S63: {
         spawners: ["Spawn2"],
-        towers: [], // tower IDs
+        towers: ["5831f9989f18cf26542f4ef5"], // tower IDs
         stealerpaths: [],
         creeps: {
             harvester: 2,
             spawnfiller: 1,
-            worker: 1,
+            worker: 2,
             wallfixer: 1,
             transporter: 0,
             transporternoroad: 0,
