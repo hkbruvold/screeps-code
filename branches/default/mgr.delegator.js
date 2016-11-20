@@ -1,6 +1,6 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
-    giveTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget
+    giveTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget, abroadworkerGetTask
 };
 
 function giveTask(creep, room) {
@@ -122,7 +122,7 @@ function workerGetTask(creep, room) {
     return creep.room.controller;
 }
 
-function abroudworkerGetTask(creep, room) {
+function abroadworkerGetTask(creep, room) {
     /* Function to give an abroudworker a task */
     // Check if something needs repair
     let target = room.controller.pos.findClosestByRange(FIND_STRUCTURES, {
