@@ -9,6 +9,7 @@ module.exports = {run};
 function run(creep) {
     let utilMove = require("util.move");
     let mgrSpawner = require("mgr.spawner");
+    let mgrDelegator = require("mgr.delegator");
 
     if (creep.spawning) return;
 
@@ -42,9 +43,13 @@ function run(creep) {
                 creep.memory.task["id"] = source.id;
                 creep.say("Found it");
             } else {
-                creep.memory.task["id"] = "";
-                creep.say("NOPE");
-                console.log("[FATAL] creep "+creep.name+" can't find any unclaimed sources.");
+                mgrDelegator.giveHarvesterTask(creep, creep,room);
+                if (!"id" in creep.memory.task) {
+                    console.log("[FATAL] creep " + creep.name + " can't find any unclaimed sources.");
+                    console.log("You probably have too many harvesters");
+                } else {
+                    creep.memory.state = 2;
+                }
                 return;
             }
         }

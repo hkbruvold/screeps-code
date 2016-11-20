@@ -1,17 +1,17 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
-    giveTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget, abroadworkerGetTask, wallfixerGetTask
+    giveTask, giveHarvesterTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget, abroadworkerGetTask, wallfixerGetTask
 };
 
 function giveTask(creep, room) {
     /* Assign task to creep, meant to be used for new creeps */
     let type = creep.memory.type;
     if (type == "harvester") giveHarvesterTask(creep, room);
-    if (type == "abroadworker") giveAbroudworkerTask(creep, room);
+    if (type == "abroadworker") giveAbroadworkerTask(creep, room);
 }
 
-function giveAbroudworkerTask(creep, room) {
-    /* Give the abroudworker a workRoom */
+function giveAbroadworkerTask(creep, room) {
+    /* Give the abroadworker a workRoom */
     creep.memory.workRoom = "E46S63";
 }
 
