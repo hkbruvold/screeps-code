@@ -67,8 +67,9 @@ module.exports.loop = function () {
 
 function safeMode(spawner) {
     /* Will spawn one harvester and one upgrader one needed */
-    if ((_.filter(Game.creeps, (creep) => creep.memory.type == "harvester" && creep.memory.home == spawner.room.name).length < 1) &&
-        (_.filter(Game.creeps, (creep) => creep.memory.type == "safeharvester" && creep.memory.home == spawner.room.name).length < 1)) {
+    if ((_.filter(Game.creeps, (creep) => creep.memory.type == "safeharvester" && creep.memory.home == spawner.room.name).length < 1) &&
+        ((_.filter(Game.creeps, (creep) => creep.memory.type == "harvester" && creep.memory.home == spawner.room.name).length < 1) ||
+        (_.filter(Game.creeps, (creep) => creep.memory.type == "spawnfiller" && creep.memory.home == spawner.room.name).length < 1))) {
         console.log("["+spawner.name+"] Spawning safe mode harvester");
         spawner.createCreep([WORK,MOVE,CARRY,MOVE], spawner.name+"_HARVESTER", {type: "safeharvester", home: spawner.room.name, tiredCount: 0, deployTime: 0});
         return true;
