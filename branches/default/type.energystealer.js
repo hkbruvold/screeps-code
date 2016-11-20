@@ -64,7 +64,7 @@ function run(creep) {
         } else { // Move to room
             let myPos = creep.room.name;
             let idest = creep.memory.task.indexOf(myPos) + 1;
-            creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.apath[idest])));
+            creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.task[idest])));
         }
     }
 
