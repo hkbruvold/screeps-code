@@ -73,7 +73,7 @@ module.exports = {
         priority: 5, // priority is a number from 0 to 9 where 0 is highest priority
     },
     abroadworker: {
-        /* abroudworker works in another room, but collect sources from home room */
+        /* abroadworker works in another room, but collect sources from home room */
         parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "abroadworker", home: "", tiredCount: 0, deployTime: 2, state: 0},
@@ -85,5 +85,12 @@ module.exports = {
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "roomdefender", home: "", tiredCount: 0, deployTime: 2, state: 0},
         priority: 6, // priority is a number from 0 to 9 where 0 is highest priority
+    },
+    wallfixer: {
+        /* wallfixer repairs walls/ramparts. It should be able to move fast on plains */
+        parts: [MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY,],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "wallfixer", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
+        priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
     },
 };
