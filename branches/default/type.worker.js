@@ -17,6 +17,16 @@ function run(creep) {
         return;
     }
 
+    // If the creep ends up in another room (it did happen)
+    if (creep.room.name != creep.memory.home) {
+        creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.home)));
+        return;
+    }
+    if (creep.pos.y == 0) {
+        creep.move(BOTTOM);
+        return;
+    }
+
     if (creep.ticksToLive == creep.memory.deployTime) {
         mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
     }

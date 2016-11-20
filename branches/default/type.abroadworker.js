@@ -17,6 +17,12 @@ function run(creep) {
         creep.memory.workTarget = "";
         return;
     }
+    
+    // temporary fix to prevent creeps from going back 
+    if (creep.pos.y == 0) {
+        creep.move(BOTTOM);
+        return;
+    }
 
     if (creep.ticksToLive == creep.memory.deployTime) {
         mgrSpawner.addToQueue(creep.room, creep.memory.type, true);

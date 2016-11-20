@@ -7,7 +7,7 @@
 module.exports = {
     E46S62: {
         spawners: ["Spawn1"],
-        towers: [], // tower IDs
+        towers: ["582d7e71412cc5f63b55d3b2"], // tower IDs
         creeps: {
             harvester: 2,
             spawnfiller: 2,
@@ -31,7 +31,7 @@ module.exports = {
             harvester: 2,
             spawnfiller: 0,
             worker: 1,
-            wallfixer: 0,
+            wallfixer: 1,
             transporter: 0,
             transporternoroad: 0,
             upgrader: 0,
