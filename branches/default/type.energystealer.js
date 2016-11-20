@@ -69,36 +69,41 @@ function run(creep) {
     }
 
     else if (creep.memory.state === 2) {
-        let dumpTarget = Game.getObjectById(creep.memory.dumpTarget);
-        if (!dumpTarget) { // Ask delegator for target
-            let target = mgrDelegator.transporterGetTarget(creep, Game.rooms[creep.memory.home]);
+        // Check if in correct room
+        if (creep.room.name == creep.memory.task[0]) {
+            let dumpTarget = Game.getObjectById(creep.memory.dumpTarget);
+            if (!dumpTarget) { // Ask delegator for target
+                let target = mgrDelegator.transporterGetTarget(creep, Game.rooms[creep.memory.home]);
 
-            if (target) {
-                creep.memory.dumpTarget = target.id;
-                dumpTarget = target;
-            } else { // Delegator didn't have any tasks
+                if (target) {
+                    creep.memory.dumpTarget = target.id;
+                    dumpTarget = target;
+                } else { // Delegator didn't have any tasks
+                    return;
+                }
+            }
+
+            if (creep.pos.isNearTo(dumpTarget)) {
+                creep.transfer(dumpTarget, RESOURCE_ENERGY);
+                if (creep.carry.energy === 0) creep.memory.state = 1;
+                creep.memory.dumpTarget = "";
+                creep.memory.path = null;
                 return;
             }
-        }
 
-        if (creep.pos.isNearTo(dumpTarget)) {
-            creep.transfer(dumpTarget, RESOURCE_ENERGY);
-            if (creep.carry.energy === 0) creep.memory.state = 1;
-            creep.memory.dumpTarget = "";
-            creep.memory.path = null;
-            return;
-        }
-
-        let moveResult = utilMove.move(creep);
-        if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
-            utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
-            utilMove.move(creep);
-        } else if (moveResult === 2) {
-            if (creep.memory.pathtarget.x != dumpTarget.pos.x || creep.memory.pathtarget.y != dumpTarget.pos.y) {
-                // Need new path, shouldn't happen often
+            let moveResult = utilMove.move(creep);
+            if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
                 utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
                 utilMove.move(creep);
+            } else if (moveResult === 2) {
+                if (creep.memory.pathtarget.x != dumpTarget.pos.x || creep.memory.pathtarget.y != dumpTarget.pos.y) {
+                    // Need new path, shouldn't happen often
+                    utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
+                    utilMove.move(creep);
+                }
             }
+        } else { // Move to correct room
+            creep.moveTo(Game.rooms[creep.memory.home].controller);
         }
     }
 
