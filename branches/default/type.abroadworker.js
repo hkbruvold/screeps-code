@@ -12,11 +12,7 @@ function run(creep) {
     let mgrSpawner = require("mgr.spawner");
     let confRooms = require("conf.rooms");
 
-    if (creep.spawning) {
-        creep.memory.energyTarget = "";
-        creep.memory.workTarget = "";
-        return;
-    }
+    if (creep.spawning) return;
 
     if (creep.ticksToLive == creep.memory.deployTime) {
         mgrSpawner.addToQueue(creep.room, creep.memory.type, true);

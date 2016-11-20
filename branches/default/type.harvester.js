@@ -11,7 +11,12 @@ function run(creep) {
     let mgrSpawner = require("mgr.spawner");
     let mgrDelegator = require("mgr.delegator");
 
-    if (creep.spawning) return;
+    if (creep.spawning) {
+        if (!("id" in creep.memory.task)) { // Get task from delegator if possible
+            mgrDelegator.harvesterGetTask(creep, creep.room);
+        }
+        return;
+    }
 
     if (creep.ticksToLive == creep.memory.deployTime) {
         mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
@@ -39,11 +44,11 @@ function run(creep) {
                 }
             });
             if (source) {
-                creep.room.memory.harvesterTasks[source.id] = {creepName: creep.name};
+                creep.room.memory.harvesterTasks[source.id] = {creepID: creep.id};
                 creep.memory.task["id"] = source.id;
                 creep.say("Found it");
             } else {
-                mgrDelegator.giveHarvesterTask(creep, creep,room);
+                mgrDelegator.harvesterGetTask(creep, creep,room);
                 if (!"id" in creep.memory.task) {
                     console.log("[FATAL] creep " + creep.name + " can't find any unclaimed sources.");
                     console.log("You probably have too many harvesters");
