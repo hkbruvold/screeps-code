@@ -44,7 +44,7 @@ function run(creep, tools) {
                 creep.memory.task["id"] = source.id;
                 creep.say("Found it");
             } else {
-                tools.mgrDelegator.harvesterGetTask(creep, creep,room);
+                tools.mgrDelegator.harvesterGetTask(creep, creep.room);
                 if (!"id" in creep.memory.task) {
                     console.log("[FATAL] creep " + creep.name + " can't find any unclaimed sources.");
                     console.log("You probably have too many harvesters");
