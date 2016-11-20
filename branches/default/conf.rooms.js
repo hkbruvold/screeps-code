@@ -8,6 +8,7 @@ module.exports = {
     E46S62: {
         spawners: ["Spawn1"],
         towers: ["582d7e71412cc5f63b55d3b2", "5831d51e3b3158d14cff4157"], // tower IDs
+        stealerpaths: [["E46S62", "E47S62"]],
         creeps: {
             harvester: 2,
             spawnfiller: 2,
@@ -27,6 +28,7 @@ module.exports = {
     E46S63: {
         spawners: ["Spawn2"],
         towers: [], // tower IDs
+        stealerpaths: [],
         creeps: {
             harvester: 2,
             spawnfiller: 0,

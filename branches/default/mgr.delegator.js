@@ -1,6 +1,6 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
-    giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget, abroadworkerGetTask, wallfixerGetTask
+    giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget, abroadworkerGetTask, wallfixerGetTask, energystealerGetTask
 };
 
 function giveTask(creep, room) {
@@ -34,6 +34,11 @@ function giveTask(creep, room) {
         creep.memory.energyTarget = "";
         creep.memory.workTarget = "";
         creep.memory.repairTarget = 0;
+    }
+    else if (type == "energystealer") {
+        creep.memory.energyTarget = "";
+        creep.memory.dumpTarget = "";
+        creep.memory.task = [];
     }
 }
 
@@ -270,4 +275,36 @@ function wallfixerGetTask(creep, room) {
 
     // If no walls/ramparts, give the wallfixer the task of a worker
     return workerGetTask(creep, room);
+}
+
+function energystealerGetTask(creep, room) {
+    /* Function to give an energystealer a room to steal energy from */
+    let confRooms = require("conf.rooms");
+
+    let tasks = confRooms[room.name].stealerpaths;
+    if (!Game.rooms[creep.memory.home].memory.stealerTasks) {
+        Game.rooms[creep.memory.home].memory.stealerTasks = new Array(tasks.length).fill(0);
+    }
+
+    // Check that stealerTasks has enough entries
+    let taskCount = Game.rooms[creep.memory.home].memory.stealerTasks;
+    if (taskCount.length < tasks.length) {
+        for (let i = taskCount.length; i < tasks.length; i++) {
+            Game.rooms[creep.memory.home].memory.stealerTasks.push(0);
+        }
+    }
+
+    // Get index of smallest number in array
+    let imin = 0;
+    let tmin = taskCount[0];
+    for (let i in taskCount) {
+        if (taskCount[i] < tmin) {
+            tmin = taskCount;
+            imin = i;
+        }
+    }
+
+    if (tasks.length > 0) {
+        return tasks[imin];
+    }
 }
