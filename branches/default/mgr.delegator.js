@@ -53,7 +53,7 @@ function harvesterGetTask(creep, room) {
     // Check for sources missing a harvester
     let source = null;
     for (let sourceID in room.memory.harvesterTasks) {
-        if ((!Game.creeps[room.memory.harvesterTasks[sourceID].creepID])) {
+        if (!Game.getObjectById(room.memory.harvesterTasks[sourceID].creepID)) {
             source = sourceID;
             break;
         }
