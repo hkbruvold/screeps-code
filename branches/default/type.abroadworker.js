@@ -15,7 +15,6 @@ function run(creep) {
     if (creep.spawning) {
         creep.memory.energyTarget = "";
         creep.memory.workTarget = "";
-        creep.memory.workRoom = "";
         return;
     }
 
@@ -53,17 +52,7 @@ function run(creep) {
             creep.memory.path = null;
             return;
         }
-        let moveResult = utilMove.move(creep);
-        if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
-            utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y);
-            utilMove.move(creep);
-        } else if (moveResult === 2) {
-            if (creep.memory.pathtarget.x != energyTarget.pos.x || creep.memory.pathtarget.y != energyTarget.pos.y) {
-                // Need new path, shouldn't happen often
-                utilMove.createPath(creep, energyTarget.pos.x, energyTarget.pos.y);
-                utilMove.move(creep);
-            }
-        }
+        let moveResult = creep.moveTo(energyTarget);
     }
 
     else if (creep.memory.state === 2) {
@@ -108,16 +97,6 @@ function run(creep) {
             }
         }
 
-        let moveResult = utilMove.move(creep);
-        if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
-            utilMove.createPath(creep, workTarget.pos.x, workTarget.pos.y);
-            utilMove.move(creep);
-        } else if (moveResult === 2) {
-            if (creep.memory.pathtarget.x != workTarget.pos.x || creep.memory.pathtarget.y != workTarget.pos.y) {
-                // Need new path, shouldn't happen often
-                utilMove.createPath(creep, workTarget.pos.x, workTarget.pos.y);
-                utilMove.move(creep);
-            }
-        }
+        let moveResult = creep.moveTo(energyTarget);
     }
 }
