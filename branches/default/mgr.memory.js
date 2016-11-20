@@ -1,6 +1,6 @@
 /* This module contains functions to clean up in memory and initialize some memories */
 module.exports = {
-    clearCreepMemory, initSources, initRepairQueue, initSpawnMemory, initHarvesterContainers
+    clearCreepMemory, clearReservationMemory, initSources, initRepairQueue, initSpawnMemory, initHarvesterContainers
 }
 
 function clearCreepMemory() {
@@ -9,6 +9,16 @@ function clearCreepMemory() {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
+        }
+    }
+}
+
+function clearReservationMemory(room) {
+    /* Clears the reservation memory from the room */
+    if (!room.memory.reservation) return;
+    for (let memID in room.memory.reservation) {
+        if (!Game.getObjectById(memID)) {
+            delete room.memory.reservation[memID];
         }
     }
 }
@@ -40,7 +50,7 @@ function initHarvesterContainers(room) {
 
     for (let name in Game.creeps) {
         if (Game.creeps[name].memory.type == "harvester") {
-            let container = _.filter(Game.creeps[name].pos.lookFor(LOOK_STRUCTURES), (structure) => (structure.structureType == STRUCTURE_CONTAINER));
+            let container = _.filter(Game.creeps[name].pos.lookFor(LOOK_STRUCTURES), (structure) => (structure.structureType == STRUCTURE_CONTAINER && structure.room.name == room.name));
             if (container[0]) {
                 room.memory.harvesterContainers.push(container[0].id);
             }

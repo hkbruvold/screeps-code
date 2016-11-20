@@ -12,8 +12,8 @@ function run(creep) {
 
     if (creep.spawning) return;
 
-    if (creep.ticksToLive <= creep.memory.deployTime) {
-        mgrSpawner.addToQueue(creep.room, creep.memory.type);
+    if (creep.ticksToLive == creep.memory.deployTime) {
+        mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
     }
 
     if (creep.memory.state == 3) { // Ready to harvest

@@ -15,34 +15,38 @@ function run(creep) {
     }
 
     if(creep.memory.harvesting == true) {
+        let container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
+                    _.sum(structure.store) > 50;
+            }
+        });
+        if (container) {
+            if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(container);
+            }
+            return;
+        }
+        
         let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
             filter: (resource) => {
                 return (resource.amount > 50);
             }
         });
+
         if (dropped) {
             if(creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(dropped);
             }
-        } else {
-            let container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
-                        _.sum(structure.store) > 50;
-                }
-            });
-
-            if (container) {
-                if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(container);
-                }
-            } else {
-                let source = creep.pos.findClosestByRange(FIND_SOURCES);
-                if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(source);
-                }
-            }
+            return;
         }
+        
+        let source = creep.pos.findClosestByRange(FIND_SOURCES);
+        
+        if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(source);
+        }
+        return;
     } else {
         let targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
