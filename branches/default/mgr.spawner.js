@@ -57,6 +57,12 @@ function addToQueue(room, creepType, checkMax) {
     /* Adds a creep of creepType to spawn queue */
     let confRooms = require("conf.rooms");
     let confCreeps = require("conf.creeps");
+    if (checkMax) {
+        let count = _.filter(Game.creeps, (creep) => (creep.memory.type == creepType &&
+            creep.memory.home == spawner.room.name)).length;
+        let desiredCount = confRooms[spawner.room.name].creeps[creepType];
+        if (desiredCount >= count) return;
+    }
 
     let priority = confCreeps[creepType].priority;
     let spawner = Game.spawns[confRooms[room.name].spawners[0]];
