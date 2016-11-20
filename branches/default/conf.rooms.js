@@ -1,7 +1,8 @@
 /* This module servers two purposes:
 *  - Defines the rooms
 *  - Defines name of spawners per room
-*  - Contains definitions of the desired amount of creeps*/
+*  - Contains definitions of the desired amount of creeps
+*  - Defines the amount of hits above minimum wall hits before the wall should be considered to be repaired (walluffer)*/
 module.exports = {
     E46S62: {
         spawners: ["Spawn1"],
@@ -18,6 +19,7 @@ module.exports = {
             abroadworker: 2,
             roomdefender: 1,
         },
+        wallbuffer: 1000,
     },
     E46S63: {
         spawners: ["Spawn2"],
@@ -34,5 +36,6 @@ module.exports = {
             abroadworker: 0,
             roomdefender: 0,
         },
+        wallbuffer: 1000,
     },
 };
