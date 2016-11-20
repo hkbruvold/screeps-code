@@ -213,32 +213,36 @@ function wallfixerGetTask(creep, room) {
     // Find the wall/rampart closest to creep that has one of the lowest hits
     let structures = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_WALL &&
+            return (structure.structureType == STRUCTURE_WALL ||
                 structure.structureType == STRUCTURE_RAMPART);
         }
     });
 
-    let minHits = structures[0].hits;
-    for (let i in structures) {
-        if (structures[i].hits < minHits) {
-            minHits = structures[i].hits;
+    if (structures.length > 0) {
+        let minHits = structures[0].hits;
+        for (let i in structures) {
+            if (structures[i].hits < minHits) {
+                minHits = structures[i].hits;
+            }
         }
-    }
-
-    minHits += confRooms[room.name].wallbuffer; // The allowed hits in order to find next wall
-
-    let target = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-            return (structure.structureType == STRUCTURE_WALL &&
-                structure.structureType == STRUCTURE_RAMPART &&
-                structure.hits <= minHits);
+    
+        minHits += confRooms[room.name].wallbuffer; // The allowed hits in order to find next wall
+        console.log(minHits);
+    
+        let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return ((structure.structureType == STRUCTURE_WALL ||
+                    structure.structureType == STRUCTURE_RAMPART) &&
+                    structure.hits <= minHits &&
+                    structure.structureType != STRUCTURE_CONTROLLER);
+            }
+        });
+    
+        if (target) {
+            creep.memory.role = "wallfixer";
+            creep.memory.repairTarget = target.hits + minHits*1.5;
+            return target;
         }
-    });
-
-    if (target) {
-        creep.memory.role = "wallfixer";
-        creep.memory.repairTarget = target.hits + minHits*1.5;
-        return target;
     }
 
     // If no walls/ramparts, give the wallfixer the task of a worker

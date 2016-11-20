@@ -64,9 +64,10 @@ function run(creep) {
 
     else if (creep.memory.state === 2) {
         let workTarget = Game.getObjectById(creep.memory.workTarget);
+        
         if (!workTarget) { // Need target
             let target = mgrDelegator.wallfixerGetTask(creep, creep.room);
-
+            
             if (target) {
                 creep.memory.workTarget = target.id;
                 workTarget = target;
