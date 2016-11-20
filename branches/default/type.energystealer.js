@@ -86,7 +86,7 @@ function run(creep, tools) {
                 return;
             }
 
-            let moveResult = utilMove.move(creep);
+            let moveResult = tools.utilMove.move(creep);
             if (moveResult === 4 || moveResult === 1) { // Completed or non-existing
                 tools.utilMove.createPath(creep, dumpTarget.pos.x, dumpTarget.pos.y, creep.memory.home);
                 tools.utilMove.move(creep);
