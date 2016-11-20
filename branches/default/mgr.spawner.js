@@ -53,7 +53,7 @@ function spawnNext(spawner) {
     }
 }
 
-function addToQueue(room, creepType) {
+function addToQueue(room, creepType, checkMax) {
     /* Adds a creep of creepType to spawn queue */
     let confRooms = require("conf.rooms");
     let confCreeps = require("conf.creeps");
@@ -73,7 +73,8 @@ function fillSpawnQueue(spawner) {
     let spawnQueue = spawner.memory.spawnQueue;
 
     for (let creepType in confCreeps) {
-        let count = _.filter(Game.creeps, (creep) => creep.memory.type == creepType).length;
+        let count = _.filter(Game.creeps, (creep) => (creep.memory.type == creepType &&
+            creep.memory.home == spawner.room.name)).length;
         let desiredCount = confRooms[spawner.room.name].creeps[creepType];
 
         let delta = desiredCount - count;
