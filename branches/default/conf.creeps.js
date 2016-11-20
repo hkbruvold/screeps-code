@@ -93,4 +93,11 @@ module.exports = {
         memory: {type: "wallfixer", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
         priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
     },
+    energystealer: {
+        /* energystealer moves to another room and takes the energy there */
+        parts: [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "energystealer", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
+        priority: 6, // priority is a number from 0 to 9 where 0 is highest priority
+    },
 };
