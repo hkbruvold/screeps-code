@@ -17,7 +17,7 @@ function run(creep, tools) {
     }
 
     if (creep.ticksToLive == creep.memory.deployTime) {
-        tools.mgrSpawner.addToQueue(creep.room, creep.memory.type, true);
+        tools.mgrSpawner.addToQueue(Game.rooms[creep.memory.home], creep.memory.type, true);
     }
 
     if (creep.memory.state == 3) { // Ready to harvest
