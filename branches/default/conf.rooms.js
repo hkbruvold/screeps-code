@@ -28,8 +28,8 @@ module.exports = {
             remoteminer: 0,
         },
         wallbuffer: 2000,
-        walllimit: 100000,
-        rampartlimit: 100000,
+        walllimit: 150000,
+        rampartlimit: 150000,
     },
     E46S63: {
         spawners: ["Spawn2"],
@@ -50,8 +50,8 @@ module.exports = {
             dismantler: 0,
             remoteminer: 0,
         },
-        wallbuffer: 0,//1000,
-        walllimit: 0,//200000,
-        rampartlimit: 0,//200000,
+        wallbuffer: 1000,
+        walllimit: 200000,
+        rampartlimit: 200000,
     },
 };
