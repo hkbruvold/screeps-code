@@ -243,11 +243,15 @@ function transporterGetTarget(creep, room) {
 function wallfixerGetTask(creep, room) {
     /* Function to give the wallfixer a target */
     let confRooms = require("conf.rooms");
+
+    let walllimit = confRooms[room.name].walllimit;
+    let rampartlimit = confRooms[room.name].rampartlimit;
+
     // Find the wall/rampart closest to creep that has one of the lowest hits
     let structures = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_WALL ||
-                structure.structureType == STRUCTURE_RAMPART);
+            return ((structure.hits <= walllimit && structure.structureType == STRUCTURE_WALL) ||
+                (structure.hits <= rampartlimit && structure.structureType == STRUCTURE_RAMPART));
         }
     });
 
