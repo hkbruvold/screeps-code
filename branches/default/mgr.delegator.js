@@ -1,7 +1,8 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
     giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget,
-    abroadworkerGetTask, wallfixerGetTask, energystealerGetTask, dismantlerGetDumpTarget, remoteminerGetTask
+    abroadworkerGetTask, wallfixerGetTask, energystealerGetTask, dismantlerGetDumpTarget, remoteminerGetTask,
+    reserverGetTask
 };
 
 function giveTask(creep, room) {
@@ -45,6 +46,9 @@ function giveTask(creep, room) {
     else if (type == "remoteminer") {
         creep.memory.targetRoom = [];
         creep.memory.task = {};
+    }
+    else if (type == "reserver") {
+        creep.memory.targetPath = [];
     }
 }
 
@@ -369,4 +373,13 @@ function remoteminerGetTask(creep, roomname) {
     let targetRoom = confRooms[roomname].remotemining[0];
 
     creep.memory.targetRoom = targetRoom;
+}
+
+function reserverGetTask(creep, roomname) {
+    /* Function to give the remoteminer a target room */
+    let confRooms = require("conf.rooms");
+
+    let targetPath = confRooms[roomname].reservepaths[0];
+
+    creep.memory.targetPath = targetPath;
 }

@@ -93,4 +93,11 @@ module.exports = {
         memory: {type: "remoteminer", home: "", tiredCount: 0, deployTime: 2, state: 0},
         priority: 4, // priority is a number from 0 to 9 where 0 is highest priority
     },
+    reserver: {
+        /* remoteminer harvests energy in another room */
+        parts: [MOVE,CLAIM,MOVE,CLAIM],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "reserver", home: "", tiredCount: 0, deployTime: 2, state: 0},
+        priority: 4, // priority is a number from 0 to 9 where 0 is highest priority
+    },
 };
