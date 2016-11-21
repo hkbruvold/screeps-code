@@ -9,7 +9,7 @@ module.exports = {run};
 function run(creep, tools) {
     if (creep.spawning) return;
 
-    if (creep.memory.dismantleYourself) {
+    if (creep.memory.dismantleYourself === true) {
         let spawn = Game.spawns[tools.confRooms[creep.room].spawns[0]];
         if (spawn.recycleCreep(creep) == ERR_NOT_IN_RANGE) {
             creep.moveTo(spawn);

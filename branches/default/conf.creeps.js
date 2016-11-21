@@ -81,9 +81,9 @@ module.exports = {
     },
     dismantler: {
         /* dismantler dismantles structures */
-        parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
+        parts: [MOVE,WORK,CARRY,MOVE,WORK,WORK,CARRY,MOVE,WORK,WORK,CARRY,MOVE,WORK,WORK,CARRY,MOVE,WORK,WORK,CARRY,MOVE,WORK,WORK,CARRY],
         extend: false, // whether the parts list should be looped. Recommended: false
-        memory: {type: "repairer", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
+        memory: {type: "dismantler", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
         priority: 8, // priority is a number from 0 to 9 where 0 is highest priority
     },
 };

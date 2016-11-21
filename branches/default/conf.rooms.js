@@ -35,7 +35,7 @@ module.exports = {
         creeps: {
             harvester: 2,
             spawnfiller: 1,
-            worker: 3,
+            worker: 2,
             wallfixer: 1,
             transporter: 0,
             transporternoroad: 0,
@@ -45,8 +45,8 @@ module.exports = {
             energystealer: 0,
             dismantler: 0,
         },
-        wallbuffer: 1000,
-        walllimit: 150000,
-        rampartlimit: 150000,
+        wallbuffer: 0,//1000,
+        walllimit: 0,//200000,
+        rampartlimit: 0,//200000,
     },
 };
