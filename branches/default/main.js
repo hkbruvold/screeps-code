@@ -30,13 +30,13 @@ module.exports.loop = function () {
 
     /* Run initial room configs for rooms not initialized (can be commented out to save CPU)*/
     try {
-        for (let i in rooms) {
-            if (rooms[i].memory.initialized != true) {
-                tools.mgrMemory.initSpawnMemory(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
-                tools.mgrSpawner.fillSpawnQueue(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
-                tools.mgrSpawner.recalculateCapacity(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
+        for (let room of rooms) {
+            if (room.memory.initialized != true) {
+                tools.mgrMemory.initSpawnMemory(Game.spawns[tools.confRooms[room.name].spawners[0]]);
+                tools.mgrSpawner.fillSpawnQueue(Game.spawns[tools.confRooms[room.name].spawners[0]]);
+                tools.mgrSpawner.recalculateCapacity(Game.spawns[tools.confRooms[room.name].spawners[0]]);
                 tools.mgrMemory.initHarvesterContainers(rooms[i]);
-                rooms[i].memory.initialized = true;
+                room.memory.initialized = true;
             }
         }
     } catch(error) {

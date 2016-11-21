@@ -369,6 +369,4 @@ function remoteminerGetTask(creep, roomname) {
     let targetRoom = confRooms[roomname].remotemining[0];
 
     creep.memory.targetRoom = targetRoom;
-
-    harvesterGetTask(creep, targetRoom[targetRoom.length-1]);
 }
