@@ -51,14 +51,15 @@ function harvesterGetTask(creep, room) {
     /* Give the harvester a the task of the oldest harvester under 200 ticks or a source if it's missing a harvester */
 
     // Check for sources missing a harvester
+    let source = null;
     for (let sourceID in room.memory.harvesterTasks) {
         if (Game.getObjectById(room.memory.harvesterTasks[sourceID].creepID) === null) {
-            var source = sourceID;
+            source = sourceID;
             break;
         }
     }
 
-    if (source === null) { // Give harvester the task to harvest the source with a missing harvester
+    if (!(source === null)) { // Give harvester the task to harvest the source with a missing harvester
         creep.memory.task = {id: source};
         room.memory.harvesterTasks[source].creepID = creep.id;
         creep.memory.state = 2;
@@ -71,7 +72,7 @@ function harvesterGetTask(creep, room) {
                 if (curHarvester.memory.state === 3 && !(curHarvester.memory.repairTarget === true)) {
                     if (curHarvester.ticksToLive < minTicks) {
                         minTicks = curHarvester.ticksToLive;
-                        harvester = curHarvester.id;
+                        harvester = Game.getObjectById(curHarvester.id);
                     }
                 }
             }
