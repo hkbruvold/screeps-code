@@ -8,7 +8,8 @@ function run(creep) {
     
     // If the creep ends up in another room (it did happen)
     if (creep.room.name != creep.memory.home) {
-        creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.home)));
+        creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(Game.rooms[creep.memory.home])));
+        return;
     }
 
     if (creep.memory.harvesting == true && creep.carry.energy == creep.carryCapacity) {
@@ -20,18 +21,6 @@ function run(creep) {
     }
 
     if(creep.memory.harvesting == true) {
-        let container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
-                    _.sum(structure.store) > 50;
-            }
-        });
-        if (container) {
-            if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(container);
-            }
-            return;
-        }
         
         let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
             filter: (resource) => {
@@ -46,6 +35,19 @@ function run(creep) {
             return;
         }
         
+        let container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) &&
+                    _.sum(structure.store) > 50;
+            }
+        });
+        if (container) {
+            if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(container);
+            }
+            return;
+        }
+        
         let source = creep.pos.findClosestByRange(FIND_SOURCES);
         
         if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
@@ -53,16 +55,16 @@ function run(creep) {
         }
         return;
     } else {
-        let targets = creep.room.find(FIND_STRUCTURES, {
+        let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
                     structure.energy < structure.energyCapacity;
             }
         });
 
-        if(targets.length > 0) {
-            if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(targets[0]);
+        if(target) {
+            if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target);
             }
         } else {
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
