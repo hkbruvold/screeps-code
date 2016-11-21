@@ -31,9 +31,6 @@ function move(creep) {
     // Return 4 if no path exist
     if (!path || !pathtarget) return 4;
 
-    // return 4 if missing room object, until all creeps has new pathtarget definition
-    if (!pathtarget.room) return 4;
-
     // If in wrong room, or about to leave target room
     if (creep.room.name != pathtarget.room || (creep.room.name == pathtarget.room &&
         (creep.pos.y === 0 || creep.pos.y === 49 || creep.pos.x === 0 || creep.pos.x === 49))) {
@@ -41,7 +38,9 @@ function move(creep) {
 
         return;
     }
-
+    
+    if (pathprog > path.length) return 4;
+    
     // Check if last move went fine or if it's wise to regenerate path
     if (pathprog) {
         if (!(creep.pos.x == path[pathprog-1].x && creep.pos.y == path[pathprog-1].y) || (pathprog > 5)) {

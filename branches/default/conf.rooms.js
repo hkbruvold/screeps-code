@@ -11,7 +11,7 @@ module.exports = {
     E46S62: {
         spawners: ["Spawn1"],
         towers: ["582d7e71412cc5f63b55d3b2", "5831d51e3b3158d14cff4157"],
-        stealerpaths: [["E46S62", "E46S61"]],
+        stealerpaths: [["E46S62", "E46S61"],["E46S62", "E47S62"]],
         remotemining: [["E46S62", "E47S62"]],
         creeps: {
             harvester: 2,

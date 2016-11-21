@@ -23,8 +23,8 @@ function run(creep, tools) {
     // Check if creep needs to go to target room
     if (creep.memory.targetRoom[creep.memory.targetRoom.length - 1] !== creep.room.name) {
         let myPos = creep.room.name;
-        let idest = creep.memory.task.indexOf(myPos) + 1;
-        creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.task[idest])));
+        let idest = creep.memory.targetRoom.indexOf(myPos) + 1;
+        creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.targetRoom[idest])));
         return;
     }
 
