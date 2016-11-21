@@ -27,8 +27,8 @@ module.exports = {
             energystealer: 2,
         },
         wallbuffer: 2000,
-        walllimit: 150000,
-        rampartlimit: 150000,
+        walllimit: 100000,
+        rampartlimit: 100000,
     },
     E46S63: {
         spawners: ["Spawn2"],

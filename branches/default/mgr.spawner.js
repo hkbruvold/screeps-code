@@ -64,7 +64,8 @@ function addToQueue(room, creepType, checkMax) {
     
     if (checkMax) {
         let count = _.filter(Game.creeps, (creep) => (creep.memory.type == creepType &&
-            creep.memory.home == spawner.room.name)).length;
+            creep.memory.home == spawner.room.name &&
+            creep.ticksToLive > 500)).length;
         count = count*2; // To allow for all creeps to request a replacer
         let desiredCount = confRooms[spawner.room.name].creeps[creepType];
         if (desiredCount >= count) return;
