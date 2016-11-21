@@ -44,6 +44,7 @@ function giveTask(creep, room) {
     else if (type == "dismantler") {
         creep.memory.dismantleTarget = "";
         creep.memory.dumpTarget = "";
+        creep.memory.dismantleYourself = false;
     }
 }
 
