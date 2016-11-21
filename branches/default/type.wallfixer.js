@@ -14,10 +14,12 @@ function run(creep, tools) {
 
     if (_.sum(creep.carry) === creep.carryCapacity) {
         creep.memory.state = 2;
+        creep.memory.path = null;
     }
 
     if (creep.carry.energy === 0) {
         creep.memory.state = 1;
+        creep.memory.path = null;
     }
 
     if (creep.memory.state === 1) { // Is most likely moving to energy

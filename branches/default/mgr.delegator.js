@@ -1,6 +1,7 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
-    giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget, abroadworkerGetTask, wallfixerGetTask, energystealerGetTask
+    giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget,
+    abroadworkerGetTask, wallfixerGetTask, energystealerGetTask, dismantlerGetDumpTarget
 };
 
 function giveTask(creep, room) {
@@ -39,6 +40,10 @@ function giveTask(creep, room) {
         creep.memory.energyTarget = "";
         creep.memory.dumpTarget = "";
         creep.memory.task = [];
+    }
+    else if (type == "dismantler") {
+        creep.memory.dismantleTarget = "";
+        creep.memory.dumpTarget = "";
     }
 }
 
@@ -314,5 +319,40 @@ function energystealerGetTask(creep, room) {
 
     if (tasks.length > 0) {
         return tasks[imin];
+    }
+}
+
+function dismantlerGetDumpTarget(creep, room) {
+    /* Function to give the dismantler a target to dump its energy */
+    // Check if some regular storage containers need filling
+    let utilEnergy = require("util.energy");
+    let target = utilEnergy.getRegularStorage(creep);
+
+    if (target) {
+        return target;
+    }
+
+    // Check if spawn or extensions need energy
+    target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                structure.energy < structure.energyCapacity;
+        }
+    });
+
+    if (target) {
+        return target;
+    }
+
+    // Check for towers
+    target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return (structure.structureType == STRUCTURE_TOWER) &&
+                structure.energy < structure.energyCapacity;
+        }
+    });
+
+    if (target) {
+        return target;
     }
 }
