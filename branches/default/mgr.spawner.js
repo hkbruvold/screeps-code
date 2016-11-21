@@ -13,7 +13,7 @@ let energyCost = {
 };
 
 module.exports = {
-    spawnNext, recalculateCapacity, fillSpawnQueue, addToQueue
+    spawnNext, recalculateCapacity, fillSpawnQueue, addToQueue, sortBodyParts
 };
 
 function spawnNext(spawner) {
@@ -105,6 +105,36 @@ function fillSpawnQueue(spawner) {
             }
         }
     }
+}
+
+function sortBodyParts(bodyParts) {
+    /* Will sort the body parts to move more important parts last */
+    let count = { // works as counter and pirority list
+        move: 0,
+        work: 0,
+        carry: 0,
+        attack: 0,
+        ranged_attack: 0,
+        heal: 0,
+        claim: 0,
+        tough: 0
+    };
+    let priorityList = [TOUGH, WORK, CARRY, CLAIM, MOVE, ATTACK, RANGED_ATTACK, HEAL];
+
+    // Count different body parts
+    for (let part of bodyParts) {
+        count[part]++;
+    }
+
+    let newlist = [];
+    // Add parts in correct order
+    for (let part of priorityList) {
+        for (let i = 0; i < count[part]; i++) {
+            newlist.push(part);
+        }
+    }
+
+    return newlist;
 }
 
 function recalculateCapacity(spawner) {
