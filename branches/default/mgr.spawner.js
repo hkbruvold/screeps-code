@@ -33,7 +33,7 @@ function spawnNext(spawner) {
             let capacity = spawner.memory.capacity;
             let body = getBodyParts(confCreeps[creep].parts, capacity, confCreeps[creep].extend);
             let name = getName(creep);
-            let result = spawner.createCreep(body, getName(creep), confCreeps[creep].memory);
+            let result = spawner.createCreep(sortBodyParts(body), getName(creep), confCreeps[creep].memory);
 
             if (result == name) {
                 console.log("["+spawner.name+"] creating new creep, "+name+", of type "+confCreeps[creep].memory.type);
