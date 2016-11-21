@@ -18,5 +18,18 @@ function run(tower) {
 
     if (hostile) {
         tower.attack(hostile);
+        return;
+    }
+    
+    // Find creeps that needs heal
+    let friendly = tower.pos.findClosestByRange(FIND_MY_CREEPS, {
+        filter: (creep) => {
+            return (creep.hits < creep.hitsMax);
+        }
+    });
+    
+    if (friendly) {
+        tower.heal(friendly);
+        return;
     }
 }
