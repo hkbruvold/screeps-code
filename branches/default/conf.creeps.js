@@ -56,7 +56,7 @@ module.exports = {
         parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "abroadworker", home: "", tiredCount: 0, deployTime: 2, state: 0},
-        priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
+        priority: 4, // priority is a number from 0 to 9 where 0 is highest priority
     },
     roomdefender: {
         /* roomdefender attacks enemies in the room */
@@ -85,5 +85,12 @@ module.exports = {
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "dismantler", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
         priority: 8, // priority is a number from 0 to 9 where 0 is highest priority
+    },
+    remoteminer: {
+        /* remoteminer harvests energy in another room */
+        parts: [MOVE,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "remoteminer", home: "", tiredCount: 0, deployTime: 2, state: 0},
+        priority: 4, // priority is a number from 0 to 9 where 0 is highest priority
     },
 };

@@ -1,16 +1,16 @@
-/* The harvester moves to a source and mines energy
-*  States:
-*  0 - just spawned
-*  1 - looking for task
-*  2 - moving to task
-*  3 - harvesting */
+/* The remoteminer moves to another room and harvests an energy source
+ *  States:
+ *  0 - just spawned
+ *  1 - looking for task
+ *  2 - moving to task
+ *  3 - harvesting */
 module.exports = {run};
 
 function run(creep, tools) {
     if (creep.spawning) {
         if (!(creep.id===undefined)) {
             if (!("id" in creep.memory.task)) { // Get task from delegator if possible
-                tools.mgrDelegator.harvesterGetTask(creep, creep.room.name);
+                tools.mgrDelegator.remoteminerGetTask(creep, creep.room.name);
             }
         }
         return;
@@ -18,6 +18,14 @@ function run(creep, tools) {
 
     if (creep.ticksToLive == creep.memory.deployTime) {
         tools.mgrSpawner.addToQueue(Game.rooms[creep.memory.home], creep.memory.type, true);
+    }
+
+    // Check if creep needs to go to target room
+    if (creep.memory.targetRoom[creep.memory.targetRoom.length - 1] !== creep.room.name) {
+        let myPos = creep.room.name;
+        let idest = creep.memory.task.indexOf(myPos) + 1;
+        creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.task[idest])));
+        return;
     }
 
     if (creep.memory.state == 3) { // Ready to harvest
@@ -46,7 +54,7 @@ function run(creep, tools) {
                 creep.memory.task["id"] = source.id;
                 creep.say("Found it");
             } else {
-                tools.mgrDelegator.harvesterGetTask(creep, creep.room.name);
+                tools.mgrDelegator.harvesterGetTask(creep, creep.room);
                 if (!"id" in creep.memory.task) {
                     console.log("[FATAL] creep " + creep.name + " can't find any unclaimed sources.");
                     console.log("You probably have too many harvesters");

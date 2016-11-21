@@ -1,18 +1,14 @@
 /* This module contains functions for creeps to get task */
 module.exports = {
     giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget,
-    abroadworkerGetTask, wallfixerGetTask, energystealerGetTask, dismantlerGetDumpTarget
+    abroadworkerGetTask, wallfixerGetTask, energystealerGetTask, dismantlerGetDumpTarget, remoteminerGetTask
 };
 
 function giveTask(creep, room) {
     /* Assign task or define memory for new creeps */
     let type = creep.memory.type;
     if (type == "harvester") {
-        if (!room.memory.harvesterTasks) {
-            room.memory.harvesterTasks = {};
-        }
         creep.memory.task = {};
-        //giveHarvesterTask(creep, room);
     }
     else if (type == "abroadworker") {
         creep.memory.energyTarget = "";
@@ -46,6 +42,10 @@ function giveTask(creep, room) {
         creep.memory.dumpTarget = "";
         creep.memory.dismantleYourself = false;
     }
+    else if (type == "remoteminer") {
+        creep.memory.targetRoom = [];
+        creep.memory.task = {};
+    }
 }
 
 function giveAbroadworkerTask(creep, room) {
@@ -53,13 +53,17 @@ function giveAbroadworkerTask(creep, room) {
     creep.memory.workRoom = "E46S63";
 }
 
-function harvesterGetTask(creep, room) {
+function harvesterGetTask(creep, roomname) {
     /* Give the harvester a the task of the oldest harvester under 200 ticks or a source if it's missing a harvester */
+
+    if (!Memory.rooms[roomname].harvesterTasks) {
+        Memory.rooms[roomname].harvesterTasks = {};
+    }
 
     // Check for sources missing a harvester
     let source = null;
-    for (let sourceID in room.memory.harvesterTasks) {
-        if (Game.getObjectById(room.memory.harvesterTasks[sourceID].creepID) === null) {
+    for (let sourceID in Memory.rooms[roomname].harvesterTasks) {
+        if (Game.getObjectById(Memory.rooms[roomname].harvesterTasks[sourceID].creepID) === null) {
             source = sourceID;
             break;
         }
@@ -67,13 +71,13 @@ function harvesterGetTask(creep, room) {
 
     if (!(source === null)) { // Give harvester the task to harvest the source with a missing harvester
         creep.memory.task = {id: source};
-        room.memory.harvesterTasks[source].creepID = creep.id;
+        Memory.rooms[roomname].harvesterTasks[source].creepID = creep.id;
         creep.memory.state = 2;
     } else { // Give the harvester the task of replacing the oldest creep
         let harvester = null;
         let minTicks = 1500;
-        for (let sourceID in room.memory.harvesterTasks) {
-            let curHarvester = Game.getObjectById(room.memory.harvesterTasks[sourceID].creepID);
+        for (let sourceID in Memory.rooms[roomname].harvesterTasks) {
+            let curHarvester = Game.getObjectById(Memory.rooms[roomname].harvesterTasks[sourceID].creepID);
             if (curHarvester) {
                 if (curHarvester.memory.state === 3 && !(curHarvester.memory.repairTarget === true)) {
                     if (curHarvester.ticksToLive < minTicks) {
@@ -87,7 +91,7 @@ function harvesterGetTask(creep, room) {
         if (harvester) { // greater than 1 because it finds itself
             harvester.memory.replacing = true;
             creep.memory.task = {id: harvester.memory.task.id, old: harvester.id};
-            room.memory.harvesterTasks[harvester.memory.task.id].creepID = creep.id;
+            Memory.rooms[roomname].harvesterTasks[harvester.memory.task.id].creepID = creep.id;
             creep.memory.state = 2;
         }
     }
@@ -356,4 +360,15 @@ function dismantlerGetDumpTarget(creep, room) {
     if (target) {
         return target;
     }
+}
+
+function remoteminerGetTask(creep, roomname) {
+    /* Function to give the remoteminer a target room */
+    let confRooms = require("conf.rooms");
+
+    let targetRoom = confRooms[roomname].remotemining[0];
+
+    creep.memory.targetRoom = targetRoom;
+
+    harvesterGetTask(creep, targetRoom[targetRoom.length-1]);
 }
