@@ -39,31 +39,10 @@ module.exports = {
     },
     transporternoroad: {
         /* transporternoroad is same as transporter, but designed to move quicker on plain */
-        parts: [MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY],
+        parts: [MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY],
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "transporter", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
         priority: 2, // priority is a number from 0 to 9 where 0 is highest priority
-    },
-    upgrader: {
-        /* upgrader upgrades controller */
-        parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
-        extend: false, // whether the parts list should be looped. Recommended: false
-        memory: {type: "upgrader", home: "", tiredCount: 0, deployTime: 2, state: 0},
-        priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
-    },
-    builder: {
-        /* builder constructs structures */
-        parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
-        extend: false, // whether the parts list should be looped. Recommended: false
-        memory: {type: "builder", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
-        priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
-    },
-    repairer: {
-        /* repairer repairs structures */
-        parts: [MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY,MOVE,MOVE,WORK,CARRY,],
-        extend: false, // whether the parts list should be looped. Recommended: false
-        memory: {type: "repairer", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
-        priority: 3, // priority is a number from 0 to 9 where 0 is highest priority
     },
     claimer: {
         /* claimer moves to other rooms to claim the controller */
@@ -99,5 +78,12 @@ module.exports = {
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "energystealer", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
         priority: 6, // priority is a number from 0 to 9 where 0 is highest priority
+    },
+    dismantler: {
+        /* dismantler dismantles structures */
+        parts: [MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,MOVE,WORK,CARRY,],
+        extend: false, // whether the parts list should be looped. Recommended: false
+        memory: {type: "repairer", home: "", tiredCount: 0, deployTime: 2, role: "", state: 0},
+        priority: 8, // priority is a number from 0 to 9 where 0 is highest priority
     },
 };

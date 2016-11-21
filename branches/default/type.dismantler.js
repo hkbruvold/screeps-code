@@ -9,6 +9,13 @@ module.exports = {run};
 function run(creep, tools) {
     if (creep.spawning) return;
 
+    if (creep.memory.dismantleYourself) {
+        let spawn = Game.spawns[tools.confRooms[creep.room].spawns[0]];
+        if (spawn.recycleCreep(creep) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(spawn);
+        }
+    }
+
     if (_.sum(creep.carry) === creep.carryCapacity) {
         creep.memory.state = 2;
     }
