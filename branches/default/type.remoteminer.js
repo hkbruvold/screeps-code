@@ -40,6 +40,9 @@ function run(creep, tools) {
     if (!("id" in creep.memory.task)) {
         creep.memory.state = 1;
         creep.say("Exploring");
+        if (!creep.room.memory.harvesterTasks) {
+            creep.room.memory.harvesterTasks = {};
+        }
     }
 
     if (creep.memory.state == 1) { // Looking for task
