@@ -1,4 +1,7 @@
 /* This module contains functions for creeps to get task */
+let confRooms = require("conf.rooms");
+let utilEnergy = require("util.energy");
+
 module.exports = {
     giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget,
     abroadworkerGetTask, wallfixerGetTask, energystealerGetTask, dismantlerGetDumpTarget, remoteminerGetTask,
@@ -202,7 +205,6 @@ function abroadworkerGetTask(creep, room) {
 function transporterGetSource(creep, room) {
     /* Function to give energy source for the transporter */
     // Check for harvester storage
-    let utilEnergy = require("util.energy");
     let target = utilEnergy.getHarvesterStorage(creep);
 
     if (target) {
@@ -219,7 +221,6 @@ function transporterGetSource(creep, room) {
 function transporterGetTarget(creep, room) {
     /* Function to give the transporter a target */
     // Check if some regular storage containers need filling
-    let utilEnergy = require("util.energy");
     let target = utilEnergy.getRegularStorage(creep);
 
     if (target) {
@@ -256,8 +257,6 @@ function transporterGetTarget(creep, room) {
 
 function wallfixerGetTask(creep, room) {
     /* Function to give the wallfixer a target */
-    let confRooms = require("conf.rooms");
-
     let walllimit = confRooms[room.name].walllimit;
     let rampartlimit = confRooms[room.name].rampartlimit;
 
@@ -301,8 +300,6 @@ function wallfixerGetTask(creep, room) {
 
 function energystealerGetTask(creep, room) {
     /* Function to give an energystealer a room to steal energy from */
-    let confRooms = require("conf.rooms");
-
     let tasks = confRooms[room.name].stealerpaths;
     let desiredTaskCount = confRooms[room.name].stealercount;
     let taskCount = desiredTaskCount.slice(); // Copy array
@@ -330,7 +327,6 @@ function energystealerGetTask(creep, room) {
 function dismantlerGetDumpTarget(creep, room) {
     /* Function to give the dismantler a target to dump its energy */
     // Check if some regular storage containers need filling
-    let utilEnergy = require("util.energy");
     let target = utilEnergy.getRegularStorage(creep);
 
     if (target) {
@@ -364,8 +360,6 @@ function dismantlerGetDumpTarget(creep, room) {
 
 function remoteminerGetTask(creep, roomname) {
     /* Function to give the remoteminer a target room */
-    let confRooms = require("conf.rooms");
-
     let targetRoom = confRooms[roomname].remotemining[0];
     
     creep.memory.targetRoom = targetRoom;
@@ -373,8 +367,6 @@ function remoteminerGetTask(creep, roomname) {
 
 function reserverGetTask(creep, roomname) {
     /* Function to give the remoteminer a target room */
-    let confRooms = require("conf.rooms");
-
     let targetPath = confRooms[roomname].reservepaths[0];
 
     creep.memory.targetPath = targetPath;

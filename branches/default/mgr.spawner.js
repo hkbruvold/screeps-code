@@ -1,4 +1,7 @@
 /* This module handles spawning creeps */
+let confCreeps = require("conf.creeps");
+let confRooms = require("conf.rooms");
+let mgrDelegator = require("mgr.delegator");
 
 /* Energy cost for body parts */
 let energyCost = {
@@ -19,9 +22,6 @@ module.exports = {
 function spawnNext(spawner) {
     /* Will spawn next creep in spawn queue if there are enough resources.
     *  Will also recalculate spawn energy capacity once in a while */
-    let confCreeps = require("conf.creeps");
-    let mgrDelegator = require("mgr.delegator");
-
     if (spawner.spawning) {
         return;
     }
@@ -56,9 +56,6 @@ function spawnNext(spawner) {
 function addToQueue(room, creepType, checkMax) {
     /* Adds a creep of creepType to spawn queue 
      * If checkMax == true, the queue adding will not happen if enough creeps exist */
-    let confRooms = require("conf.rooms");
-    let confCreeps = require("conf.creeps");
-    
     let priority = confCreeps[creepType].priority;
     let spawner = Game.spawns[confRooms[room.name].spawners[0]];
     
@@ -78,9 +75,6 @@ function addToQueue(room, creepType, checkMax) {
 function fillSpawnQueue(spawner) {
     /* Fill spawn queue with creeps that are missing and somehow has not a place in queue.
     *  Does currently not support more than one spawn per room (need to move spawn queue to room memory for that, possibly) */
-    let confRooms = require("conf.rooms");
-    let confCreeps = require("conf.creeps");
-
     let spawnQueue = spawner.memory.spawnQueue;
 
     for (let creepType in confCreeps) {

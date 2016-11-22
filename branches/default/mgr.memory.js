@@ -1,4 +1,6 @@
 /* This module contains functions to clean up in memory and initialize some memories */
+let mgrSpawner = require("mgr.spawner");
+
 module.exports = {
     clearCreepMemory, clearReservationMemory, initSources, initRepairQueue, initSpawnMemory, initHarvesterContainers
 }
@@ -69,7 +71,6 @@ function initSpawnMemory(spawner) {
     /* Creates an empty list to be used as spawn queue.
      * The queue is prioritized from 0 to 9 where 0 is highest priority.
      * The queue is stored in the spawner's memory. */
-    let mgrSpawner = require("mgr.spawner");
     spawner.memory.spawnQueue = [[],[],[],[],[],[],[],[],[],[]];
     spawner.memory.spawnQueueMisses = 0;
     spawner.memory.capacity = 300;
