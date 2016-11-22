@@ -316,8 +316,6 @@ function energystealerGetTask(creep, room) {
             }
         }
     }
-    
-    // Count creeps with different tasks
 
     // Return first path with missing stealer
     for (let i in taskCount) {
