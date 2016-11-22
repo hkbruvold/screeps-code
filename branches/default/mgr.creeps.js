@@ -46,11 +46,11 @@ function getTypeCount(room, type) {
 
 function runCreeps(tools, creeptypes) {
     /* Executes function to all creeps. */
-    for (let creep of Game.creeps) {
+    for (let name in Game.creeps) {
         try {
-            creeptypes[creep.memory.type].run(creep, tools);
+            creeptypes[Game.creeps[name].memory.type].run(Game.creeps[name], tools);
         } catch(error) {
-            console.log("Error executing code for creep: " + creep.name + " of type: " + creep.memory.type);
+            console.log("Error executing code for creep: " + name + " of type: " + Game.creeps[name].memory.type);
             console.log(error.stack);
         }
     }
