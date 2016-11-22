@@ -107,7 +107,7 @@ const tools = { // Modules that should be passed to different modules
     utilMove: require("util.move"),
 };
 const creeptypes = { // Modules to the different creep types
-    abroadworker: require("type.aboradworker"),
+    abroadworker: require("type.abroadworker"),
     claimer: require("type.claimer"),
     dismantler: require("type.dismantler"),
     energystealer: require("type.energystealer"),
