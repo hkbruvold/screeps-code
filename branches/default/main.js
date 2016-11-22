@@ -1,15 +1,4 @@
-var tools = { // Modules that should be passed to different modules
-    confCreeps: require("conf.creeps"),
-    confGame: require("conf.game"),
-    confRooms: require("conf.rooms"),
-    mgrCreeps: require("mgr.creeps"),
-    mgrDelegator: require("mgr.delegator"),
-    mgrSpawner: require("mgr.spawner"),
-    mgrMemory: require("mgr.memory"),
-    utilEnergy: require("util.energy"),
-    utilMove: require("util.move"),
-};
-let typeTower = require("type.tower");
+
 
 module.exports.loop = function () {
     /* Get rooms defined in conf.rooms */
@@ -88,7 +77,6 @@ module.exports.loop = function () {
     tools.mgrCreeps.runCreeps(tools);
 };
 
-
 function safeMode(spawner) {
     /* Will spawn one harvester and one upgrader one needed */
     if ((_.filter(Game.creeps, (creep) => creep.memory.type == "safeharvester" && creep.memory.home == spawner.room.name).length < 1) &&
@@ -104,4 +92,26 @@ function safeMode(spawner) {
     } else {
         return false;
     }
+}
+
+const typeTower = require("type.tower");
+const tools = { // Modules that should be passed to different modules
+    confCreeps: require("conf.creeps"),
+    confGame: require("conf.game"),
+    confRooms: require("conf.rooms"),
+    mgrCreeps: require("mgr.creeps"),
+    mgrDelegator: require("mgr.delegator"),
+    mgrSpawner: require("mgr.spawner"),
+    mgrMemory: require("mgr.memory"),
+    utilEnergy: require("util.energy"),
+    utilMove: require("util.move"),
+};
+const creeptypes = { // Modules to the different creep types
+    abroadworker: require("type.aboradworker"),
+    claimer: require("type.claimer"),
+    dismantler: require("type.dismantler"),
+    energystealer: require("type.energystealer"),
+    harvester: require("type.harvester"),
+    remoteminer: require("type.remoteminer"),
+    reserver: require("type.reserver"),
 }
