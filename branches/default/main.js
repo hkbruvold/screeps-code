@@ -1,4 +1,4 @@
-
+/* Modules are imported at the bottom */
 
 module.exports.loop = function () {
     /* Get rooms defined in conf.rooms */
@@ -74,7 +74,7 @@ module.exports.loop = function () {
     }
 
     /* Run creeps modules */
-    tools.mgrCreeps.runCreeps(tools);
+    tools.mgrCreeps.runCreeps(tools, creeptypes);
 };
 
 function safeMode(spawner) {
@@ -114,4 +114,11 @@ const creeptypes = { // Modules to the different creep types
     harvester: require("type.harvester"),
     remoteminer: require("type.remoteminer"),
     reserver: require("type.reserver"),
-}
+    roomdefender: require("type.roomdefender"),
+    safeharvester: require("type.safeharvester"),
+    safeupgrader: require("type.safeupgrader"),
+    spawnfiller: require("type.spawnfiller"),
+    transporter: require("type.transporter"),
+    wallfixer: require("type.wallfixer"),
+    worker: require("type.worker"),
+};

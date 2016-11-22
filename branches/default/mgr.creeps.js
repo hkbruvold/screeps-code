@@ -44,23 +44,13 @@ function getTypeCount(room, type) {
     }
 }
 
-function runCreeps(tools) {
-    /* Executes function to all creeps. Automatically imports module. */
-    for (let cname in Game.creeps) {
-        if (Game.creeps[cname].ticksToLive < 50) {
-            //removeCreep(room, Game.creeps[cname]);
-        }
+function runCreeps(tools, creeptypes) {
+    /* Executes function to all creeps. */
+    for (let creep of Game.creeps) {
         try {
-            var creepModule = require("type." + Game.creeps[cname].memory.type);
+            creeptypes[creep.memory.type].run(creep, tools);
         } catch(error) {
-            console.log(error.stack);
-            console.log("Probably missing module type or syntax error." + Game.creeps[cname].memory.type);
-            continue;
-        }
-        try {
-            creepModule.run(Game.creeps[cname], tools);
-        } catch(error) {
-            console.log("Error executing code for creep: " + Game.creeps[cname].name + " of type: " + Game.creeps[cname].memory.type);
+            console.log("Error executing code for creep: " + creep.name + " of type: " + creep.memory.type);
             console.log(error.stack);
         }
     }
