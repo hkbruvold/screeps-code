@@ -304,31 +304,27 @@ function energystealerGetTask(creep, room) {
     let confRooms = require("conf.rooms");
 
     let tasks = confRooms[room.name].stealerpaths;
-    if (!Game.rooms[creep.memory.home].memory.stealerTasks) {
-        Game.rooms[creep.memory.home].memory.stealerTasks = new Array(tasks.length).fill(0);
-    }
+    let desiredTaskCount = confRooms[room.name].stealercount;
+    let taskCount = desiredTaskCount.slice(); // Copy array
 
-    // Check that stealerTasks has enough entries
-    let taskCount = Game.rooms[creep.memory.home].memory.stealerTasks;
-    if (taskCount.length < tasks.length) {
-        for (let i = taskCount.length; i < tasks.length; i++) {
-            Game.rooms[creep.memory.home].memory.stealerTasks.push(0);
+    // Count number of stealers per path (a bit inefficient, but shouldn't be run often)
+    let stealers = _.filter(Game.creeps, (creep) => creep.memory.type == "energystealer" && creep.memory.home == room.name);
+    for (let stealer of stealers) {
+        for (let i in tasks) {
+            if (tasks[i][tasks[i].length-1] == stealer.memory.task[stealer.memory.task.length-1]) {
+                taskCount[i]--;
+            }
         }
     }
 
-    // Get index of smallest number in array
-    let imin = 0;
-    let tmin = taskCount[0];
+    // Return first path with missing stealer
     for (let i in taskCount) {
-        if (taskCount[i] < tmin) {
-            tmin = taskCount;
-            imin = i;
+        if (taskCount[i] > 0) {
+            return tasks[i];
         }
     }
-
-    if (tasks.length > 0) {
-        return tasks[imin];
-    }
+    creep.say("need path");
+    return []; // Return an empty array so that the creep will ask again
 }
 
 function dismantlerGetDumpTarget(creep, room) {
