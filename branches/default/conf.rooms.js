@@ -18,7 +18,7 @@ module.exports = {
         creeps: {
             harvester: 2,
             spawnfiller: 2,
-            worker: 2,
+            worker: 3,
             wallfixer: 2,
             transporter: 1,
             transporternoroad: 0,
@@ -31,8 +31,8 @@ module.exports = {
             reserver: 0,
         },
         wallbuffer: 2000,
-        walllimit: 150000,
-        rampartlimit: 150000,
+        walllimit: 200000,
+        rampartlimit: 200000,
     },
     E46S63: {
         spawners: ["Spawn2"],
@@ -45,7 +45,7 @@ module.exports = {
             spawnfiller: 1,
             worker: 2,
             wallfixer: 1,
-            transporter: 0,
+            transporter: 1,
             transporternoroad: 0,
             claimer: 0,
             abroadworker: 0,

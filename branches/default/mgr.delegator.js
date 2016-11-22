@@ -315,6 +315,8 @@ function energystealerGetTask(creep, room) {
             Game.rooms[creep.memory.home].memory.stealerTasks.push(0);
         }
     }
+    
+    // Count creeps with different tasks
 
     // Get index of smallest number in array
     let imin = 0;
