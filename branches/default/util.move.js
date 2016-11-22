@@ -36,7 +36,7 @@ function move(creep) {
         (creep.pos.y === 0 || creep.pos.y === 49 || creep.pos.x === 0 || creep.pos.x === 49))) {
         creep.moveTo(Game.rooms[pathtarget.room].controller);
 
-        return;
+        return 4;
     }
     
     if (pathprog > path.length) return 4;

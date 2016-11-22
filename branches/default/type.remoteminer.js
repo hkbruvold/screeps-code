@@ -90,7 +90,7 @@ function run(creep, tools) {
         if (result == 4) {
             let sourceID = creep.memory.task.id;
             let taskpos = creep.room.memory.harvesterTasks[sourceID].pos;
-            tools.utilMove.createPath(creep, taskpos.x, taskpos.y, creep.memory.home);
+            tools.utilMove.createPath(creep, taskpos.x, taskpos.y, creep.memory.targetRoom[creep.memory.targetRoom.length-1]);
         } else if (result == 1) {
             creep.memory.state = 3;
             creep.say("I'm here");
