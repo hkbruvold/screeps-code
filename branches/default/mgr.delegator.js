@@ -367,7 +367,7 @@ function remoteminerGetTask(creep, roomname) {
     let confRooms = require("conf.rooms");
 
     let targetRoom = confRooms[roomname].remotemining[0];
-    console.log(targetRoom);
+    
     creep.memory.targetRoom = targetRoom;
 }
 
