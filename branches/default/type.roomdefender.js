@@ -1,15 +1,23 @@
 /* The roomdefender moves to a room and attacks enemies */
 module.exports = {run};
 
-function run(creep) {
+function run(creep, tools) {
     if (creep.spawning) return;
 
-    let targets = creep.room.find(FIND_HOSTILE_CREEPS);
+    let whitelist = tools.confGame.whitelist;
 
-    if (targets.length > 0) {
-        if (creep.attack(targets[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(targets[0]);
+    let hostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
+        filter: (creep) => {
+            return (whitelist.indexOf(creep.owner.username) == -1);
         }
+    });
+
+    if (hostile) {
+        if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(hostile);
+        }
+    } else if (creep.hits < creep.hitsMax){
+        creep.heal(creep);
     } else if (Game.flags[creep.name]) {
         creep.moveTo(Game.flags[creep.name]);
     } else {

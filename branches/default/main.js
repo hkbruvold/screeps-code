@@ -1,4 +1,5 @@
 /* Modules are imported at the bottom */
+console.log("Global changed at time "+Game.time+", reloading modules");
 
 module.exports.loop = function () {
     /* Get rooms defined in conf.rooms */
@@ -21,10 +22,10 @@ module.exports.loop = function () {
     try {
         for (let room of rooms) {
             if (room.memory.initialized != true) {
-                tools.mgrMemory.initSpawnMemory(Game.spawns[tools.confRooms[room.name].spawners[0]]);
-                tools.mgrSpawner.fillSpawnQueue(Game.spawns[tools.confRooms[room.name].spawners[0]]);
-                tools.mgrSpawner.recalculateCapacity(Game.spawns[tools.confRooms[room.name].spawners[0]]);
-                tools.mgrMemory.initHarvesterContainers(rooms[i]);
+                tools.mgrMemory.initSpawnMemory(room);
+                tools.mgrSpawner.fillSpawnQueue(room);
+                tools.mgrSpawner.recalculateCapacity(room);
+                tools.mgrMemory.initHarvesterContainers(room);
                 room.memory.initialized = true;
             }
         }
@@ -49,9 +50,9 @@ module.exports.loop = function () {
     try {
         if (Game.time % 15 == 0) {
             for (let i in rooms) {
-                tools.mgrSpawner.fillSpawnQueue(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
-                tools.mgrSpawner.recalculateCapacity(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
-                tools.mgrMemory.clearReservationMemory(rooms[i]);
+                tools.mgrSpawner.fillSpawnQueue(rooms[i]);
+                tools.mgrSpawner.recalculateCapacity(rooms[i]);
+                //tools.mgrMemory.clearReservationMemory(rooms[i]); // Disabled for now
                 //tools.mgrMemory.initHarvesterContainers(rooms[i]); // Check for new harvester containers (can be commented out if not needed)
             }
             tools.mgrMemory.clearCreepMemory();
@@ -65,7 +66,9 @@ module.exports.loop = function () {
     try {
         for (let i in rooms) {
             if (!safeMode(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]])) {
-                tools.mgrSpawner.spawnNext(Game.spawns[tools.confRooms[rooms[i].name].spawners[0]]);
+                for (let spawn of tools.confRooms[rooms[i].name].spawners) {
+                    tools.mgrSpawner.spawnNext(Game.spawns[spawn]);
+                }
             }
         }
     } catch(error) {

@@ -60,7 +60,7 @@ module.exports = {
     },
     roomdefender: {
         /* roomdefender attacks enemies in the room */
-        parts: [TOUGH,TOUGH,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK],
+        parts: [MOVE,ATTACK,MOVE,TOUGH,MOVE,ATTACK,MOVE,TOUGH,MOVE,ATTACK,MOVE,TOUGH,MOVE,TOUGH,MOVE,HEAL,MOVE,ATTACK,MOVE,ATTACK,MOVE,ATTACK,MOVE,HEAL,MOVE,TOUGH],
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "roomdefender", home: "", tiredCount: 0, deployTime: 2, state: 0},
         priority: 6, // priority is a number from 0 to 9 where 0 is highest priority
@@ -95,7 +95,7 @@ module.exports = {
     },
     reserver: {
         /* remoteminer harvests energy in another room */
-        parts: [MOVE,CLAIM,MOVE,CLAIM],
+        parts: [MOVE,CLAIM,],
         extend: false, // whether the parts list should be looped. Recommended: false
         memory: {type: "reserver", home: "", tiredCount: 0, deployTime: 2, state: 0},
         priority: 4, // priority is a number from 0 to 9 where 0 is highest priority

@@ -57,7 +57,7 @@ function giveTask(creep, room) {
 
 function giveAbroadworkerTask(creep, room) {
     /* Give the abroadworker a workRoom */
-    creep.memory.workRoom = "E46S63";
+    creep.memory.workRoom = "E45S62";
 }
 
 function harvesterGetTask(creep, roomname) {
@@ -82,7 +82,7 @@ function harvesterGetTask(creep, roomname) {
         creep.memory.state = 2;
     } else { // Give the harvester the task of replacing the oldest creep
         let harvester = null;
-        let minTicks = 1500;
+        let minTicks = 200;
         for (let sourceID in Memory.rooms[roomname].harvesterTasks) {
             let curHarvester = Game.getObjectById(Memory.rooms[roomname].harvesterTasks[sourceID].creepID);
             if (curHarvester) {

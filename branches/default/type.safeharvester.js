@@ -22,18 +22,6 @@ function run(creep) {
 
     if(creep.memory.harvesting == true) {
         
-        let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
-            filter: (resource) => {
-                return (resource.amount > 50);
-            }
-        });
-
-        if (dropped) {
-            if(creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(dropped);
-            }
-            return;
-        }
         
         let container = creep.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => {
@@ -44,6 +32,19 @@ function run(creep) {
         if (container) {
             if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(container);
+            }
+            return;
+        }
+        
+        let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
+            filter: (resource) => {
+                return (resource.amount > 50);
+            }
+        });
+
+        if (dropped) {
+            if(creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(dropped);
             }
             return;
         }

@@ -6,12 +6,12 @@ function run(creep) {
 
     if (creep.memory.roompath) {
         let myPos = creep.room.name;
-        let idest = creep.memory["apath"].indexOf(myPos) + 1;
-        if (idest == creep.memory["apath"].length) { // Has arrived at end
+        let idest = creep.memory["roompath"].indexOf(myPos) + 1;
+        if (idest == creep.memory["roompath"].length) { // Has arrived at end
             creep.moveTo(creep.room.controller);
-            //creep.claim(creep.room.controller); let's do this manually for now
+            //creep.claimController(creep.room.controller); //let's do this manually for now
         } else { // Move to next room
-            creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.apath[idest])));
+            creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.roompath[idest])));
         }
     } else {
         creep.memory.roompath = [creep.room.name];

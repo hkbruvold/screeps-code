@@ -19,7 +19,7 @@ function run(creep, tools) {
     }
 
     // Check if creep needs to go to target room
-    if (creep.memory.targetRoom[creep.memory.targetRoom.length - 1] !== creep.room.name) {
+    if (creep.memory.targetPath[creep.memory.targetPath.length - 1] !== creep.room.name) {
         let myPos = creep.room.name;
         let idest = creep.memory.targetPath.indexOf(myPos) + 1;
         creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.targetPath[idest])));
@@ -28,7 +28,7 @@ function run(creep, tools) {
 
     if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller);
-    } else if (creep.isNearTo(creep.room.controller)) {
+    } else if (creep.pos.isNearTo(creep.room.controller)) {
         if (creep.memory.deployTime == 2) {
             creep.memory.deployTime = Game.time - creep.memory.born;
         }

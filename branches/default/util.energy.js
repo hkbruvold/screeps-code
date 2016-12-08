@@ -29,7 +29,7 @@ function takeEnergy(creep, object) {
     let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
     if (object.resourceType == RESOURCE_ENERGY) { // If it's dropped energy
         let result = creep.pickup(object);
-        if (result === OK) unReserve(object, remainingCapacity);
+        //if (result === OK) unReserve(object, remainingCapacity);
         return result;
     } else {
         return creep.withdraw(object, RESOURCE_ENERGY);
@@ -72,7 +72,7 @@ function getHarvesterStorage(creep) {
     if (!containers) creep.room.memory.harvesterContainers = [];
     return creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (_.sum(structure.store) > 50) &&
+            return (_.sum(structure.store) >= 150) &&
                 (structure.structureType == STRUCTURE_CONTAINER) &&
                 (containers.indexOf(structure.id) != -1);
         }
@@ -93,18 +93,18 @@ function getRegularStorage(creep) {
 }
 
 function getDroppedResource(creep) {
-    /* Returns dropped resource if not all reserved, will also reserve */
+    /* Returns dropped resource if not all reserved, will also reserve 
+     * Reservation is disabled for the moment */
     let remainingCapacity = creep.carryCapacity - _.sum(creep.carry);
-    let droppedmem = creep.room.memory.reservation;
-    if (!droppedmem) droppedmem = {};
+    //let droppedmem = creep.room.memory.reservation;
+    //if (!droppedmem) droppedmem = {};
     let dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: (resource) => {
-            return (resource.resourceType == RESOURCE_ENERGY) && ((!(resource.id in droppedmem) && resource.amount > 50) ||
-                (resource.id in droppedmem && resource.amount > droppedmem[resource.id]));
+            return (resource.resourceType == RESOURCE_ENERGY) && ((resource.amount > 50));/*(!(resource.id in droppedmem) && ...resource.id in droppedmem && resource.amount > droppedmem[resource.id])*/
         }
     });
     if (dropped) {
-        reserve(dropped, remainingCapacity);
+        //reserve(dropped, remainingCapacity);
     }
     return dropped;
 }

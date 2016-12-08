@@ -67,12 +67,12 @@ function initRepairQueue(room) {
     room.memory.repairQueue = [];
 }
 
-function initSpawnMemory(spawner) {
+function initSpawnMemory(room) {
     /* Creates an empty list to be used as spawn queue.
      * The queue is prioritized from 0 to 9 where 0 is highest priority.
      * The queue is stored in the spawner's memory. */
-    spawner.memory.spawnQueue = [[],[],[],[],[],[],[],[],[],[]];
-    spawner.memory.spawnQueueMisses = 0;
-    spawner.memory.capacity = 300;
-    mgrSpawner.recalculateCapacity(spawner);
+    room.memory.spawnQueue = [[],[],[],[],[],[],[],[],[],[]];
+    room.memory.spawnQueueMisses = 0;
+    room.memory.spawnCapacity = 300;
+    mgrSpawner.recalculateCapacity(room);
 }
