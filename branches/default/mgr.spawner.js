@@ -30,12 +30,20 @@ function spawnNext(spawner) {
     for (let i in spawnQueue) {
         if (spawnQueue[i].length > 0) {
             let creep = spawnQueue[i][0];
+            let specialOrder = spawner.room.memory["SO"+creep]; // check if there exists a special order
             let capacity = spawner.room.memory.spawnCapacity;
             let body = getBodyParts(confCreeps[creep].parts, capacity, confCreeps[creep].extend);
+            if (!specialOrder) {} else {
+                body = getBodyParts(specialOrder, capacity, false);
+            }
             let name = getName(creep);
             let result = spawner.createCreep(sortBodyParts(body), getName(creep), confCreeps[creep].memory);
 
             if (result == name) {
+                if (!specialOrder) {} else {
+                    delete spawner.room.memory["SO"+creep];
+                    console.log("["+spawner.name+"] creating special order " + body);
+                }
                 console.log("["+spawner.name+"] creating new creep, "+name+", of type "+confCreeps[creep].memory.type);
                 spawner.room.memory.spawnQueue[i].shift();
                 Game.creeps[name].memory.born = Game.time;

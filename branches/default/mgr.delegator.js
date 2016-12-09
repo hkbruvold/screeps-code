@@ -5,7 +5,7 @@ let utilEnergy = require("util.energy");
 module.exports = {
     giveTask, harvesterGetTask, spawnfillerGetTask, workerGetTask, transporterGetSource, transporterGetTarget,
     abroadworkerGetTask, wallfixerGetTask, energystealerGetTask, dismantlerGetDumpTarget, remoteminerGetTask,
-    reserverGetTask
+    reserverGetTask, giveAbroadworkerTask
 };
 
 function giveTask(creep, room) {
@@ -17,7 +17,8 @@ function giveTask(creep, room) {
     else if (type == "abroadworker") {
         creep.memory.energyTarget = "";
         creep.memory.workTarget = "";
-        giveAbroadworkerTask(creep, room);
+        creep.memory.workPath = [];
+        creep.memory.workPath = giveAbroadworkerTask(creep, room);
     }
     else if (type == "worker") {
         creep.memory.energyTarget = "";
@@ -57,7 +58,28 @@ function giveTask(creep, room) {
 
 function giveAbroadworkerTask(creep, room) {
     /* Give the abroadworker a workRoom */
-    creep.memory.workRoom = "E45S62";
+    let tasks = confRooms[room.name].abroadworkerpaths;
+    let desiredTaskCount = confRooms[room.name].abroadworkercount;
+    let taskCount = desiredTaskCount.slice(); // Copy array
+
+    // Count number of stealers per path (a bit inefficient, but shouldn't be run often)
+    let workers = _.filter(Game.creeps, (creep) => creep.memory.type == "abroadworker" && creep.memory.home == room.name);
+    for (let worker of workers) {
+        for (let i in tasks) {
+            if (tasks[i][tasks[i].length-1] == worker.memory.workPath[worker.memory.workPath.length-1]) {
+                taskCount[i]--;
+            }
+        }
+    }
+
+    // Return first path with missing stealer
+    for (let i in taskCount) {
+        if (taskCount[i] > 0) {
+            return tasks[i];
+        }
+    }
+    creep.say("need path");
+    return []; // Return an empty array so that the creep will ask again
 }
 
 function harvesterGetTask(creep, roomname) {

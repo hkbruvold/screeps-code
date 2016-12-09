@@ -15,6 +15,9 @@ function run(creep, tools) {
     }
 
     if (creep.ticksToLive == creep.memory.deployTime) {
+        if (creep.room.controller.reservation.ticksToEnd < 2000) { // Set a special order of a creep with one more claim part
+            Game.rooms[creep.memory.home].memory["SOreserver"] = [MOVE,MOVE,CLAIM,CLAIM];
+        }
         tools.mgrSpawner.addToQueue(Game.rooms[creep.memory.home], creep.memory.type, true);
     }
 

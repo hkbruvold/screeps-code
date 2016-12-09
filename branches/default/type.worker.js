@@ -9,6 +9,11 @@ function run(creep, tools) {
     if (creep.spawning) return;
 
     if (creep.ticksToLive == creep.memory.deployTime) {
+        if (Game.rooms[creep.memory.home].storage.energy > 500000) { // Add special order of big workers if enough energy is present
+            let origbody = tools.confCreeps.worker.parts;
+            let bigbody = origbody.concat(origbody); // Double the parts
+            Game.rooms[creep.memory.home].memory["SOworker"] = bigbody;
+        }
         tools.mgrSpawner.addToQueue(Game.rooms[creep.memory.home], creep.memory.type, true);
     }
 

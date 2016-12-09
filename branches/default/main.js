@@ -75,7 +75,12 @@ module.exports.loop = function () {
         console.log("[ERROR] Error executing spawn functions");
         console.log(error.stack);
     }
-
+    
+    if (Game.cpu.bucket > 100) {} else {
+        console.log("CPU bucket too low, skipping creep scripts");
+        return;
+    }
+    
     /* Run creeps modules */
     tools.mgrCreeps.runCreeps(tools, creeptypes);
 };
